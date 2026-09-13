@@ -195,9 +195,12 @@ img { max-width: 100%; display: block; }
     /* inset:0's implicit height (computed from bottom:0 against whatever the
        viewport currently is) is exactly what made this visibly resize/flash
        as the mobile URL bar showed and hid - it recalculates on every
-       transition. An explicit, stable height doesn't. */
+       transition. An explicit, stable height doesn't. Sized to the *large*
+       viewport (bar hidden) rather than the small one, so there's no gap of
+       bare page background below it once the bar hides and the page grows
+       taller than a small-viewport-sized layer would cover. */
     height: 100vh;
-    height: 100svh;
+    height: 100lvh;
     z-index: -1;
     background-image: var(--bg-image);
     background-color: #2a2a2a;
