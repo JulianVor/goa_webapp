@@ -13,6 +13,7 @@
 
     <p class="flash-success" th:if="${success}" th:text="${success}"></p>
 
+    <div class="table-scroll">
     <table class="admin-table">
         <thead>
         <tr>
@@ -44,6 +45,7 @@
         </tr>
         </tbody>
     </table>
+    </div>
 
     <div class="admin-header-row" style="margin-top: 2rem;">
         <h2>Band aus anderem Jahr übernehmen</h2>
@@ -59,6 +61,7 @@
         <button type="submit" class="btn">Anzeigen</button>
     </form>
 
+    <div class="table-scroll">
     <table class="admin-table" th:if="${sourceBands != null}">
         <thead>
         <tr>
@@ -87,6 +90,7 @@
         </tr>
         </tbody>
     </table>
+    </div>
 </main>
 </body>
 </html>

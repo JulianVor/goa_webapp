@@ -135,6 +135,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
+    min-width: 0;
 }
 
 .admin-form legend { font-weight: 700; padding: 0 0.4rem; color: #2f6f68; }
@@ -247,4 +248,27 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     color: #fff;
     font-weight: 700;
     cursor: pointer;
+}
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 700px) {
+    .admin-main { padding: 1.5rem 1rem 3rem; }
+
+    .admin-nav { padding: 0.9rem 1rem; }
+
+    .admin-table { min-width: 480px; }
+
+    .form-row label,
+    .form-row.colors label {
+        min-width: 0;
+        flex: 1 1 100%;
+    }
+
+    .copy-from-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .copy-from-form select { min-width: 0; width: 100%; }
 }
