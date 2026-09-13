@@ -31,6 +31,7 @@
    backdrop everywhere. */
 html {
     background: #171717;
+    font-size: 118%;
 }
 
 html, body {
@@ -75,12 +76,12 @@ img { max-width: 100%; display: block; }
     font-family: var(--font-display);
     font-weight: bold;
     color: var(--color-accent);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     display: flex;
     align-items: center;
 }
 
-.site-nav .brand img { height: 36px; width: auto; }
+.site-nav .brand img { height: 42px; width: auto; }
 
 .nav-toggle {
     display: none;
@@ -104,24 +105,24 @@ img { max-width: 100%; display: block; }
     background: var(--color-accent);
     color: #222;
     text-decoration: none;
-    padding: 0.5rem 1.1rem;
+    padding: 0.6rem 1.3rem;
     border-radius: 999px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     white-space: nowrap;
 }
 
 .nav-socials { display: flex; gap: 0.5rem; align-items: center; }
 .nav-socials a { display: inline-flex; transition: transform 0.2s ease, opacity 0.2s ease; }
 .nav-socials a:hover { transform: scale(1.08); opacity: 0.9; }
-.nav-socials img { width: 26px; height: 26px; border-radius: 50%; }
+.nav-socials img { width: 30px; height: 30px; border-radius: 50%; }
 
 .nav-history {
     text-decoration: none;
     color: var(--color-text);
     font-weight: 600;
     opacity: 0.85;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     white-space: nowrap;
 }
 
@@ -158,7 +159,7 @@ img { max-width: 100%; display: block; }
 .hero-inner { max-width: 900px; }
 
 .hero-title {
-    font-size: clamp(2rem, 8vw, 3.6rem);
+    font-size: clamp(2.4rem, 9vw, 4.4rem);
     font-family: var(--font-display);
     color: var(--color-accent);
     -webkit-text-stroke: 0.16em var(--color-primary);
@@ -169,7 +170,7 @@ img { max-width: 100%; display: block; }
 }
 
 .hero-year {
-    font-size: clamp(3rem, 14vw, 7rem);
+    font-size: clamp(3.6rem, 16vw, 8.6rem);
     font-family: var(--font-display);
     color: var(--color-secondary);
     -webkit-text-stroke: 0.16em var(--color-primary);
@@ -182,14 +183,14 @@ img { max-width: 100%; display: block; }
     display: inline-block;
     background: var(--color-secondary);
     border: 4px solid var(--color-primary);
-    border-radius: 24px;
-    padding: 1rem 2.5rem;
+    border-radius: 28px;
+    padding: 1.25rem 3rem;
     transform: rotate(-1.5deg);
 }
 
 .headliner-name {
     font-family: var(--font-display);
-    font-size: clamp(1.6rem, 6vw, 2.6rem);
+    font-size: clamp(2rem, 7vw, 3.2rem);
     color: var(--color-accent);
     -webkit-text-stroke: 1.5px var(--color-primary);
     paint-order: stroke fill;
@@ -197,7 +198,7 @@ img { max-width: 100%; display: block; }
 
 .headliner-date {
     font-family: var(--font-display);
-    font-size: clamp(1.3rem, 4.5vw, 2rem);
+    font-size: clamp(1.6rem, 5.5vw, 2.4rem);
     color: var(--color-accent);
     -webkit-text-stroke: 1px var(--color-primary);
     paint-order: stroke fill;
@@ -225,7 +226,7 @@ img { max-width: 100%; display: block; }
 
 .section-title {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
     color: var(--color-secondary);
     -webkit-text-stroke: 0.14em var(--color-primary);
     paint-order: stroke fill;
@@ -249,29 +250,30 @@ img { max-width: 100%; display: block; }
 /* One panel holding all three Was/Wann/Wo rows, each row a two-column
    [big bubble label | answer text] layout - matching the real site instead
    of three separate stacked cards. */
+/* .info-row uses display:contents so its label+paragraph become direct
+   children of this grid - that's what makes all three rows share one
+   column width and left-align their answer text at the same position,
+   instead of each row sizing its own label column independently. */
 .info-panel {
     background: color-mix(in srgb, var(--color-primary) 80%, black);
     border-radius: 24px;
-    padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.info-row {
+    padding: 1.75rem 2.25rem;
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 0.5rem 1.75rem;
+    column-gap: 2rem;
+    row-gap: 1.5rem;
     align-items: start;
 }
 
+.info-row { display: contents; }
+
 @media (max-width: 480px) {
-    .info-row { grid-template-columns: 1fr; }
+    .info-panel { grid-template-columns: 1fr; row-gap: 0.5rem; }
 }
 
 .info-label {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    font-size: clamp(2.2rem, 6vw, 3rem);
     -webkit-text-stroke: 0.16em var(--color-primary);
     paint-order: stroke fill;
     line-height: 1.3;
@@ -282,6 +284,7 @@ img { max-width: 100%; display: block; }
 .info-row p {
     margin: 0;
     line-height: 1.5;
+    font-size: 1.15rem;
     color: #d9a441;
     align-self: center;
 }
@@ -290,18 +293,22 @@ img { max-width: 100%; display: block; }
 
 .map-frame {
     width: 100%;
-    height: 280px;
+    height: 320px;
     border: 0;
     border-radius: 18px;
 }
 
 .route-button {
-    align-self: flex-start;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
     background: var(--color-accent);
     color: #222;
     text-decoration: none;
     font-weight: 700;
-    padding: 0.7rem 1.4rem;
+    font-size: 1.2rem;
+    padding: 0.9rem 1.4rem;
     border-radius: 999px;
     font-family: var(--font-display);
 }
@@ -319,7 +326,7 @@ img { max-width: 100%; display: block; }
     paint-order: stroke fill;
     line-height: 1.3;
     text-align: center;
-    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
     margin-bottom: 1.5rem;
 }
 
@@ -368,10 +375,10 @@ img { max-width: 100%; display: block; }
 .band-card-name {
     font-family: var(--font-display);
     color: var(--color-accent);
-    font-size: 1.3rem;
+    font-size: 1.6rem;
 }
 
-.band-card-genre, .band-card-time { font-size: 0.85rem; opacity: 0.9; }
+.band-card-genre, .band-card-time { font-size: 1rem; opacity: 0.9; }
 
 @media (max-width: 480px) {
     .band-card { border-radius: 20px; }
@@ -398,12 +405,12 @@ img { max-width: 100%; display: block; }
     border: none;
     color: var(--color-text);
     font-weight: 600;
-    padding: 1rem 1.25rem;
+    padding: 1.15rem 1.5rem;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1rem;
+    font-size: 1.15rem;
 }
 
 .faq-caret { transition: transform 0.2s ease; }
@@ -454,7 +461,7 @@ img { max-width: 100%; display: block; }
 
 .band-detail-name {
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
     color: var(--color-accent);
     -webkit-text-stroke: 1.5px var(--color-primary);
     paint-order: stroke fill;
@@ -475,7 +482,7 @@ img { max-width: 100%; display: block; }
     -webkit-text-stroke: 1px var(--color-primary);
     paint-order: stroke fill;
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.35rem;
 }
 
 .band-detail-meta p { margin: 0.2rem 0 0; }
@@ -487,14 +494,14 @@ img { max-width: 100%; display: block; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: rgba(0,0,0,0.2);
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
 .band-detail-socials a:hover { transform: scale(1.08); opacity: 0.9; }
-.band-detail-socials img { width: 28px; height: 28px; border-radius: 50%; }
+.band-detail-socials img { width: 32px; height: 32px; border-radius: 50%; }
 
 .band-detail-video {
     max-width: 1100px;
