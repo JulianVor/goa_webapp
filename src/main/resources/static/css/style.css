@@ -507,7 +507,7 @@ img { max-width: 100%; display: block; }
 .site-footer {
     text-align: center;
     padding: 1.5rem;
-    background: color-mix(in srgb, var(--color-primary) 82%, transparent);
+    background: #0000004f;
 }
 
 .site-footer a { text-decoration: none; opacity: 0.8; font-size: 0.85rem; color: var(--color-text); }
@@ -646,7 +646,7 @@ img { max-width: 100%; display: block; }
 /* --------------------------------- Legal page -------------------------------- */
 
 .legal-page { background: #0000004f; min-height: 50vh; }
-.legal-text { line-height: 1.6; opacity: 0.95; }
+.legal-text { line-height: 1.6; opacity: 0.95; font-weight: 700; }
 .legal-text a { color: inherit; text-decoration: underline; }
 
 /* --------------------------------- Responsive -------------------------------- */
