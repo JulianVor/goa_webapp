@@ -2,6 +2,7 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head(${edition}, null)}"></head>
 <body>
+<div class="page-bg"></div>
 <div th:replace="~{fragments/nav :: nav(${edition}, ${previousEdition})}"></div>
 
 <header class="hero">
@@ -16,7 +17,8 @@
     </div>
 </header>
 
-<section id="event-infos" class="section section-infos">
+<section id="event-infos" class="section-band section-infos">
+    <div class="section">
     <h2 class="section-title">Event – Infos</h2>
     <div class="infos-grid">
         <div class="infos-cards">
@@ -51,9 +53,11 @@
             </a>
         </div>
     </div>
+    </div>
 </section>
 
-<section id="line-up" class="section section-lineup">
+<section id="line-up" class="section-band section-lineup">
+    <div class="section">
     <h2 class="section-title">Line – Up</h2>
 
     <div class="day-block" th:each="day : ${dayLineups}">
@@ -72,9 +76,11 @@
     </div>
 
     <p class="empty-hint" th:if="${dayLineups.isEmpty()}">Das Line-Up wird bald bekannt gegeben.</p>
+    </div>
 </section>
 
-<section id="faq" class="section section-faq" th:if="${!faqEntries.isEmpty()}">
+<section id="faq" class="section-band section-faq" th:if="${!faqEntries.isEmpty()}">
+    <div class="section">
     <h2 class="section-title">FAQ</h2>
     <div class="faq-list">
         <div class="faq-item" th:each="faq : ${faqEntries}">
@@ -86,6 +92,7 @@
                 <p th:text="${faq.answer}">Antwort</p>
             </div>
         </div>
+    </div>
     </div>
 </section>
 

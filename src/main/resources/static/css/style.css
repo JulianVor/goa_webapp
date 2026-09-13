@@ -25,11 +25,18 @@
 
 * { box-sizing: border-box; }
 
+/* The canvas color goes on <html> only: <body> is a normal in-flow box that
+   paints above z-index:-1 fixed children (like .page-bg) regardless of
+   z-index, so giving it its own opaque background would blot out the fixed
+   backdrop everywhere. */
+html {
+    background: #171717;
+}
+
 html, body {
     margin: 0;
     padding: 0;
     font-family: var(--font-body);
-    background: #171717;
     color: var(--color-text);
     scroll-behavior: smooth;
 }
@@ -118,15 +125,29 @@ img { max-width: 100%; display: block; }
     white-space: nowrap;
 }
 
-/* ---------------------------------- Hero ---------------------------------- */
+/* ------------------------------- Fixed backdrop ---------------------------- */
 
-.hero {
-    min-height: 85vh;
+/* A dedicated fixed layer behind everything, instead of
+   background-attachment:fixed on .hero: that property is notoriously
+   unreliable on mobile browsers (iOS Safari in particular), where it can
+   bleed through supposedly-opaque sections further down the page. A plain
+   position:fixed element sits below all content via z-index, so any
+   section with its own opaque background reliably covers it once scrolled
+   into view. */
+.page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
     background-image: var(--bg-image);
     background-color: #2a2a2a;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+}
+
+/* ---------------------------------- Hero ---------------------------------- */
+
+.hero {
+    min-height: 85vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -185,6 +206,10 @@ img { max-width: 100%; display: block; }
 
 /* --------------------------------- Sections -------------------------------- */
 
+/* .section-band carries a section's full-bleed background color; .section
+   inside it constrains and centers the actual content to a readable width. */
+.section-band { width: 100%; }
+
 .section { padding: 3.5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
 
 .section-title {
@@ -197,7 +222,7 @@ img { max-width: 100%; display: block; }
     margin: 0 0 2rem;
 }
 
-.section-infos { background: color-mix(in srgb, var(--color-primary) 55%, #1b1b1b); }
+.section-infos { background: color-mix(in srgb, var(--color-primary) 92%, black); }
 
 .infos-grid {
     display: grid;
@@ -272,8 +297,12 @@ img { max-width: 100%; display: block; }
 
 .band-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.875rem;
+}
+
+@media (max-width: 768px) {
+    .band-grid { grid-template-columns: 1fr; }
 }
 
 .band-card {
@@ -324,7 +353,7 @@ img { max-width: 100%; display: block; }
 
 /* ----------------------------------- FAQ ------------------------------------ */
 
-.section-faq { background: color-mix(in srgb, var(--color-primary) 40%, #1b1b1b); }
+.section-faq { background: color-mix(in srgb, var(--color-primary) 85%, black); }
 
 .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
@@ -390,7 +419,7 @@ img { max-width: 100%; display: block; }
 .band-detail-image img { border-radius: 18px; width: 100%; }
 
 .band-detail-card {
-    background: color-mix(in srgb, var(--color-primary) 55%, #1b1b1b);
+    background: color-mix(in srgb, var(--color-primary) 92%, black);
     border-radius: 20px;
     padding: 2rem;
 }
