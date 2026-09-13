@@ -94,14 +94,10 @@ public class AdminEditionController {
         form.setLocationZipCity(edition.getLocationZipCity());
         form.setAboutText(edition.getAboutText());
         form.setMapQuery(edition.getMapQuery());
-        form.setImpressumText(edition.getImpressumText());
         form.setColorPrimary(edition.getColorPrimary());
         form.setColorSecondary(edition.getColorSecondary());
         form.setColorAccent(edition.getColorAccent());
         form.setColorText(edition.getColorText());
-        form.setInstagramUrl(edition.getInstagramUrl());
-        form.setFacebookUrl(edition.getFacebookUrl());
-        form.setContactEmail(edition.getContactEmail());
         form.setCurrent(edition.isCurrent());
         form.setShowEventInfos(edition.isShowEventInfos());
         form.setShowLineup(edition.isShowLineup());

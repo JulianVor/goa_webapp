@@ -27,6 +27,21 @@
             </div>
         </fieldset>
 
+        <fieldset>
+            <legend>Kontakt & Social (Navigation)</legend>
+            <div class="form-row">
+                <label>Instagram-URL<input type="text" th:field="*{instagramUrl}"/></label>
+                <label>Facebook-URL<input type="text" th:field="*{facebookUrl}"/></label>
+                <label>Kontakt E-Mail<input type="email" th:field="*{contactEmail}"/></label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Impressum</legend>
+            <p class="field-hint">Hier ist HTML erlaubt (z.B. &lt;p&gt;, &lt;br/&gt;, &lt;a&gt;) und wird auf der Impressum-Seite unverändert ausgegeben.</p>
+            <label>Impressumstext (HTML)<textarea th:field="*{impressumText}" rows="10" class="code-textarea"></textarea></label>
+        </fieldset>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Speichern</button>
             <a class="btn" th:href="@{/admin}">Zurück</a>

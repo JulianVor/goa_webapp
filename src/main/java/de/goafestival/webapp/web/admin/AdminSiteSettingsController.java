@@ -1,5 +1,6 @@
 package de.goafestival.webapp.web.admin;
 
+import de.goafestival.webapp.domain.SiteSettings;
 import de.goafestival.webapp.dto.SiteSettingsForm;
 import de.goafestival.webapp.service.SiteSettingsService;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class AdminSiteSettingsController {
 
     @GetMapping
     public String form(Model model) {
-        model.addAttribute("settingsForm", new SiteSettingsForm());
+        model.addAttribute("settingsForm", toForm(siteSettingsService.get()));
         return "admin/site-settings-form";
     }
 
@@ -31,5 +32,14 @@ public class AdminSiteSettingsController {
         siteSettingsService.update(form);
         redirectAttributes.addFlashAttribute("success", "Globale Einstellungen wurden gespeichert.");
         return "redirect:/admin/settings";
+    }
+
+    private SiteSettingsForm toForm(SiteSettings settings) {
+        SiteSettingsForm form = new SiteSettingsForm();
+        form.setInstagramUrl(settings.getInstagramUrl());
+        form.setFacebookUrl(settings.getFacebookUrl());
+        form.setContactEmail(settings.getContactEmail());
+        form.setImpressumText(settings.getImpressumText());
+        return form;
     }
 }

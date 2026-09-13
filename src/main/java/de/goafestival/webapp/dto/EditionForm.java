@@ -35,7 +35,6 @@ public class EditionForm {
 
     private String aboutText;
     private String mapQuery;
-    private String impressumText;
 
     @NotBlank
     private String colorPrimary = "#2f6f68";
@@ -45,10 +44,6 @@ public class EditionForm {
     private String colorAccent = "#f2c14e";
     @NotBlank
     private String colorText = "#ffffff";
-
-    private String instagramUrl;
-    private String facebookUrl;
-    private String contactEmail;
 
     private boolean current;
 
@@ -165,14 +160,6 @@ public class EditionForm {
         this.mapQuery = mapQuery;
     }
 
-    public String getImpressumText() {
-        return impressumText;
-    }
-
-    public void setImpressumText(String impressumText) {
-        this.impressumText = impressumText;
-    }
-
     public String getColorPrimary() {
         return colorPrimary;
     }
@@ -203,30 +190,6 @@ public class EditionForm {
 
     public void setColorText(String colorText) {
         this.colorText = colorText;
-    }
-
-    public String getInstagramUrl() {
-        return instagramUrl;
-    }
-
-    public void setInstagramUrl(String instagramUrl) {
-        this.instagramUrl = instagramUrl;
-    }
-
-    public String getFacebookUrl() {
-        return facebookUrl;
-    }
-
-    public void setFacebookUrl(String facebookUrl) {
-        this.facebookUrl = facebookUrl;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
     }
 
     public boolean isCurrent() {

@@ -58,9 +58,6 @@ public class Edition {
     /** Address used for the Google Maps embed + "Route berechnen" link. */
     private String mapQuery;
 
-    @Column(length = 4000)
-    private String impressumText;
-
     private String colorPrimary = "#2f6f68";
     private String colorSecondary = "#e0559a";
     private String colorAccent = "#f2c14e";
@@ -75,10 +72,6 @@ public class Edition {
      * text rendering when not set.
      */
     private String locationImagePath;
-
-    private String instagramUrl;
-    private String facebookUrl;
-    private String contactEmail;
 
     /**
      * Per-section visibility toggles, e.g. to publish next year's logo/hero
@@ -206,14 +199,6 @@ public class Edition {
         this.mapQuery = mapQuery;
     }
 
-    public String getImpressumText() {
-        return impressumText;
-    }
-
-    public void setImpressumText(String impressumText) {
-        this.impressumText = impressumText;
-    }
-
     public String getColorPrimary() {
         return colorPrimary;
     }
@@ -268,30 +253,6 @@ public class Edition {
 
     public void setLocationImagePath(String locationImagePath) {
         this.locationImagePath = locationImagePath;
-    }
-
-    public String getInstagramUrl() {
-        return instagramUrl;
-    }
-
-    public void setInstagramUrl(String instagramUrl) {
-        this.instagramUrl = instagramUrl;
-    }
-
-    public String getFacebookUrl() {
-        return facebookUrl;
-    }
-
-    public void setFacebookUrl(String facebookUrl) {
-        this.facebookUrl = facebookUrl;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
     }
 
     public boolean isShowEventInfos() {

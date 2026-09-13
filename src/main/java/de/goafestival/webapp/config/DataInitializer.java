@@ -3,9 +3,11 @@ package de.goafestival.webapp.config;
 import de.goafestival.webapp.domain.Band;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.FaqEntry;
+import de.goafestival.webapp.domain.SiteSettings;
 import de.goafestival.webapp.repository.BandRepository;
 import de.goafestival.webapp.repository.EditionRepository;
 import de.goafestival.webapp.repository.FaqEntryRepository;
+import de.goafestival.webapp.repository.SiteSettingsRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +25,14 @@ public class DataInitializer implements CommandLineRunner {
     private final EditionRepository editionRepository;
     private final BandRepository bandRepository;
     private final FaqEntryRepository faqEntryRepository;
+    private final SiteSettingsRepository siteSettingsRepository;
 
-    public DataInitializer(EditionRepository editionRepository, BandRepository bandRepository, FaqEntryRepository faqEntryRepository) {
+    public DataInitializer(EditionRepository editionRepository, BandRepository bandRepository,
+                            FaqEntryRepository faqEntryRepository, SiteSettingsRepository siteSettingsRepository) {
         this.editionRepository = editionRepository;
         this.bandRepository = bandRepository;
         this.faqEntryRepository = faqEntryRepository;
+        this.siteSettingsRepository = siteSettingsRepository;
     }
 
     @Override
@@ -50,7 +55,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2026.setAboutText("Das Grumbrechtstraßen Open Air ist ein Indie Rock / Metal Festival von Schanien "
                 + "Bands und Sherenernen über Bühnen bolten mobile.");
         edition2026.setMapQuery("Am Radeland 25, 21079 Hamburg");
-        edition2026.setImpressumText("Grumbrechtstraßen Open Air\nMusterstraße 1\n21079 Hamburg\n\nKontakt: info@goa-festival.de");
         edition2026.setColorPrimary("#2f6f68");
         edition2026.setColorSecondary("#e0559a");
         edition2026.setColorAccent("#f2c14e");
@@ -96,7 +100,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2025.setLocationZipCity("21079 Hamburg");
         edition2025.setAboutText("Die 60. Ausgabe des Grumbrechtstraßen Open Air – ein Rückblick.");
         edition2025.setMapQuery("Grumbrechtstraße 1, 21079 Hamburg");
-        edition2025.setImpressumText(edition2026.getImpressumText());
         edition2025.setColorPrimary("#2e5fa3");
         edition2025.setColorSecondary("#c9701f");
         edition2025.setColorAccent("#e07f22");
@@ -114,6 +117,13 @@ public class DataInitializer implements CommandLineRunner {
                 "Die bekanntesten Pop-Rock-Hits im eigenen Gewand.", LocalDateTime.of(2025, 7, 12, 19, 30));
         addBand(edition2025, "Mule Tales", "Alternative Rock", "Hamburg",
                 "Erzählerischer Alternative Rock mit Herz.", LocalDateTime.of(2025, 7, 12, 21, 0));
+
+        if (siteSettingsRepository.findById(SiteSettings.SINGLETON_ID).isEmpty()) {
+            SiteSettings settings = new SiteSettings();
+            settings.setImpressumText("<p>Grumbrechtstraßen Open Air<br/>Musterstraße 1<br/>21079 Hamburg</p>"
+                    + "<p>Kontakt: info@goa-festival.de</p>");
+            siteSettingsRepository.save(settings);
+        }
     }
 
     private void addFaq(Edition edition, int order, String question, String answer) {

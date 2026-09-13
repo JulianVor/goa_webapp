@@ -100,14 +100,10 @@ public class EditionService {
         edition.setLocationZipCity(form.getLocationZipCity());
         edition.setAboutText(form.getAboutText());
         edition.setMapQuery(form.getMapQuery());
-        edition.setImpressumText(form.getImpressumText());
         edition.setColorPrimary(form.getColorPrimary());
         edition.setColorSecondary(form.getColorSecondary());
         edition.setColorAccent(form.getColorAccent());
         edition.setColorText(form.getColorText());
-        edition.setInstagramUrl(form.getInstagramUrl());
-        edition.setFacebookUrl(form.getFacebookUrl());
-        edition.setContactEmail(form.getContactEmail());
         edition.setShowEventInfos(form.isShowEventInfos());
         edition.setShowLineup(form.isShowLineup());
         edition.setShowFaq(form.isShowFaq());

@@ -617,7 +617,8 @@ img { max-width: 100%; display: block; }
 /* --------------------------------- Legal page -------------------------------- */
 
 .legal-page { background: #0000004f; min-height: 50vh; }
-.legal-text { line-height: 1.6; opacity: 0.95; white-space: pre-line; }
+.legal-text { line-height: 1.6; opacity: 0.95; }
+.legal-text a { color: inherit; text-decoration: underline; }
 
 /* --------------------------------- Responsive -------------------------------- */
 

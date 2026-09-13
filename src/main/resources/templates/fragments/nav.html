@@ -16,13 +16,13 @@
         <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
 
         <span class="nav-socials">
-            <a th:if="${not #strings.isEmpty(edition.instagramUrl)}" th:href="${edition.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
+            <a th:if="${not #strings.isEmpty(siteSettings.instagramUrl)}" th:href="${siteSettings.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
                 <img th:src="@{/img/icons/instagram.svg}" alt="Instagram"/>
             </a>
-            <a th:if="${not #strings.isEmpty(edition.facebookUrl)}" th:href="${edition.facebookUrl}" target="_blank" rel="noopener" title="Facebook">
+            <a th:if="${not #strings.isEmpty(siteSettings.facebookUrl)}" th:href="${siteSettings.facebookUrl}" target="_blank" rel="noopener" title="Facebook">
                 <img th:src="@{/img/icons/facebook.svg}" alt="Facebook"/>
             </a>
-            <a th:if="${not #strings.isEmpty(edition.contactEmail)}" th:href="'mailto:' + ${edition.contactEmail}" title="E-Mail">
+            <a th:if="${not #strings.isEmpty(siteSettings.contactEmail)}" th:href="'mailto:' + ${siteSettings.contactEmail}" title="E-Mail">
                 <img th:src="@{/img/icons/mail.svg}" alt="E-Mail"/>
             </a>
         </span>

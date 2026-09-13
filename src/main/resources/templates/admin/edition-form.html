@@ -6,6 +6,10 @@
 
 <main class="admin-main">
     <h1 th:text="${isNew} ? 'Neues Jahr anlegen' : 'Ausgabe bearbeiten'">Ausgabe</h1>
+    <p class="field-hint">
+        Logo, Tab-Icon, Kontakt/Social-Links und das Impressum sind seitenübergreifend und werden unter
+        <a th:href="@{/admin/settings}">Globale Einstellungen</a> gepflegt.
+    </p>
 
     <form method="post" enctype="multipart/form-data" class="admin-form"
           th:action="${isNew} ? @{/admin/editions} : @{'/admin/editions/' + ${editionForm.id}}"
@@ -81,20 +85,6 @@
                 <img th:if="${edition.backgroundImagePath}" th:src="${edition.backgroundImagePath}" alt="Aktueller Hintergrund"/>
                 <img th:if="${edition.locationImagePath}" th:src="${edition.locationImagePath}" alt="Aktuelles Ort-/Terminbild"/>
             </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Kontakt & Social (Navigation)</legend>
-            <div class="form-row">
-                <label>Instagram-URL<input type="text" th:field="*{instagramUrl}"/></label>
-                <label>Facebook-URL<input type="text" th:field="*{facebookUrl}"/></label>
-                <label>Kontakt E-Mail<input type="email" th:field="*{contactEmail}"/></label>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Impressum</legend>
-            <label>Impressumstext<textarea th:field="*{impressumText}" rows="6"></textarea></label>
         </fieldset>
 
         <div class="form-actions">
