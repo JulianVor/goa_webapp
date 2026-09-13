@@ -200,7 +200,12 @@ img { max-width: 100%; display: block; }
 /* ---------------------------------- Hero ---------------------------------- */
 
 .hero {
+    /* svh (small viewport height) ignores the mobile browser's collapsible
+       URL bar, so the hero - and the fixed .page-bg behind it - don't
+       visibly resize/jump as it shows and hides while scrolling. Falls
+       back to plain vh on browsers that don't support svh yet. */
     min-height: 85vh;
+    min-height: 85svh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -661,6 +666,15 @@ img { max-width: 100%; display: block; }
         margin-top: 0.75rem;
     }
     .nav-links.open { display: flex; }
+
+    /* Desktop anchors the menu to the toggle's right edge, which sits far
+       right in the nav bar there. On mobile the stacked nav-links are
+       left-aligned instead, so that same right:0 anchor pushed a
+       min-width:140px menu off the left edge of the screen. */
+    .nav-history-dropdown .dropdown-menu {
+        left: 0;
+        right: auto;
+    }
 }
 
 /* On phones the fixed 1.5-2.5rem side padding ate a noticeable chunk of an
