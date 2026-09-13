@@ -280,7 +280,7 @@ img { max-width: 100%; display: block; }
 
 /* --------------------------------- Line-up --------------------------------- */
 
-.section-lineup { background: rgba(10, 10, 10, 0.55); }
+.section-lineup { background: #0000004f; }
 
 .day-block { margin-bottom: 2.5rem; }
 
@@ -508,7 +508,7 @@ img { max-width: 100%; display: block; }
 
 /* --------------------------------- Legal page -------------------------------- */
 
-.legal-page { background: rgba(10, 10, 10, 0.55); min-height: 50vh; }
+.legal-page { background: #0000004f; min-height: 50vh; }
 .legal-text { line-height: 1.6; opacity: 0.95; white-space: pre-line; }
 
 /* --------------------------------- Responsive -------------------------------- */
