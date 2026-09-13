@@ -7,9 +7,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    document.querySelectorAll('.faq-question').forEach(function (button) {
+    var faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(function (item) {
+        var button = item.querySelector('.faq-question');
+        if (!button) return;
         button.addEventListener('click', function () {
-            button.parentElement.classList.toggle('open');
+            var wasOpen = item.classList.contains('open');
+            faqItems.forEach(function (other) {
+                other.classList.remove('open');
+            });
+            if (!wasOpen) {
+                item.classList.add('open');
+            }
         });
     });
 });
