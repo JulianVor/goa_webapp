@@ -50,16 +50,18 @@
     </div>
 </section>
 
+<section class="band-detail-gallery" th:if="${!band.galleryImages.isEmpty()}">
+    <div class="gallery-panel">
+        <div class="gallery-grid">
+            <img th:each="img : ${band.galleryImages}" th:src="${img}" th:alt="${band.name}" loading="lazy"/>
+        </div>
+    </div>
+</section>
+
 <section class="band-detail-video" th:if="${not #strings.isEmpty(band.youtubeVideoUrl)}">
     <iframe th:src="${youtubeEmbedUrl}"
             loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
-</section>
-
-<section class="band-detail-gallery" th:if="${!band.galleryImages.isEmpty()}">
-    <div class="gallery-grid">
-        <img th:each="img : ${band.galleryImages}" th:src="${img}" th:alt="${band.name}" loading="lazy"/>
-    </div>
 </section>
 
 <p class="band-detail-back">
