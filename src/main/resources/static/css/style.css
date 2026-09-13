@@ -7,9 +7,7 @@
 
 @font-face {
     font-family: 'Brugty';
-    src: url('/fonts/Brugty.woff2') format('woff2'),
-         url('/fonts/Brugty.woff') format('woff'),
-         url('/fonts/Brugty.ttf') format('truetype');
+    src: url('/fonts/Brugty.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
