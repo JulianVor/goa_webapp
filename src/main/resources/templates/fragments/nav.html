@@ -3,7 +3,7 @@
 <body>
 <nav class="site-nav" th:fragment="nav(edition, archivedEditions)"
      th:with="baseUrl=${edition.current} ? '/' : ('/goa/' + ${edition.year})">
-    <a class="brand" th:href="${baseUrl}">
+    <a class="brand" th:href="@{/}">
         <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo"/>
         <span th:unless="${siteSettings.logoImagePath}" th:text="${edition.title}">GOA</span>
     </a>
