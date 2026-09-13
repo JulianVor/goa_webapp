@@ -26,7 +26,7 @@ public class BandPageController {
         model.addAttribute("band", band);
         model.addAttribute("edition", band.getEdition());
         model.addAttribute("youtubeEmbedUrl", YoutubeUtils.toEmbedUrl(band.getYoutubeVideoUrl()));
-        model.addAttribute("otherEditions", editionService.findOtherEditions(band.getEdition()));
+        model.addAttribute("archivedEditions", editionService.findArchivedEditions());
         return "band-detail";
     }
 }

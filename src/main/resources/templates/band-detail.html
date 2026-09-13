@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/head :: head(${edition}, ${band.name})}"></head>
 <body>
 <div class="page-bg"></div>
-<div th:replace="~{fragments/nav :: nav(${edition}, ${otherEditions})}"></div>
+<div th:replace="~{fragments/nav :: nav(${edition}, ${archivedEditions})}"></div>
 
 <section class="band-detail-hero">
     <div class="band-detail-image" th:if="${band.mainImagePath}">

@@ -39,10 +39,14 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Ausgabe " + id + " wurde nicht gefunden."));
     }
 
-    /** All editions except the given one, newest year first — used for the nav's "other years" link/dropdown. */
-    public List<Edition> findOtherEditions(Edition edition) {
+    /**
+     * All non-current editions, newest year first — the nav's "Archiv" link/dropdown.
+     * Same result on every page, regardless of which edition is being viewed; the
+     * current edition never appears here.
+     */
+    public List<Edition> findArchivedEditions() {
         return findAllOrdered().stream()
-                .filter(e -> !e.getId().equals(edition.getId()))
+                .filter(e -> !e.isCurrent())
                 .toList();
     }
 

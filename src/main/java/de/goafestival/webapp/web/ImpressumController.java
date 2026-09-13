@@ -19,7 +19,7 @@ public class ImpressumController {
     public String impressum(Model model) {
         Edition edition = editionService.getCurrentOrThrow();
         model.addAttribute("edition", edition);
-        model.addAttribute("otherEditions", editionService.findOtherEditions(edition));
+        model.addAttribute("archivedEditions", editionService.findArchivedEditions());
         return "impressum";
     }
 }

@@ -52,6 +52,6 @@ public class EditionPageController {
         model.addAttribute("dayLineups", dayLineups);
         model.addAttribute("faqEntries", faqEntryService.findByEdition(edition.getId()));
         model.addAttribute("isCurrentView", isCurrentView);
-        model.addAttribute("otherEditions", editionService.findOtherEditions(edition));
+        model.addAttribute("archivedEditions", editionService.findArchivedEditions());
     }
 }
