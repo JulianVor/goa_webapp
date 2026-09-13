@@ -34,7 +34,7 @@
             <label class="checkbox-row"><input type="checkbox" th:field="*{current}"/> Als aktuelle Festival-Seite ("/") anzeigen</label>
         </fieldset>
 
-        <fieldset>
+        <fieldset th:if="${edition == null or edition.isCurrent()}">
             <legend>Sichtbare Bereiche</legend>
             <p class="field-hint">
                 Einzelne Bereiche der Seite lassen sich abschalten, z.B. um schon vor Bekanntgabe des
@@ -45,6 +45,10 @@
             <label class="checkbox-row"><input type="checkbox" th:field="*{showFaq}"/> FAQ anzeigen</label>
             <label class="checkbox-row"><input type="checkbox" th:field="*{showHeadliner}"/> Zweites Bild / Headliner-Text im Hero anzeigen</label>
         </fieldset>
+        <p class="field-hint" th:if="${edition != null and !edition.isCurrent()}">
+            Diese Ausgabe ist archiviert: Es werden automatisch nur Logo und Line-Up angezeigt (ohne Datum/Uhrzeit),
+            alle anderen Bereiche sind ausgeblendet.
+        </p>
 
         <fieldset>
             <legend>Event-Infos (Was / Wo)</legend>

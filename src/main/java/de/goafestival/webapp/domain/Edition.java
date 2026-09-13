@@ -255,16 +255,22 @@ public class Edition {
         this.locationImagePath = locationImagePath;
     }
 
+    /**
+     * An archived (non-current) edition is a past event: it always shows just the
+     * logo and the Line-Up, regardless of the stored toggles, so these three ignore
+     * the toggle once the edition is archived.
+     */
     public boolean isShowEventInfos() {
-        return showEventInfos == null || showEventInfos;
+        return current && (showEventInfos == null || showEventInfos);
     }
 
     public void setShowEventInfos(Boolean showEventInfos) {
         this.showEventInfos = showEventInfos;
     }
 
+    /** The Line-Up always shows on an archived edition, regardless of the stored toggle. */
     public boolean isShowLineup() {
-        return showLineup == null || showLineup;
+        return !current || showLineup == null || showLineup;
     }
 
     public void setShowLineup(Boolean showLineup) {
@@ -272,7 +278,7 @@ public class Edition {
     }
 
     public boolean isShowFaq() {
-        return showFaq == null || showFaq;
+        return current && (showFaq == null || showFaq);
     }
 
     public void setShowFaq(Boolean showFaq) {
@@ -280,7 +286,7 @@ public class Edition {
     }
 
     public boolean isShowHeadliner() {
-        return showHeadliner == null || showHeadliner;
+        return current && (showHeadliner == null || showHeadliner);
     }
 
     public void setShowHeadliner(Boolean showHeadliner) {
