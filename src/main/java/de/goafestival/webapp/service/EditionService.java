@@ -76,6 +76,7 @@ public class EditionService {
         Edition edition = getByIdOrThrow(id);
         fileStorageService.delete(edition.getLogoImagePath());
         fileStorageService.delete(edition.getBackgroundImagePath());
+        fileStorageService.delete(edition.getLocationImagePath());
         editionRepository.delete(edition);
     }
 
@@ -108,6 +109,10 @@ public class EditionService {
         if (form.getBackgroundImage() != null && !form.getBackgroundImage().isEmpty()) {
             fileStorageService.delete(edition.getBackgroundImagePath());
             edition.setBackgroundImagePath(fileStorageService.store(form.getBackgroundImage(), "editions/backgrounds"));
+        }
+        if (form.getLocationImage() != null && !form.getLocationImage().isEmpty()) {
+            fileStorageService.delete(edition.getLocationImagePath());
+            edition.setLocationImagePath(fileStorageService.store(form.getLocationImage(), "editions/location"));
         }
     }
 }

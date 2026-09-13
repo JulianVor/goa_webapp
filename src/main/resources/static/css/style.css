@@ -159,6 +159,20 @@ img { max-width: 100%; display: block; }
 
 .hero-inner { max-width: 1100px; }
 
+.hero-logo {
+    max-width: 100%;
+    width: min(90vw, 820px);
+    height: auto;
+    margin: 0 auto;
+}
+
+.hero-location-image {
+    max-width: 100%;
+    width: min(70vw, 480px);
+    height: auto;
+    margin: 2rem auto 0;
+}
+
 .hero-title {
     font-size: clamp(2.4rem, 9vw, 4.4rem);
     font-family: var(--font-display);

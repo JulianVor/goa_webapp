@@ -69,6 +69,13 @@ public class Edition {
     private String logoImagePath;
     private String backgroundImagePath;
 
+    /**
+     * Second hero graphic (e.g. a "Tipsy Apes 10./11.07.26" style venue+date
+     * announcement image). Falls back to the headlinerName/headlinerDateLabel
+     * text rendering when not set.
+     */
+    private String locationImagePath;
+
     private String instagramUrl;
     private String facebookUrl;
     private String contactEmail;
@@ -243,6 +250,14 @@ public class Edition {
 
     public void setBackgroundImagePath(String backgroundImagePath) {
         this.backgroundImagePath = backgroundImagePath;
+    }
+
+    public String getLocationImagePath() {
+        return locationImagePath;
+    }
+
+    public void setLocationImagePath(String locationImagePath) {
+        this.locationImagePath = locationImagePath;
     }
 
     public String getInstagramUrl() {

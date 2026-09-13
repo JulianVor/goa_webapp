@@ -54,6 +54,7 @@ public class EditionForm {
 
     private MultipartFile logoImage;
     private MultipartFile backgroundImage;
+    private MultipartFile locationImage;
 
     public Long getId() {
         return id;
@@ -245,5 +246,13 @@ public class EditionForm {
 
     public void setBackgroundImage(MultipartFile backgroundImage) {
         this.backgroundImage = backgroundImage;
+    }
+
+    public MultipartFile getLocationImage() {
+        return locationImage;
+    }
+
+    public void setLocationImage(MultipartFile locationImage) {
+        this.locationImage = locationImage;
     }
 }

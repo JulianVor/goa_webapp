@@ -166,6 +166,8 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .form-actions { display: flex; gap: 1rem; }
 
+.field-hint { font-size: 0.85rem; color: #5a6472; margin: -0.5rem 0 0.25rem; font-weight: normal; }
+
 .current-image-preview img, .gallery-preview img {
     max-height: 120px;
     border-radius: 8px;
