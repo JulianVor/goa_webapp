@@ -103,6 +103,9 @@ public class AdminEditionController {
         form.setFacebookUrl(edition.getFacebookUrl());
         form.setContactEmail(edition.getContactEmail());
         form.setCurrent(edition.isCurrent());
+        form.setShowEventInfos(edition.isShowEventInfos());
+        form.setShowLineup(edition.isShowLineup());
+        form.setShowFaq(edition.isShowFaq());
         return form;
     }
 }

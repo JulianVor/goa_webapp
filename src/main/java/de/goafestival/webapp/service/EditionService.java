@@ -101,6 +101,9 @@ public class EditionService {
         edition.setInstagramUrl(form.getInstagramUrl());
         edition.setFacebookUrl(form.getFacebookUrl());
         edition.setContactEmail(form.getContactEmail());
+        edition.setShowEventInfos(form.isShowEventInfos());
+        edition.setShowLineup(form.isShowLineup());
+        edition.setShowFaq(form.isShowFaq());
 
         if (form.getLogoImage() != null && !form.getLogoImage().isEmpty()) {
             fileStorageService.delete(edition.getLogoImagePath());

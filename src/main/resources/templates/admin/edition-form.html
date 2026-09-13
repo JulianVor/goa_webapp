@@ -31,6 +31,17 @@
         </fieldset>
 
         <fieldset>
+            <legend>Sichtbare Bereiche</legend>
+            <p class="field-hint">
+                Einzelne Bereiche der Seite lassen sich abschalten, z.B. um schon vor Bekanntgabe des
+                Line-Ups nur Logo und Hero anzuzeigen.
+            </p>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{showEventInfos}"/> Event-Infos anzeigen</label>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{showLineup}"/> Line-Up anzeigen</label>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{showFaq}"/> FAQ anzeigen</label>
+        </fieldset>
+
+        <fieldset>
             <legend>Event-Infos (Was / Wo)</legend>
             <label>Beschreibung ("Was?")<textarea th:field="*{aboutText}" rows="4"></textarea></label>
             <div class="form-row">

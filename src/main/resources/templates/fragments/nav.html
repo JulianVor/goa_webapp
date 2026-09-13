@@ -11,9 +11,9 @@
     <button class="nav-toggle" type="button" aria-label="Menü">☰</button>
 
     <div class="nav-links">
-        <a class="pill" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
-        <a class="pill" th:href="${baseUrl} + '#line-up'">Line-Up</a>
-        <a class="pill" th:href="${baseUrl} + '#faq'">FAQ</a>
+        <a class="pill" th:if="${edition.isShowEventInfos()}" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
+        <a class="pill" th:if="${edition.isShowLineup()}" th:href="${baseUrl} + '#line-up'">Line-Up</a>
+        <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
 
         <span class="nav-socials">
             <a th:if="${edition.instagramUrl}" th:href="${edition.instagramUrl}" target="_blank" rel="noopener" title="Instagram">

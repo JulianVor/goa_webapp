@@ -52,6 +52,10 @@ public class EditionForm {
 
     private boolean current;
 
+    private boolean showEventInfos = true;
+    private boolean showLineup = true;
+    private boolean showFaq = true;
+
     private MultipartFile logoImage;
     private MultipartFile backgroundImage;
     private MultipartFile locationImage;
@@ -230,6 +234,30 @@ public class EditionForm {
 
     public void setCurrent(boolean current) {
         this.current = current;
+    }
+
+    public boolean isShowEventInfos() {
+        return showEventInfos;
+    }
+
+    public void setShowEventInfos(boolean showEventInfos) {
+        this.showEventInfos = showEventInfos;
+    }
+
+    public boolean isShowLineup() {
+        return showLineup;
+    }
+
+    public void setShowLineup(boolean showLineup) {
+        this.showLineup = showLineup;
+    }
+
+    public boolean isShowFaq() {
+        return showFaq;
+    }
+
+    public void setShowFaq(boolean showFaq) {
+        this.showFaq = showFaq;
     }
 
     public MultipartFile getLogoImage() {

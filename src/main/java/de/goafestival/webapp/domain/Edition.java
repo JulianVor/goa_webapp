@@ -80,6 +80,15 @@ public class Edition {
     private String facebookUrl;
     private String contactEmail;
 
+    /**
+     * Per-section visibility toggles, e.g. to publish next year's logo/hero
+     * before there's a line-up yet. Nullable so existing rows (created before
+     * these columns existed) default to "shown" without a data migration.
+     */
+    private Boolean showEventInfos;
+    private Boolean showLineup;
+    private Boolean showFaq;
+
     /** Only one edition may be "current" (shown at "/"); others are reachable as history. */
     @Column(name = "is_current", nullable = false)
     private boolean current = false;
@@ -282,6 +291,30 @@ public class Edition {
 
     public void setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;
+    }
+
+    public boolean isShowEventInfos() {
+        return showEventInfos == null || showEventInfos;
+    }
+
+    public void setShowEventInfos(Boolean showEventInfos) {
+        this.showEventInfos = showEventInfos;
+    }
+
+    public boolean isShowLineup() {
+        return showLineup == null || showLineup;
+    }
+
+    public void setShowLineup(Boolean showLineup) {
+        this.showLineup = showLineup;
+    }
+
+    public boolean isShowFaq() {
+        return showFaq == null || showFaq;
+    }
+
+    public void setShowFaq(Boolean showFaq) {
+        this.showFaq = showFaq;
     }
 
     public boolean isCurrent() {

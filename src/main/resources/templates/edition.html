@@ -21,7 +21,7 @@
     </div>
 </header>
 
-<section id="event-infos" class="section-band section-infos">
+<section id="event-infos" class="section-band section-infos" th:if="${edition.isShowEventInfos()}">
     <div class="section">
     <h2 class="section-title">Event – Infos</h2>
     <div class="infos-grid">
@@ -60,9 +60,9 @@
     </div>
 </section>
 
-<hr class="section-divider"/>
+<hr class="section-divider" th:if="${edition.isShowEventInfos() and edition.isShowLineup()}"/>
 
-<section id="line-up" class="section-band section-lineup">
+<section id="line-up" class="section-band section-lineup" th:if="${edition.isShowLineup()}">
     <div class="section">
     <h2 class="section-title">Line – Up</h2>
 
@@ -85,9 +85,9 @@
     </div>
 </section>
 
-<hr class="section-divider" th:if="${!faqEntries.isEmpty()}"/>
+<hr class="section-divider" th:if="${edition.isShowFaq() and !faqEntries.isEmpty() and (edition.isShowEventInfos() or edition.isShowLineup())}"/>
 
-<section id="faq" class="section-band section-faq" th:if="${!faqEntries.isEmpty()}">
+<section id="faq" class="section-band section-faq" th:if="${edition.isShowFaq() and !faqEntries.isEmpty()}">
     <div class="section">
     <h2 class="section-title">FAQ</h2>
     <div class="faq-list">
