@@ -52,6 +52,7 @@
 
 <section class="band-detail-gallery" th:if="${!band.galleryImages.isEmpty()}">
     <div class="gallery-panel">
+        <h2 class="section-title" th:text="'Recap ' + ${edition.year}">Recap 2025</h2>
         <div class="gallery-grid">
             <img th:each="img : ${band.galleryImages}" th:src="${img}" th:alt="${band.name}" loading="lazy"/>
         </div>
@@ -69,5 +70,6 @@
 </p>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
