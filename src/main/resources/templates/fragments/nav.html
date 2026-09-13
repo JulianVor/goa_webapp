@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<nav class="site-nav" th:fragment="nav(edition, previousEdition)"
+<nav class="site-nav" th:fragment="nav(edition, otherEditions)"
      th:with="baseUrl=${edition.current} ? '/' : ('/goa/' + ${edition.year})">
     <a class="brand" th:href="${baseUrl}">
         <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo"/>
@@ -27,9 +27,16 @@
             </a>
         </span>
 
-        <a class="nav-history" th:if="${previousEdition != null}"
-           th:href="@{'/goa/' + ${previousEdition.year}}"
-           th:text="'GOA ' + ${previousEdition.year}">GOA 2025</a>
+        <a class="nav-history" th:if="${otherEditions != null and #lists.size(otherEditions) == 1}"
+           th:href="@{'/goa/' + ${otherEditions[0].year}}"
+           th:text="'GOA ' + ${otherEditions[0].year}">GOA 2025</a>
+
+        <div class="nav-history-dropdown" th:if="${otherEditions != null and #lists.size(otherEditions) > 1}">
+            <button type="button" class="nav-history dropdown-toggle">Archiv <span class="caret">▾</span></button>
+            <div class="dropdown-menu">
+                <a th:each="e : ${otherEditions}" th:href="@{'/goa/' + ${e.year}}" th:text="'GOA ' + ${e.year}">GOA 2025</a>
+            </div>
+        </div>
     </div>
 </nav>
 </body>

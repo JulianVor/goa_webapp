@@ -88,6 +88,7 @@ public class Edition {
     private Boolean showEventInfos;
     private Boolean showLineup;
     private Boolean showFaq;
+    private Boolean showHeadliner;
 
     /** Only one edition may be "current" (shown at "/"); others are reachable as history. */
     @Column(name = "is_current", nullable = false)
@@ -315,6 +316,14 @@ public class Edition {
 
     public void setShowFaq(Boolean showFaq) {
         this.showFaq = showFaq;
+    }
+
+    public boolean isShowHeadliner() {
+        return showHeadliner == null || showHeadliner;
+    }
+
+    public void setShowHeadliner(Boolean showHeadliner) {
+        this.showHeadliner = showHeadliner;
     }
 
     public boolean isCurrent() {

@@ -127,6 +127,57 @@ img { max-width: 100%; display: block; }
     white-space: nowrap;
 }
 
+.nav-history-dropdown { position: relative; }
+
+.nav-history-dropdown .dropdown-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.nav-history-dropdown .caret {
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-history-dropdown.open .caret { transform: rotate(180deg); }
+
+.nav-history-dropdown .dropdown-menu {
+    display: none;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.6rem;
+    background: var(--color-primary);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 140px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    z-index: 60;
+}
+
+.nav-history-dropdown.open .dropdown-menu { display: flex; }
+
+.nav-history-dropdown .dropdown-menu a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.nav-history-dropdown .dropdown-menu a:hover {
+    background: color-mix(in srgb, var(--color-primary) 70%, black);
+}
+
 /* ------------------------------- Fixed backdrop ---------------------------- */
 
 /* A dedicated fixed layer behind everything, instead of

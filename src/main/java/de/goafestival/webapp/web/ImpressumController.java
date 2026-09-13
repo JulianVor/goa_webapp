@@ -1,5 +1,6 @@
 package de.goafestival.webapp.web;
 
+import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.service.EditionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,9 @@ public class ImpressumController {
 
     @GetMapping("/impressum")
     public String impressum(Model model) {
-        model.addAttribute("edition", editionService.getCurrentOrThrow());
+        Edition edition = editionService.getCurrentOrThrow();
+        model.addAttribute("edition", edition);
+        model.addAttribute("otherEditions", editionService.findOtherEditions(edition));
         return "impressum";
     }
 }

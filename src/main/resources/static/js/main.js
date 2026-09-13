@@ -21,4 +21,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    var historyDropdowns = document.querySelectorAll('.nav-history-dropdown');
+    historyDropdowns.forEach(function (dropdown) {
+        var toggle = dropdown.querySelector('.dropdown-toggle');
+        if (!toggle) return;
+        toggle.addEventListener('click', function (event) {
+            event.stopPropagation();
+            var wasOpen = dropdown.classList.contains('open');
+            historyDropdowns.forEach(function (other) {
+                other.classList.remove('open');
+            });
+            if (!wasOpen) {
+                dropdown.classList.add('open');
+            }
+        });
+    });
+    document.addEventListener('click', function () {
+        historyDropdowns.forEach(function (dropdown) {
+            dropdown.classList.remove('open');
+        });
+    });
 });

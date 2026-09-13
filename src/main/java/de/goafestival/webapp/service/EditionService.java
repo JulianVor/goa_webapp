@@ -39,6 +39,13 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Ausgabe " + id + " wurde nicht gefunden."));
     }
 
+    /** All editions except the given one, newest year first — used for the nav's "other years" link/dropdown. */
+    public List<Edition> findOtherEditions(Edition edition) {
+        return findAllOrdered().stream()
+                .filter(e -> !e.getId().equals(edition.getId()))
+                .toList();
+    }
+
     public Edition create(EditionForm form) {
         Edition edition = new Edition();
         applyForm(edition, form);
@@ -104,6 +111,7 @@ public class EditionService {
         edition.setShowEventInfos(form.isShowEventInfos());
         edition.setShowLineup(form.isShowLineup());
         edition.setShowFaq(form.isShowFaq());
+        edition.setShowHeadliner(form.isShowHeadliner());
 
         if (form.getLogoImage() != null && !form.getLogoImage().isEmpty()) {
             fileStorageService.delete(edition.getLogoImagePath());

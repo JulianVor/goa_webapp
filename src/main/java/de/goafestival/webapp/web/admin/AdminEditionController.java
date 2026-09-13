@@ -106,6 +106,7 @@ public class AdminEditionController {
         form.setShowEventInfos(edition.isShowEventInfos());
         form.setShowLineup(edition.isShowLineup());
         form.setShowFaq(edition.isShowFaq());
+        form.setShowHeadliner(edition.isShowHeadliner());
         return form;
     }
 }

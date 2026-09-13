@@ -55,6 +55,7 @@ public class EditionForm {
     private boolean showEventInfos = true;
     private boolean showLineup = true;
     private boolean showFaq = true;
+    private boolean showHeadliner = true;
 
     private MultipartFile logoImage;
     private MultipartFile backgroundImage;
@@ -258,6 +259,14 @@ public class EditionForm {
 
     public void setShowFaq(boolean showFaq) {
         this.showFaq = showFaq;
+    }
+
+    public boolean isShowHeadliner() {
+        return showHeadliner;
+    }
+
+    public void setShowHeadliner(boolean showHeadliner) {
+        this.showHeadliner = showHeadliner;
     }
 
     public MultipartFile getLogoImage() {

@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/head :: head(${edition}, null)}"></head>
 <body>
 <div class="page-bg"></div>
-<div th:replace="~{fragments/nav :: nav(${edition}, ${previousEdition})}"></div>
+<div th:replace="~{fragments/nav :: nav(${edition}, ${otherEditions})}"></div>
 
 <header class="hero">
     <div class="hero-inner">
@@ -13,11 +13,13 @@
             <div class="hero-year" th:text="${edition.displayLabel}">2026</div>
         </th:block>
 
-        <img class="hero-location-image" th:if="${edition.locationImagePath}" th:src="${edition.locationImagePath}" th:alt="${edition.headlinerName}"/>
-        <div class="headliner-box" th:if="${edition.locationImagePath == null and edition.headlinerName != null}">
-            <div class="headliner-name" th:text="${edition.headlinerName}">Tipsy Apes</div>
-            <div class="headliner-date" th:text="${edition.headlinerDateLabel}">10./11.07.26</div>
-        </div>
+        <th:block th:if="${edition.isShowHeadliner()}">
+            <img class="hero-location-image" th:if="${edition.locationImagePath}" th:src="${edition.locationImagePath}" th:alt="${edition.headlinerName}"/>
+            <div class="headliner-box" th:if="${edition.locationImagePath == null and edition.headlinerName != null}">
+                <div class="headliner-name" th:text="${edition.headlinerName}">Tipsy Apes</div>
+                <div class="headliner-date" th:text="${edition.headlinerDateLabel}">10./11.07.26</div>
+            </div>
+        </th:block>
     </div>
 </header>
 

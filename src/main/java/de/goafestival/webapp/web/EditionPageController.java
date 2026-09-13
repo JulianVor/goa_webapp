@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Renders the public festival page: the current edition at "/", and any past
@@ -49,15 +48,10 @@ public class EditionPageController {
         List<Band> bands = bandService.findByEdition(edition.getId());
         List<DayLineup> dayLineups = bandService.groupByDay(bands);
 
-        List<Edition> all = editionService.findAllOrdered();
-        Optional<Edition> previous = all.stream()
-                .filter(e -> e.getYear() < edition.getYear())
-                .findFirst();
-
         model.addAttribute("edition", edition);
         model.addAttribute("dayLineups", dayLineups);
         model.addAttribute("faqEntries", faqEntryService.findByEdition(edition.getId()));
         model.addAttribute("isCurrentView", isCurrentView);
-        model.addAttribute("previousEdition", previous.orElse(null));
+        model.addAttribute("otherEditions", editionService.findOtherEditions(edition));
     }
 }
