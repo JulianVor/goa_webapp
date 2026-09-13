@@ -103,10 +103,11 @@ img { max-width: 100%; display: block; }
 
 .nav-links .pill {
     background: var(--color-accent);
-    color: #222;
+    color: var(--color-primary);
     text-decoration: none;
     padding: 0.6rem 1.3rem;
     border-radius: 999px;
+    font-family: var(--font-display);
     font-weight: 600;
     font-size: 1.05rem;
     white-space: nowrap;
@@ -304,7 +305,7 @@ img { max-width: 100%; display: block; }
     box-sizing: border-box;
     text-align: center;
     background: var(--color-accent);
-    color: #222;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 700;
     font-size: 1.2rem;

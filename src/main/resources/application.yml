@@ -15,8 +15,8 @@ spring:
         format_sql: false
   servlet:
     multipart:
-      max-file-size: 15MB
-      max-request-size: 60MB
+      max-file-size: ${APP_MAX_UPLOAD_SIZE:50MB}
+      max-request-size: ${APP_MAX_UPLOAD_REQUEST_SIZE:200MB}
   thymeleaf:
     cache: false
 

@@ -27,6 +27,8 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
       APP_UPLOAD_DIR: /data/uploads
+      APP_MAX_UPLOAD_SIZE: ${APP_MAX_UPLOAD_SIZE:-50MB}
+      APP_MAX_UPLOAD_REQUEST_SIZE: ${APP_MAX_UPLOAD_REQUEST_SIZE:-200MB}
     ports:
       - "${APP_PORT:-8080}:8080"
     volumes:
