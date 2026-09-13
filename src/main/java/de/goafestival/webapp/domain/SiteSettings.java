@@ -27,7 +27,7 @@ public class SiteSettings {
     private String contactEmail;
 
     /** Rendered as raw HTML on the Impressum page, so admins can format it freely. */
-    @Column(length = 8000)
+    @Column(columnDefinition = "TEXT")
     private String impressumText;
 
     public Long getId() {
