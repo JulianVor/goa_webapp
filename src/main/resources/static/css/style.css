@@ -212,6 +212,17 @@ img { max-width: 100%; display: block; }
 
 .section { padding: 3.5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
 
+/* A short rule between sections instead of a hard color-block edge, so the
+   backdrop veil can stay the same everywhere while sections still read as
+   separate. */
+.section-divider {
+    width: 120px;
+    height: 2px;
+    margin: 2.5rem auto;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+}
+
 .section-title {
     font-family: var(--font-display);
     font-size: clamp(1.8rem, 5vw, 2.6rem);
@@ -222,7 +233,7 @@ img { max-width: 100%; display: block; }
     margin: 0 0 2rem;
 }
 
-.section-infos { background: color-mix(in srgb, var(--color-primary) 55%, transparent); }
+.section-infos { background: #0000004f; }
 
 .infos-grid {
     display: grid;
@@ -353,7 +364,7 @@ img { max-width: 100%; display: block; }
 
 /* ----------------------------------- FAQ ------------------------------------ */
 
-.section-faq { background: color-mix(in srgb, var(--color-primary) 45%, transparent); }
+.section-faq { background: #0000004f; }
 
 .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
