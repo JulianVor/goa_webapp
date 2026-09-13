@@ -662,3 +662,16 @@ img { max-width: 100%; display: block; }
     }
     .nav-links.open { display: flex; }
 }
+
+/* On phones the fixed 1.5-2.5rem side padding ate a noticeable chunk of an
+   already-narrow screen; trim it down so content actually uses the width. */
+@media (max-width: 480px) {
+    .hero,
+    .section,
+    .band-detail-hero,
+    .band-detail-gallery,
+    .band-detail-video {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
