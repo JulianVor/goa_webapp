@@ -222,7 +222,7 @@ img { max-width: 100%; display: block; }
     margin: 0 0 2rem;
 }
 
-.section-infos { background: color-mix(in srgb, var(--color-primary) 92%, black); }
+.section-infos { background: color-mix(in srgb, var(--color-primary) 55%, transparent); }
 
 .infos-grid {
     display: grid;
@@ -280,7 +280,7 @@ img { max-width: 100%; display: block; }
 
 /* --------------------------------- Line-up --------------------------------- */
 
-.section-lineup { background: #1b1b1b; }
+.section-lineup { background: rgba(10, 10, 10, 0.55); }
 
 .day-block { margin-bottom: 2.5rem; }
 
@@ -353,7 +353,7 @@ img { max-width: 100%; display: block; }
 
 /* ----------------------------------- FAQ ------------------------------------ */
 
-.section-faq { background: color-mix(in srgb, var(--color-primary) 85%, black); }
+.section-faq { background: color-mix(in srgb, var(--color-primary) 45%, transparent); }
 
 .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
@@ -508,7 +508,7 @@ img { max-width: 100%; display: block; }
 
 /* --------------------------------- Legal page -------------------------------- */
 
-.legal-page { background: #1b1b1b; min-height: 50vh; }
+.legal-page { background: rgba(10, 10, 10, 0.55); min-height: 50vh; }
 .legal-text { line-height: 1.6; opacity: 0.95; white-space: pre-line; }
 
 /* --------------------------------- Responsive -------------------------------- */
