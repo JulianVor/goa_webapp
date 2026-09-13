@@ -6,6 +6,11 @@
     <title th:text="${pageTitle} ?: (${edition} != null ? ${edition.title} + ' ' + ${edition.displayLabel} : 'GOA Festival')">GOA Festival</title>
     <link rel="icon" th:if="${siteSettings != null and siteSettings.faviconImagePath != null}" th:href="${siteSettings.faviconImagePath}"/>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <!-- The fixed background photo covers the whole viewport and is usually the largest
+         asset on the page; preloading it avoids the browser discovering it late (it's
+         only referenced from a CSS custom property, not a plain <img>). -->
+    <link rel="preload" as="image" th:if="${edition != null and edition.backgroundImagePath != null}"
+          th:href="${edition.backgroundImagePath}"/>
     <style th:if="${edition != null}" th:utext="|
         :root {
             --color-primary: ${edition.colorPrimary};

@@ -58,7 +58,7 @@
 
 <section class="band-detail-gallery" th:if="${!band.galleryImages.isEmpty()}">
     <div class="gallery-grid">
-        <img th:each="img : ${band.galleryImages}" th:src="${img}" th:alt="${band.name}"/>
+        <img th:each="img : ${band.galleryImages}" th:src="${img}" th:alt="${band.name}" loading="lazy"/>
     </div>
 </section>
 

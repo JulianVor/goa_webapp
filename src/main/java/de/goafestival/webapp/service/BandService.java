@@ -141,7 +141,8 @@ public class BandService {
 
         if (form.getMainImage() != null && !form.getMainImage().isEmpty()) {
             fileStorageService.delete(band.getMainImagePath());
-            band.setMainImagePath(fileStorageService.store(form.getMainImage(), "bands/main"));
+            band.setMainImagePath(fileStorageService.store(form.getMainImage(), "bands/main",
+                    FileStorageService.MAX_DIMENSION_STANDARD));
         }
 
         List<MultipartFile> uploaded = form.getGalleryImages() == null ? List.of() : form.getGalleryImages().stream()
@@ -151,7 +152,7 @@ public class BandService {
             band.getGalleryImages().forEach(fileStorageService::delete);
             List<String> stored = uploaded.stream()
                     .limit(Band.MAX_GALLERY_IMAGES)
-                    .map(f -> fileStorageService.store(f, "bands/gallery"))
+                    .map(f -> fileStorageService.store(f, "bands/gallery", FileStorageService.MAX_DIMENSION_STANDARD))
                     .collect(Collectors.toList());
             band.setGalleryImages(stored);
         }

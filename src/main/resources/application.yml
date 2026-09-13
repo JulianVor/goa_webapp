@@ -18,7 +18,10 @@ spring:
       max-file-size: ${APP_MAX_UPLOAD_SIZE:50MB}
       max-request-size: ${APP_MAX_UPLOAD_REQUEST_SIZE:200MB}
   thymeleaf:
-    cache: false
+    # Re-parsing every template on every request is fine for local dev (hot template edits)
+    # but wastes CPU per request in production. Default to cached; set THYMELEAF_CACHE=false
+    # locally if you need template edits to show up without a restart.
+    cache: ${THYMELEAF_CACHE:true}
 
 server:
   port: 8080

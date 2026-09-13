@@ -72,7 +72,7 @@
         <h3 class="day-title" th:if="${edition.isCurrent()}" th:text="${day.label}">Freitag 10. Juli 2026</h3>
         <div class="band-grid">
             <a class="band-card" th:each="band : ${day.bands}" th:href="@{'/bands/' + ${band.id}}">
-                <img th:if="${band.mainImagePath}" th:src="${band.mainImagePath}" th:alt="${band.name}"/>
+                <img th:if="${band.mainImagePath}" th:src="${band.mainImagePath}" th:alt="${band.name}" loading="lazy"/>
                 <div class="band-card-overlay">
                     <div class="band-card-name" th:text="${band.name}">Bandname</div>
                     <div class="band-card-genre" th:text="${band.genre}">Genre</div>

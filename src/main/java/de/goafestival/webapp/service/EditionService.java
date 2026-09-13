@@ -121,15 +121,18 @@ public class EditionService {
 
         if (form.getLogoImage() != null && !form.getLogoImage().isEmpty()) {
             fileStorageService.delete(edition.getLogoImagePath());
-            edition.setLogoImagePath(fileStorageService.store(form.getLogoImage(), "editions/logos"));
+            edition.setLogoImagePath(fileStorageService.store(form.getLogoImage(), "editions/logos",
+                    FileStorageService.MAX_DIMENSION_STANDARD));
         }
         if (form.getBackgroundImage() != null && !form.getBackgroundImage().isEmpty()) {
             fileStorageService.delete(edition.getBackgroundImagePath());
-            edition.setBackgroundImagePath(fileStorageService.store(form.getBackgroundImage(), "editions/backgrounds"));
+            edition.setBackgroundImagePath(fileStorageService.store(form.getBackgroundImage(), "editions/backgrounds",
+                    FileStorageService.MAX_DIMENSION_BACKGROUND));
         }
         if (form.getLocationImage() != null && !form.getLocationImage().isEmpty()) {
             fileStorageService.delete(edition.getLocationImagePath());
-            edition.setLocationImagePath(fileStorageService.store(form.getLocationImage(), "editions/location"));
+            edition.setLocationImagePath(fileStorageService.store(form.getLocationImage(), "editions/location",
+                    FileStorageService.MAX_DIMENSION_STANDARD));
         }
     }
 }

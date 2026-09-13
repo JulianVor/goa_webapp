@@ -32,11 +32,13 @@ public class SiteSettingsService {
         settings.setImpressumText(form.getImpressumText());
         if (form.getLogoImage() != null && !form.getLogoImage().isEmpty()) {
             fileStorageService.delete(settings.getLogoImagePath());
-            settings.setLogoImagePath(fileStorageService.store(form.getLogoImage(), "site"));
+            settings.setLogoImagePath(fileStorageService.store(form.getLogoImage(), "site",
+                    FileStorageService.MAX_DIMENSION_STANDARD));
         }
         if (form.getFaviconImage() != null && !form.getFaviconImage().isEmpty()) {
             fileStorageService.delete(settings.getFaviconImagePath());
-            settings.setFaviconImagePath(fileStorageService.store(form.getFaviconImage(), "site"));
+            settings.setFaviconImagePath(fileStorageService.store(form.getFaviconImage(), "site",
+                    FileStorageService.MAX_DIMENSION_ICON));
         }
         siteSettingsRepository.save(settings);
     }
