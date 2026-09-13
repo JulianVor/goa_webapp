@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title th:text="${pageTitle} ?: (${edition} != null ? ${edition.title} + ' ' + ${edition.displayLabel} : 'GOA Festival')">GOA Festival</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-    <style th:if="${edition != null}" th:text="|
+    <style th:if="${edition != null}" th:utext="|
         :root {
             --color-primary: ${edition.colorPrimary};
             --color-secondary: ${edition.colorSecondary};
