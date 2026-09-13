@@ -504,10 +504,10 @@ img { max-width: 100%; display: block; }
 .site-footer {
     text-align: center;
     padding: 1.5rem;
-    background: color-mix(in srgb, var(--color-secondary) 25%, #171717);
+    background: color-mix(in srgb, var(--color-primary) 82%, transparent);
 }
 
-.site-footer a { text-decoration: none; opacity: 0.8; font-size: 0.85rem; }
+.site-footer a { text-decoration: none; opacity: 0.8; font-size: 0.85rem; color: var(--color-text); }
 
 /* -------------------------------- Band detail -------------------------------- */
 
