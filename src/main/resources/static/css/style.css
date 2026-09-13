@@ -513,7 +513,7 @@ img { max-width: 100%; display: block; }
 
 .band-detail-hero {
     display: grid;
-    grid-template-columns: 1.35fr 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: stretch;
     gap: 2rem;
     padding: 2.5rem 2.5rem;
