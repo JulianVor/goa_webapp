@@ -189,7 +189,15 @@ img { max-width: 100%; display: block; }
    into view. */
 .page-bg {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* inset:0's implicit height (computed from bottom:0 against whatever the
+       viewport currently is) is exactly what made this visibly resize/flash
+       as the mobile URL bar showed and hid - it recalculates on every
+       transition. An explicit, stable height doesn't. */
+    height: 100vh;
+    height: 100svh;
     z-index: -1;
     background-image: var(--bg-image);
     background-color: #2a2a2a;
@@ -653,7 +661,7 @@ img { max-width: 100%; display: block; }
 
 /* --------------------------------- Legal page -------------------------------- */
 
-.legal-page { background: #0000004f; min-height: 50vh; }
+.legal-page { background: #0000004f; min-height: 50vh; min-height: 50svh; }
 .legal-text { line-height: 1.6; opacity: 0.95; font-weight: 700; }
 .legal-text a { color: inherit; text-decoration: underline; }
 
