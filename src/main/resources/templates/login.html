@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('Login')}"></head>
+<body class="admin-body admin-login-body">
+<div class="login-box">
+    <h1>GOA Admin</h1>
+    <form th:action="@{/login}" method="post">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <label>
+            Benutzername
+            <input type="text" name="username" autofocus="autofocus"/>
+        </label>
+        <label>
+            Passwort
+            <input type="password" name="password"/>
+        </label>
+        <p class="form-error" th:if="${param.error}">Login fehlgeschlagen. Bitte erneut versuchen.</p>
+        <p class="form-success" th:if="${param.logout}">Erfolgreich abgemeldet.</p>
+        <button type="submit">Anmelden</button>
+    </form>
+</div>
+</body>
+</html>

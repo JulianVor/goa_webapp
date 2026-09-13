@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin(${isNew} ? 'Neue Frage' : 'Frage bearbeiten')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <p><a th:href="@{'/admin/editions/' + ${edition.id} + '/faq'}">← Zurück zu FAQ</a></p>
+    <h1 th:text="${isNew} ? 'Neue Frage' : 'Frage bearbeiten'">FAQ</h1>
+
+    <form method="post" class="admin-form"
+          th:action="${isNew} ? @{'/admin/editions/' + ${edition.id} + '/faq'} : @{'/admin/editions/' + ${edition.id} + '/faq/' + ${faqEntryForm.id}}"
+          th:object="${faqEntryForm}">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <label>Frage<input type="text" th:field="*{question}" required="required"/></label>
+        <label>Antwort<textarea th:field="*{answer}" rows="5" required="required"></textarea></label>
+        <label>Reihenfolge<input type="number" th:field="*{sortOrder}"/></label>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Speichern</button>
+            <a class="btn" th:href="@{'/admin/editions/' + ${edition.id} + '/faq'}">Abbrechen</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

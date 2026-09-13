@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin(${isNew} ? 'Neue Band' : 'Band bearbeiten')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <p><a th:href="@{'/admin/editions/' + ${edition.id} + '/bands'}">← Zurück zu Bands</a></p>
+    <h1 th:text="(${isNew} ? 'Neue Band – ' : 'Band bearbeiten – ') + ${edition.title} + ' ' + ${edition.year}">Band</h1>
+
+    <form method="post" enctype="multipart/form-data" class="admin-form"
+          th:action="${isNew} ? @{'/admin/editions/' + ${edition.id} + '/bands'} : @{'/admin/editions/' + ${edition.id} + '/bands/' + ${bandForm.id}}"
+          th:object="${bandForm}">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <fieldset>
+            <legend>Basis</legend>
+            <label>Bandname<input type="text" th:field="*{name}" required="required"/></label>
+            <div class="form-row">
+                <label>Genre<input type="text" th:field="*{genre}"/></label>
+                <label>Herkunft<input type="text" th:field="*{herkunft}"/></label>
+            </div>
+            <label>Auftritt (Tag & Uhrzeit)<input type="datetime-local" th:field="*{performanceAt}"/></label>
+            <label>Beschreibung<textarea th:field="*{description}" rows="6"></textarea></label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Medien</legend>
+            <label>Bandfoto (Karte / Detailseite)<input type="file" name="mainImage" accept="image/*"/></label>
+            <img class="current-image-preview" th:if="${band?.mainImagePath}" th:src="${band.mainImagePath}" alt="Aktuelles Foto"/>
+
+            <label>YouTube-Video (wird eingebettet)<input type="text" th:field="*{youtubeVideoUrl}" placeholder="https://www.youtube.com/watch?v=..."/></label>
+
+            <label>Galerie – bis zu 6 Fotos (Upload ersetzt bestehende Galerie)</label>
+            <input type="file" name="galleryImages" accept="image/*" multiple="multiple"/>
+            <div class="gallery-preview" th:if="${band != null and !band.galleryImages.isEmpty()}">
+                <img th:each="img : ${band.galleryImages}" th:src="${img}" alt="Galeriebild"/>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Links</legend>
+            <div class="form-row">
+                <label>Webseite<input type="text" th:field="*{websiteUrl}"/></label>
+                <label>Spotify<input type="text" th:field="*{spotifyUrl}"/></label>
+            </div>
+            <div class="form-row">
+                <label>Instagram<input type="text" th:field="*{instagramUrl}"/></label>
+                <label>Facebook<input type="text" th:field="*{facebookUrl}"/></label>
+                <label>YouTube-Kanal<input type="text" th:field="*{youtubeUrl}"/></label>
+            </div>
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Speichern</button>
+            <a class="btn" th:href="@{'/admin/editions/' + ${edition.id} + '/bands'}">Abbrechen</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${edition}, null)}"></head>
+<body>
+<div th:replace="~{fragments/nav :: nav(${edition}, ${previousEdition})}"></div>
+
+<header class="hero">
+    <div class="hero-inner">
+        <h1 class="hero-title" th:text="${edition.title}">Grumbrechtstraßen Open Air</h1>
+        <div class="hero-year" th:text="${edition.displayLabel}">2026</div>
+
+        <div class="headliner-box" th:if="${edition.headlinerName}">
+            <div class="headliner-name" th:text="${edition.headlinerName}">Tipsy Apes</div>
+            <div class="headliner-date" th:text="${edition.headlinerDateLabel}">10./11.07.26</div>
+        </div>
+    </div>
+</header>
+
+<section id="event-infos" class="section section-infos">
+    <h2 class="section-title">Event – Infos</h2>
+    <div class="infos-grid">
+        <div class="infos-cards">
+            <div class="info-card">
+                <span class="info-label label-was">Was?</span>
+                <p th:text="${edition.aboutText}">Beschreibung des Festivals.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-label label-wann">Wann?</span>
+                <p>
+                    <span th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(edition.startDate)}">10. Juli 2026</span>
+                    <br th:if="${edition.endDate != null and !edition.endDate.equals(edition.startDate)}"/>
+                    <span th:if="${edition.endDate != null and !edition.endDate.equals(edition.startDate)}"
+                          th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(edition.endDate)}">11. Juli 2026</span>
+                </p>
+            </div>
+            <div class="info-card">
+                <span class="info-label label-wo">Wo?</span>
+                <p>
+                    <span th:text="${edition.locationName}">Tipsy Apes</span><br/>
+                    <span th:text="${edition.locationStreet}">Am Radeland 25</span><br/>
+                    <span th:text="${edition.locationZipCity}">21079 Hamburg</span>
+                </p>
+            </div>
+        </div>
+        <div class="infos-map" th:if="${edition.mapQuery}">
+            <iframe class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    th:src="@{https://www.google.com/maps(q=${edition.mapQuery}, output='embed')}"></iframe>
+            <a class="route-button" target="_blank" rel="noopener"
+               th:href="@{https://www.google.com/maps/dir/(api='1', destination=${edition.mapQuery})}">
+                Route berechnen
+            </a>
+        </div>
+    </div>
+</section>
+
+<section id="line-up" class="section section-lineup">
+    <h2 class="section-title">Line – Up</h2>
+
+    <div class="day-block" th:each="day : ${dayLineups}">
+        <h3 class="day-title" th:text="${day.label}">Freitag 10. Juli 2026</h3>
+        <div class="band-grid">
+            <a class="band-card" th:each="band : ${day.bands}" th:href="@{'/bands/' + ${band.id}}"
+               th:style="${band.mainImagePath != null} ? ('background-image:url(\'' + ${band.mainImagePath} + '\')') : ''">
+                <div class="band-card-overlay">
+                    <div class="band-card-name" th:text="${band.name}">Bandname</div>
+                    <div class="band-card-genre" th:text="${band.genre}">Genre</div>
+                    <div class="band-card-time"
+                         th:text="${T(de.goafestival.webapp.service.GermanDateFormats).timeLabel(band.performanceAt)}">18:00 Uhr</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <p class="empty-hint" th:if="${dayLineups.isEmpty()}">Das Line-Up wird bald bekannt gegeben.</p>
+</section>
+
+<section id="faq" class="section section-faq" th:if="${!faqEntries.isEmpty()}">
+    <h2 class="section-title">FAQ</h2>
+    <div class="faq-list">
+        <div class="faq-item" th:each="faq : ${faqEntries}">
+            <button type="button" class="faq-question">
+                <span th:text="${faq.question}">Frage</span>
+                <span class="faq-caret">▾</span>
+            </button>
+            <div class="faq-answer">
+                <p th:text="${faq.answer}">Antwort</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

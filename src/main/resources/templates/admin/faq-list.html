@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('FAQ – ' + ${edition.title})}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <p><a th:href="@{/admin}">← Zurück zur Übersicht</a></p>
+    <div class="admin-header-row">
+        <h1 th:text="'FAQ – ' + ${edition.title} + ' ' + ${edition.year}">FAQ</h1>
+        <a class="btn btn-primary" th:href="@{'/admin/editions/' + ${edition.id} + '/faq/new'}">+ Neue Frage</a>
+    </div>
+
+    <p class="flash-success" th:if="${success}" th:text="${success}"></p>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Frage</th>
+            <th>Antwort</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="faq : ${faqEntries}">
+            <td th:text="${faq.sortOrder}">0</td>
+            <td th:text="${faq.question}">Frage</td>
+            <td th:text="${#strings.abbreviate(faq.answer, 80)}">Antwort</td>
+            <td class="actions">
+                <a th:href="@{'/admin/editions/' + ${edition.id} + '/faq/' + ${faq.id} + '/edit'}">Bearbeiten</a>
+                <form th:action="@{'/admin/editions/' + ${edition.id} + '/faq/' + ${faq.id} + '/delete'}" method="post" class="inline-form"
+                      onsubmit="return confirm('FAQ-Eintrag wirklich löschen?');">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button link-danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${faqEntries.isEmpty()}">
+            <td colspan="4">Noch keine Frage angelegt.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

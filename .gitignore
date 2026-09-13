@@ -1,0 +1,9 @@
+target/
+data/
+uploads/
+*.class
+.idea/
+*.iml
+.vscode/
+.DS_Store
+HELP.md

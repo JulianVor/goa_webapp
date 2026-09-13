@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${edition}, ${band.name})}"></head>
+<body>
+<div th:replace="~{fragments/nav :: nav(${edition}, null)}"></div>
+
+<section class="band-detail-hero">
+    <div class="band-detail-image" th:if="${band.mainImagePath}">
+        <img th:src="${band.mainImagePath}" th:alt="${band.name}"/>
+    </div>
+
+    <div class="band-detail-card">
+        <h1 class="band-detail-name" th:text="${band.name}">Bandname</h1>
+        <p class="band-detail-datetime"
+           th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dayAndTimeLabel(band.performanceAt)}">
+            Freitag 10. Juli 2026, 18:00 Uhr
+        </p>
+
+        <div class="band-detail-meta">
+            <div th:if="${band.genre}">
+                <span class="meta-label">Genre</span>
+                <p th:text="${band.genre}">Genre</p>
+            </div>
+            <div th:if="${band.herkunft}">
+                <span class="meta-label">Herkunft</span>
+                <p th:text="${band.herkunft}">Herkunft</p>
+            </div>
+        </div>
+
+        <p class="band-detail-description" th:if="${band.description}" th:text="${band.description}">Beschreibung</p>
+
+        <div class="band-detail-socials">
+            <a th:if="${band.websiteUrl}" th:href="${band.websiteUrl}" target="_blank" rel="noopener" title="Webseite">
+                <img th:src="@{/img/icons/website.svg}" alt="Webseite"/>
+            </a>
+            <a th:if="${band.spotifyUrl}" th:href="${band.spotifyUrl}" target="_blank" rel="noopener" title="Spotify">
+                <img th:src="@{/img/icons/spotify.svg}" alt="Spotify"/>
+            </a>
+            <a th:if="${band.instagramUrl}" th:href="${band.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
+                <img th:src="@{/img/icons/instagram.svg}" alt="Instagram"/>
+            </a>
+            <a th:if="${band.facebookUrl}" th:href="${band.facebookUrl}" target="_blank" rel="noopener" title="Facebook">
+                <img th:src="@{/img/icons/facebook.svg}" alt="Facebook"/>
+            </a>
+            <a th:if="${band.youtubeUrl}" th:href="${band.youtubeUrl}" target="_blank" rel="noopener" title="YouTube">
+                <img th:src="@{/img/icons/youtube.svg}" alt="YouTube"/>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="band-detail-video" th:if="${band.youtubeVideoUrl}">
+    <iframe th:src="${youtubeEmbedUrl}"
+            loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+</section>
+
+<section class="band-detail-gallery" th:if="${!band.galleryImages.isEmpty()}">
+    <div class="gallery-grid">
+        <img th:each="img : ${band.galleryImages}" th:src="${img}" th:alt="${band.name}"/>
+    </div>
+</section>
+
+<p class="band-detail-back">
+    <a th:href="${edition.current} ? '/#line-up' : ('/goa/' + ${edition.year} + '#line-up')">← Zurück zum Line-Up</a>
+</p>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

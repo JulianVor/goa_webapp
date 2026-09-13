@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head-admin(pageTitle)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${pageTitle} + ' – GOA Admin'">GOA Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+</head>
+</html>

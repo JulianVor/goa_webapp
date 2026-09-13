@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="site-nav" th:fragment="nav(edition, previousEdition)"
+     th:with="baseUrl=${edition.current} ? '/' : ('/goa/' + ${edition.year})">
+    <a class="brand" th:href="${baseUrl}">
+        <img th:if="${edition.logoImagePath}" th:src="${edition.logoImagePath}" alt="Logo"/>
+        <span th:unless="${edition.logoImagePath}" th:text="${edition.title}">GOA</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="Menü">☰</button>
+
+    <div class="nav-links">
+        <a class="pill" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
+        <a class="pill" th:href="${baseUrl} + '#line-up'">Line-Up</a>
+        <a class="pill" th:href="${baseUrl} + '#faq'">FAQ</a>
+
+        <span class="nav-socials">
+            <a th:if="${edition.instagramUrl}" th:href="${edition.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
+                <img th:src="@{/img/icons/instagram.svg}" alt="Instagram"/>
+            </a>
+            <a th:if="${edition.facebookUrl}" th:href="${edition.facebookUrl}" target="_blank" rel="noopener" title="Facebook">
+                <img th:src="@{/img/icons/facebook.svg}" alt="Facebook"/>
+            </a>
+            <a th:if="${edition.contactEmail}" th:href="'mailto:' + ${edition.contactEmail}" title="E-Mail">
+                <img th:src="@{/img/icons/mail.svg}" alt="E-Mail"/>
+            </a>
+        </span>
+
+        <a class="nav-history" th:if="${previousEdition != null}"
+           th:href="@{'/goa/' + ${previousEdition.year}}"
+           th:text="'GOA ' + ${previousEdition.year}">GOA 2025</a>
+    </div>
+</nav>
+</body>
+</html>

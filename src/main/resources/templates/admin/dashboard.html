@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('Dashboard')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <div class="admin-header-row">
+        <h1>Festival-Ausgaben</h1>
+        <a class="btn btn-primary" th:href="@{/admin/editions/new}">+ Neues Jahr anlegen</a>
+    </div>
+
+    <p class="flash-success" th:if="${success}" th:text="${success}"></p>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>Jahr</th>
+            <th>Titel</th>
+            <th>Zeitraum</th>
+            <th>Status</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="edition : ${editions}">
+            <td th:text="${edition.year}">2026</td>
+            <td th:text="${edition.title}">Grumbrechtstraßen Open Air</td>
+            <td>
+                <span th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(edition.startDate)}">10. Juli 2026</span>
+                –
+                <span th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(edition.endDate)}">11. Juli 2026</span>
+            </td>
+            <td>
+                <span class="badge badge-current" th:if="${edition.current}">aktuell</span>
+                <span class="badge" th:unless="${edition.current}">Archiv</span>
+            </td>
+            <td class="actions">
+                <a th:href="@{'/admin/editions/' + ${edition.id} + '/edit'}">Bearbeiten</a>
+                <a th:href="@{'/admin/editions/' + ${edition.id} + '/bands'}">Bands</a>
+                <a th:href="@{'/admin/editions/' + ${edition.id} + '/faq'}">FAQ</a>
+                <form th:if="${!edition.current}" th:action="@{'/admin/editions/' + ${edition.id} + '/set-current'}" method="post" class="inline-form">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button">Als aktuell setzen</button>
+                </form>
+                <form th:action="@{'/admin/editions/' + ${edition.id} + '/delete'}" method="post" class="inline-form"
+                      onsubmit="return confirm('Diese Ausgabe inkl. aller Bands und FAQ-Einträge wirklich löschen?');">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button link-danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${editions.isEmpty()}">
+            <td colspan="5">Noch keine Ausgabe angelegt.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

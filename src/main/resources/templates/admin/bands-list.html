@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('Bands – ' + ${edition.title})}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <p><a th:href="@{/admin}">← Zurück zur Übersicht</a></p>
+    <div class="admin-header-row">
+        <h1 th:text="'Bands – ' + ${edition.title} + ' ' + ${edition.year}">Bands</h1>
+        <a class="btn btn-primary" th:href="@{'/admin/editions/' + ${edition.id} + '/bands/new'}">+ Neue Band</a>
+    </div>
+
+    <p class="flash-success" th:if="${success}" th:text="${success}"></p>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Herkunft</th>
+            <th>Auftritt</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="band : ${bands}">
+            <td th:text="${band.name}">Bandname</td>
+            <td th:text="${band.genre}">Genre</td>
+            <td th:text="${band.herkunft}">Herkunft</td>
+            <td th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dayAndTimeLabel(band.performanceAt)}">Freitag, 18:00 Uhr</td>
+            <td class="actions">
+                <a th:href="@{'/bands/' + ${band.id}}" target="_blank">Ansehen</a>
+                <a th:href="@{'/admin/editions/' + ${edition.id} + '/bands/' + ${band.id} + '/edit'}">Bearbeiten</a>
+                <form th:action="@{'/admin/editions/' + ${edition.id} + '/bands/' + ${band.id} + '/delete'}" method="post" class="inline-form"
+                      onsubmit="return confirm('Band wirklich löschen?');">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button link-danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${bands.isEmpty()}">
+            <td colspan="5">Noch keine Band angelegt.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

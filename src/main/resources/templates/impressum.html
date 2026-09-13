@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${edition}, 'Impressum')}"></head>
+<body>
+<div th:replace="~{fragments/nav :: nav(${edition}, null)}"></div>
+
+<section class="section legal-page">
+    <h2 class="section-title">Impressum</h2>
+    <p class="legal-text" th:if="${edition.impressumText}" th:text="${edition.impressumText}"></p>
+    <p th:unless="${edition.impressumText}">Es wurde noch kein Impressum hinterlegt.</p>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
