@@ -18,39 +18,39 @@
         </p>
 
         <div class="band-detail-meta">
-            <div th:if="${band.genre}">
+            <div th:if="${not #strings.isEmpty(band.genre)}">
                 <span class="meta-label">Genre</span>
                 <p th:text="${band.genre}">Genre</p>
             </div>
-            <div th:if="${band.herkunft}">
+            <div th:if="${not #strings.isEmpty(band.herkunft)}">
                 <span class="meta-label">Herkunft</span>
                 <p th:text="${band.herkunft}">Herkunft</p>
             </div>
         </div>
 
-        <p class="band-detail-description" th:if="${band.description}" th:text="${band.description}">Beschreibung</p>
+        <p class="band-detail-description" th:if="${not #strings.isEmpty(band.description)}" th:text="${band.description}">Beschreibung</p>
 
         <div class="band-detail-socials">
-            <a th:if="${band.websiteUrl}" th:href="${band.websiteUrl}" target="_blank" rel="noopener" title="Webseite">
+            <a th:if="${not #strings.isEmpty(band.websiteUrl)}" th:href="${band.websiteUrl}" target="_blank" rel="noopener" title="Webseite">
                 <img th:src="@{/img/icons/website.svg}" alt="Webseite"/>
             </a>
-            <a th:if="${band.spotifyUrl}" th:href="${band.spotifyUrl}" target="_blank" rel="noopener" title="Spotify">
+            <a th:if="${not #strings.isEmpty(band.spotifyUrl)}" th:href="${band.spotifyUrl}" target="_blank" rel="noopener" title="Spotify">
                 <img th:src="@{/img/icons/spotify.svg}" alt="Spotify"/>
             </a>
-            <a th:if="${band.instagramUrl}" th:href="${band.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
+            <a th:if="${not #strings.isEmpty(band.instagramUrl)}" th:href="${band.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
                 <img th:src="@{/img/icons/instagram.svg}" alt="Instagram"/>
             </a>
-            <a th:if="${band.facebookUrl}" th:href="${band.facebookUrl}" target="_blank" rel="noopener" title="Facebook">
+            <a th:if="${not #strings.isEmpty(band.facebookUrl)}" th:href="${band.facebookUrl}" target="_blank" rel="noopener" title="Facebook">
                 <img th:src="@{/img/icons/facebook.svg}" alt="Facebook"/>
             </a>
-            <a th:if="${band.youtubeUrl}" th:href="${band.youtubeUrl}" target="_blank" rel="noopener" title="YouTube">
+            <a th:if="${not #strings.isEmpty(band.youtubeUrl)}" th:href="${band.youtubeUrl}" target="_blank" rel="noopener" title="YouTube">
                 <img th:src="@{/img/icons/youtube.svg}" alt="YouTube"/>
             </a>
         </div>
     </div>
 </section>
 
-<section class="band-detail-video" th:if="${band.youtubeVideoUrl}">
+<section class="band-detail-video" th:if="${not #strings.isEmpty(band.youtubeVideoUrl)}">
     <iframe th:src="${youtubeEmbedUrl}"
             loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>

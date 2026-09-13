@@ -48,7 +48,7 @@
                 </p>
             </div>
         </div>
-        <div class="infos-map" th:if="${edition.mapQuery}">
+        <div class="infos-map" th:if="${not #strings.isEmpty(edition.mapQuery)}">
             <iframe class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
                     th:src="@{https://www.google.com/maps(q=${edition.mapQuery}, output='embed')}"></iframe>
             <a class="route-button" target="_blank" rel="noopener"

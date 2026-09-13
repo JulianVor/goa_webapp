@@ -97,7 +97,6 @@ img { max-width: 100%; display: block; }
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-left: auto;
     flex-wrap: wrap;
 }
 
@@ -121,6 +120,7 @@ img { max-width: 100%; display: block; }
 .nav-history {
     text-decoration: none;
     color: var(--color-text);
+    font-family: var(--font-display);
     font-weight: 600;
     opacity: 0.85;
     font-size: 1.05rem;
