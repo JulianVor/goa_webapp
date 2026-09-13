@@ -42,4 +42,28 @@ public class SiteSettingsService {
         }
         siteSettingsRepository.save(settings);
     }
+
+    /** Re-optimizes already-stored images (uploaded before automatic resizing existed). Returns how many files were rewritten. */
+    public int optimizeImages() {
+        SiteSettings settings = get();
+        int count = 0;
+
+        String newLogo = fileStorageService.reoptimize(settings.getLogoImagePath(), "site", FileStorageService.MAX_DIMENSION_STANDARD);
+        if (newLogo != null) {
+            fileStorageService.delete(settings.getLogoImagePath());
+            settings.setLogoImagePath(newLogo);
+            count++;
+        }
+        String newFavicon = fileStorageService.reoptimize(settings.getFaviconImagePath(), "site", FileStorageService.MAX_DIMENSION_ICON);
+        if (newFavicon != null) {
+            fileStorageService.delete(settings.getFaviconImagePath());
+            settings.setFaviconImagePath(newFavicon);
+            count++;
+        }
+
+        if (count > 0) {
+            siteSettingsRepository.save(settings);
+        }
+        return count;
+    }
 }

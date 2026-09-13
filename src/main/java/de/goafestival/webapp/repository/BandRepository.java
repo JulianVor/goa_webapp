@@ -16,4 +16,7 @@ public interface BandRepository extends JpaRepository<Band, Long> {
 
     @Query("select distinct b from Band b left join fetch b.galleryImages where b.id = :id")
     Optional<Band> findByIdWithGallery(Long id);
+
+    @Query("select distinct b from Band b left join fetch b.galleryImages")
+    List<Band> findAllWithGallery();
 }

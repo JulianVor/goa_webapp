@@ -121,6 +121,47 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * Re-downscales/re-compresses an already-stored image in place, for images uploaded
+     * before this resizing existed. Writes the result as a new file (the caller deletes
+     * the old one and updates its reference) and returns its public path, or {@code null}
+     * if there's nothing to do: the path is unset/missing, isn't a raster image ImageIO
+     * can decode (e.g. SVG), or is already within {@code maxDimension} and in the format
+     * a fresh upload would produce (nothing to gain by re-encoding it again).
+     */
+    public String reoptimize(String publicPath, String subDir, int maxDimension) {
+        if (!StringUtils.hasText(publicPath) || !publicPath.startsWith("/uploads/")) {
+            return null;
+        }
+        Path source = root.resolve(publicPath.substring("/uploads/".length())).normalize();
+        if (!source.startsWith(root) || !Files.exists(source)) {
+            return null;
+        }
+        String currentExtension = extensionOf(source.getFileName().toString());
+        if (!RASTER_EXTENSIONS.contains(currentExtension)) {
+            return null;
+        }
+        try {
+            BufferedImage image;
+            try (InputStream in = Files.newInputStream(source)) {
+                image = ImageIO.read(in);
+            }
+            if (image == null) {
+                return null;
+            }
+            boolean hasAlpha = image.getColorModel().hasAlpha();
+            String expectedExtension = hasAlpha ? ".png" : ".jpg";
+            int longerEdge = Math.max(image.getWidth(), image.getHeight());
+            if (longerEdge <= maxDimension && currentExtension.equals(expectedExtension)) {
+                return null;
+            }
+            Path targetDir = resolveSubDir(subDir);
+            return writeResized(image, targetDir, subDir, maxDimension);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to re-optimize file " + source, e);
+        }
+    }
+
     /** Best-effort delete of a previously stored file, identified by its public path. */
     public void delete(String publicPath) {
         if (!StringUtils.hasText(publicPath) || !publicPath.startsWith("/uploads/")) {

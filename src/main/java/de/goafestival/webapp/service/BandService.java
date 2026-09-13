@@ -96,6 +96,39 @@ public class BandService {
         bandRepository.delete(band);
     }
 
+    /** Re-optimizes already-stored images (uploaded before automatic resizing existed). Returns how many files were rewritten. */
+    public int optimizeImages() {
+        int count = 0;
+        for (Band band : bandRepository.findAllWithGallery()) {
+            boolean changed = false;
+
+            String newMain = fileStorageService.reoptimize(band.getMainImagePath(), "bands/main", FileStorageService.MAX_DIMENSION_STANDARD);
+            if (newMain != null) {
+                fileStorageService.delete(band.getMainImagePath());
+                band.setMainImagePath(newMain);
+                changed = true;
+                count++;
+            }
+
+            List<String> gallery = band.getGalleryImages();
+            for (int i = 0; i < gallery.size(); i++) {
+                String original = gallery.get(i);
+                String newImage = fileStorageService.reoptimize(original, "bands/gallery", FileStorageService.MAX_DIMENSION_STANDARD);
+                if (newImage != null) {
+                    fileStorageService.delete(original);
+                    gallery.set(i, newImage);
+                    changed = true;
+                    count++;
+                }
+            }
+
+            if (changed) {
+                bandRepository.save(band);
+            }
+        }
+        return count;
+    }
+
     /**
      * Duplicates a band from another edition into the given edition, e.g. for a returning
      * act. Images are copied to their own files (not just referenced) so the two bands'

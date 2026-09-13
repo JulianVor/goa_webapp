@@ -98,6 +98,41 @@ public class EditionService {
         editionRepository.delete(edition);
     }
 
+    /** Re-optimizes already-stored images (uploaded before automatic resizing existed). Returns how many files were rewritten. */
+    public int optimizeImages() {
+        int count = 0;
+        for (Edition edition : findAllOrdered()) {
+            boolean changed = false;
+
+            String newLogo = fileStorageService.reoptimize(edition.getLogoImagePath(), "editions/logos", FileStorageService.MAX_DIMENSION_STANDARD);
+            if (newLogo != null) {
+                fileStorageService.delete(edition.getLogoImagePath());
+                edition.setLogoImagePath(newLogo);
+                changed = true;
+                count++;
+            }
+            String newBackground = fileStorageService.reoptimize(edition.getBackgroundImagePath(), "editions/backgrounds", FileStorageService.MAX_DIMENSION_BACKGROUND);
+            if (newBackground != null) {
+                fileStorageService.delete(edition.getBackgroundImagePath());
+                edition.setBackgroundImagePath(newBackground);
+                changed = true;
+                count++;
+            }
+            String newLocation = fileStorageService.reoptimize(edition.getLocationImagePath(), "editions/location", FileStorageService.MAX_DIMENSION_STANDARD);
+            if (newLocation != null) {
+                fileStorageService.delete(edition.getLocationImagePath());
+                edition.setLocationImagePath(newLocation);
+                changed = true;
+                count++;
+            }
+
+            if (changed) {
+                editionRepository.save(edition);
+            }
+        }
+        return count;
+    }
+
     private void applyForm(Edition edition, EditionForm form) {
         edition.setYear(form.getYear());
         edition.setDisplayLabel(form.getDisplayLabel());

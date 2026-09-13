@@ -7,7 +7,14 @@
 <main class="admin-main">
     <div class="admin-header-row">
         <h1>Festival-Ausgaben</h1>
-        <a class="btn btn-primary" th:href="@{/admin/editions/new}">+ Neues Jahr anlegen</a>
+        <div class="admin-header-actions">
+            <form th:action="@{/admin/optimize-images}" method="post" class="inline-form"
+                  title="Verkleinert und komprimiert alle bereits hochgeladenen Bilder, die vor der automatischen Optimierung hochgeladen wurden.">
+                <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn">Bilder optimieren</button>
+            </form>
+            <a class="btn btn-primary" th:href="@{/admin/editions/new}">+ Neues Jahr anlegen</a>
+        </div>
     </div>
 
     <p class="flash-success" th:if="${success}" th:text="${success}"></p>
