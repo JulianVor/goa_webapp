@@ -103,7 +103,6 @@ public class EditionService {
         edition.setLocationStreet(form.getLocationStreet());
         edition.setLocationZipCity(form.getLocationZipCity());
         edition.setAboutText(form.getAboutText());
-        edition.setMapQuery(form.getMapQuery());
         edition.setColorPrimary(form.getColorPrimary());
         edition.setColorSecondary(form.getColorSecondary());
         edition.setColorAccent(form.getColorAccent());

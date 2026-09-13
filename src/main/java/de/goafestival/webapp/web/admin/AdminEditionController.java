@@ -93,7 +93,6 @@ public class AdminEditionController {
         form.setLocationStreet(edition.getLocationStreet());
         form.setLocationZipCity(edition.getLocationZipCity());
         form.setAboutText(edition.getAboutText());
-        form.setMapQuery(edition.getMapQuery());
         form.setColorPrimary(edition.getColorPrimary());
         form.setColorSecondary(edition.getColorSecondary());
         form.setColorAccent(edition.getColorAccent());

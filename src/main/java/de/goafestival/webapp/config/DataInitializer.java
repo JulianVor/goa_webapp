@@ -54,7 +54,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2026.setLocationZipCity("21079 Hamburg");
         edition2026.setAboutText("Das Grumbrechtstraßen Open Air ist ein Indie Rock / Metal Festival von Schanien "
                 + "Bands und Sherenernen über Bühnen bolten mobile.");
-        edition2026.setMapQuery("Am Radeland 25, 21079 Hamburg");
         edition2026.setColorPrimary("#2f6f68");
         edition2026.setColorSecondary("#e0559a");
         edition2026.setColorAccent("#f2c14e");
@@ -99,7 +98,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2025.setLocationStreet("Grumbrechtstraße 1");
         edition2025.setLocationZipCity("21079 Hamburg");
         edition2025.setAboutText("Die 60. Ausgabe des Grumbrechtstraßen Open Air – ein Rückblick.");
-        edition2025.setMapQuery("Grumbrechtstraße 1, 21079 Hamburg");
         edition2025.setColorPrimary("#2e5fa3");
         edition2025.setColorSecondary("#c9701f");
         edition2025.setColorAccent("#e07f22");

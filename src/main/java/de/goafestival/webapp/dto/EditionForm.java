@@ -34,7 +34,6 @@ public class EditionForm {
     private String locationZipCity;
 
     private String aboutText;
-    private String mapQuery;
 
     @NotBlank
     private String colorPrimary = "#2f6f68";
@@ -150,14 +149,6 @@ public class EditionForm {
 
     public void setAboutText(String aboutText) {
         this.aboutText = aboutText;
-    }
-
-    public String getMapQuery() {
-        return mapQuery;
-    }
-
-    public void setMapQuery(String mapQuery) {
-        this.mapQuery = mapQuery;
     }
 
     public String getColorPrimary() {

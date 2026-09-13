@@ -55,9 +55,6 @@ public class Edition {
     @Column(length = 4000)
     private String aboutText;
 
-    /** Address used for the Google Maps embed + "Route berechnen" link. */
-    private String mapQuery;
-
     private String colorPrimary = "#2f6f68";
     private String colorSecondary = "#e0559a";
     private String colorAccent = "#f2c14e";
@@ -191,12 +188,20 @@ public class Edition {
         this.aboutText = aboutText;
     }
 
+    /** Address for the Google Maps embed + "Route berechnen" link, composed from street and zip/city. */
     public String getMapQuery() {
-        return mapQuery;
-    }
-
-    public void setMapQuery(String mapQuery) {
-        this.mapQuery = mapQuery;
+        boolean hasStreet = locationStreet != null && !locationStreet.isBlank();
+        boolean hasZipCity = locationZipCity != null && !locationZipCity.isBlank();
+        if (hasStreet && hasZipCity) {
+            return locationStreet + ", " + locationZipCity;
+        }
+        if (hasStreet) {
+            return locationStreet;
+        }
+        if (hasZipCity) {
+            return locationZipCity;
+        }
+        return null;
     }
 
     public String getColorPrimary() {
