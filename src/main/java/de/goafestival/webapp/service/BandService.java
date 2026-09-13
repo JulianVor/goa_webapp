@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,11 @@ public class BandService {
         return bandRepository.findByEditionIdOrderByPerformanceAtAsc(editionId);
     }
 
-    /** Groups bands by performance day, ordered chronologically by day and then by time. */
+    /**
+     * Groups bands by performance day, days ordered chronologically. Within a day, bands
+     * are ordered latest-first so the headliner (playing last) appears at the top of the
+     * line-up grid instead of the bottom.
+     */
     public List<DayLineup> groupByDay(List<Band> bands) {
         Map<LocalDate, List<Band>> grouped = new LinkedHashMap<>();
         for (Band band : bands) {
@@ -62,7 +67,9 @@ public class BandService {
         }
         List<DayLineup> result = new ArrayList<>();
         for (Map.Entry<LocalDate, List<Band>> entry : grouped.entrySet()) {
-            result.add(new DayLineup(entry.getKey(), GermanDateFormats.dayLabel(entry.getKey()), entry.getValue()));
+            List<Band> dayBands = entry.getValue();
+            dayBands.sort(Comparator.comparing(Band::getPerformanceAt).reversed());
+            result.add(new DayLineup(entry.getKey(), GermanDateFormats.dayLabel(entry.getKey()), dayBands));
         }
         return result;
     }
