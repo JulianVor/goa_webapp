@@ -157,7 +157,7 @@ img { max-width: 100%; display: block; }
     text-align: center;
 }
 
-.hero-inner { max-width: 900px; }
+.hero-inner { max-width: 1100px; }
 
 .hero-title {
     font-size: clamp(2.4rem, 9vw, 4.4rem);
@@ -212,7 +212,7 @@ img { max-width: 100%; display: block; }
    inside it constrains and centers the actual content to a readable width. */
 .section-band { width: 100%; }
 
-.section { padding: 3.5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+.section { padding: 3.5rem 1.5rem; max-width: 1440px; margin: 0 auto; }
 
 /* A short rule between sections instead of a hard color-block edge, so the
    backdrop veil can stay the same everywhere while sections still read as
@@ -286,6 +286,7 @@ img { max-width: 100%; display: block; }
     margin: 0;
     line-height: 1.5;
     font-size: 1.15rem;
+    font-family: var(--font-display);
     color: #d9a441;
     align-self: center;
 }
@@ -444,7 +445,7 @@ img { max-width: 100%; display: block; }
     grid-template-columns: 1.1fr 1fr;
     gap: 2rem;
     padding: 2.5rem 1.5rem;
-    max-width: 1200px;
+    max-width: 1440px;
     margin: 0 auto;
 }
 
@@ -505,7 +506,7 @@ img { max-width: 100%; display: block; }
 .band-detail-socials img { width: 32px; height: 32px; border-radius: 50%; }
 
 .band-detail-video {
-    max-width: 1100px;
+    max-width: 1300px;
     margin: 0 auto 2.5rem;
     padding: 0 1.5rem;
 }
@@ -517,7 +518,7 @@ img { max-width: 100%; display: block; }
     border-radius: 18px;
 }
 
-.band-detail-gallery { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 2.5rem; }
+.band-detail-gallery { max-width: 1440px; margin: 0 auto; padding: 0 1.5rem 2.5rem; }
 
 .gallery-grid {
     display: grid;
