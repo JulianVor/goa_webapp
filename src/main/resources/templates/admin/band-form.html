@@ -27,7 +27,9 @@
         <fieldset>
             <legend>Medien</legend>
             <label>Bandfoto (Karte / Detailseite)<input type="file" name="mainImage" accept="image/*"/></label>
-            <img class="current-image-preview" th:if="${band?.mainImagePath}" th:src="${band.mainImagePath}" alt="Aktuelles Foto"/>
+            <div class="current-image-preview" th:if="${band?.mainImagePath}">
+                <img th:src="${band.mainImagePath}" alt="Aktuelles Foto"/>
+            </div>
 
             <label>YouTube-Video (wird eingebettet)<input type="text" th:field="*{youtubeVideoUrl}" placeholder="https://www.youtube.com/watch?v=..."/></label>
 
