@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -32,7 +33,16 @@ public class AdminFaqController {
     public String list(@PathVariable Long editionId, Model model) {
         model.addAttribute("edition", editionService.getByIdOrThrow(editionId));
         model.addAttribute("faqEntries", faqEntryService.findByEdition(editionId));
+        model.addAttribute("otherEditions", editionService.findAllExcept(editionId));
         return "admin/faq-list";
+    }
+
+    @PostMapping("/copy-from")
+    public String copyFrom(@PathVariable Long editionId, @RequestParam Long sourceEditionId,
+                            RedirectAttributes redirectAttributes) {
+        faqEntryService.copyAllFromEdition(editionId, sourceEditionId);
+        redirectAttributes.addFlashAttribute("success", "FAQ-Einträge wurden übernommen.");
+        return "redirect:/admin/editions/" + editionId + "/faq";
     }
 
     @GetMapping("/new")

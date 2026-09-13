@@ -44,6 +44,49 @@
         </tr>
         </tbody>
     </table>
+
+    <div class="admin-header-row" style="margin-top: 2rem;">
+        <h2>Band aus anderem Jahr übernehmen</h2>
+    </div>
+    <form th:if="${!otherEditions.isEmpty()}" method="get" class="copy-from-form">
+        <label>Jahr auswählen
+            <select name="sourceEditionId">
+                <option th:each="other : ${otherEditions}" th:value="${other.id}"
+                        th:selected="${sourceEdition != null and sourceEdition.id == other.id}"
+                        th:text="${other.title} + ' ' + ${other.year}">Jahr</option>
+            </select>
+        </label>
+        <button type="submit" class="btn">Anzeigen</button>
+    </form>
+
+    <table class="admin-table" th:if="${sourceBands != null}">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Herkunft</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="band : ${sourceBands}">
+            <td th:text="${band.name}">Bandname</td>
+            <td th:text="${band.genre}">Genre</td>
+            <td th:text="${band.herkunft}">Herkunft</td>
+            <td class="actions">
+                <form th:action="@{'/admin/editions/' + ${edition.id} + '/bands/copy'}" method="post" class="inline-form">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" name="sourceBandId" th:value="${band.id}"/>
+                    <input type="hidden" name="sourceEditionId" th:value="${sourceEdition.id}"/>
+                    <button type="submit" class="link-button">Übernehmen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${sourceBands.isEmpty()}">
+            <td colspan="4">Diese Ausgabe hat keine Bands.</td>
+        </tr>
+        </tbody>
+    </table>
 </main>
 </body>
 </html>

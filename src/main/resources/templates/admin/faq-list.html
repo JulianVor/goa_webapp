@@ -13,6 +13,18 @@
 
     <p class="flash-success" th:if="${success}" th:text="${success}"></p>
 
+    <form th:if="${!otherEditions.isEmpty()}" th:action="@{'/admin/editions/' + ${edition.id} + '/faq/copy-from'}"
+          method="post" class="copy-from-form">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <label>FAQ aus anderem Jahr übernehmen
+            <select name="sourceEditionId">
+                <option th:each="other : ${otherEditions}" th:value="${other.id}"
+                        th:text="${other.title} + ' ' + ${other.year}">Jahr</option>
+            </select>
+        </label>
+        <button type="submit" class="btn">Übernehmen</button>
+    </form>
+
     <table class="admin-table">
         <thead>
         <tr>

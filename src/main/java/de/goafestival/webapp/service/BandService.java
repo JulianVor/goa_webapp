@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,6 +94,36 @@ public class BandService {
         fileStorageService.delete(band.getMainImagePath());
         band.getGalleryImages().forEach(fileStorageService::delete);
         bandRepository.delete(band);
+    }
+
+    /**
+     * Duplicates a band from another edition into the given edition, e.g. for a returning
+     * act. Images are copied to their own files (not just referenced) so the two bands'
+     * files stay independent. The performance date/time is left unset since it belongs to
+     * the new edition's schedule, not the old one's.
+     */
+    public Band copyToEdition(Long sourceBandId, Long targetEditionId) {
+        Band source = getByIdWithGalleryOrThrow(sourceBandId);
+        Edition target = editionService.getByIdOrThrow(targetEditionId);
+
+        Band copy = new Band();
+        copy.setEdition(target);
+        copy.setName(source.getName());
+        copy.setGenre(source.getGenre());
+        copy.setHerkunft(source.getHerkunft());
+        copy.setDescription(source.getDescription());
+        copy.setYoutubeVideoUrl(source.getYoutubeVideoUrl());
+        copy.setWebsiteUrl(source.getWebsiteUrl());
+        copy.setSpotifyUrl(source.getSpotifyUrl());
+        copy.setInstagramUrl(source.getInstagramUrl());
+        copy.setFacebookUrl(source.getFacebookUrl());
+        copy.setYoutubeUrl(source.getYoutubeUrl());
+        copy.setMainImagePath(fileStorageService.copy(source.getMainImagePath(), "bands/main"));
+        copy.setGalleryImages(source.getGalleryImages().stream()
+                .map(image -> fileStorageService.copy(image, "bands/gallery"))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
+        return bandRepository.save(copy);
     }
 
     private void applyForm(Band band, BandForm form) {

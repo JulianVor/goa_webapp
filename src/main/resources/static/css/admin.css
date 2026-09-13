@@ -182,6 +182,35 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .gallery-preview { display: flex; flex-wrap: wrap; }
 
+.copy-from-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+}
+
+.copy-from-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.copy-from-form select {
+    font-size: 0.95rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid #cfd6e4;
+    font-family: inherit;
+    min-width: 220px;
+}
+
 .admin-login-body {
     display: flex;
     align-items: center;

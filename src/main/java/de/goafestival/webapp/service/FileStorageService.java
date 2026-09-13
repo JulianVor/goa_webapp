@@ -68,6 +68,41 @@ public class FileStorageService {
         }
     }
 
+    /**
+     * Duplicates a previously stored file under a (possibly different) sub-directory and
+     * returns the new public path, or {@code null} if the source path is unset or missing.
+     * Used when copying an entity (e.g. a band) between editions: each copy gets its own
+     * file so deleting/replacing one side's image never affects the other's.
+     */
+    public String copy(String sourcePublicPath, String subDir) {
+        if (!StringUtils.hasText(sourcePublicPath) || !sourcePublicPath.startsWith("/uploads/")) {
+            return null;
+        }
+        Path source = root.resolve(sourcePublicPath.substring("/uploads/".length())).normalize();
+        if (!source.startsWith(root) || !Files.exists(source)) {
+            return null;
+        }
+        String original = source.getFileName().toString();
+        String extension = "";
+        int dot = original.lastIndexOf('.');
+        if (dot >= 0) {
+            extension = original.substring(dot).toLowerCase();
+        }
+        String filename = UUID.randomUUID() + extension;
+        try {
+            Path targetDir = root.resolve(subDir).normalize();
+            if (!targetDir.startsWith(root)) {
+                throw new IllegalArgumentException("Invalid sub directory: " + subDir);
+            }
+            Files.createDirectories(targetDir);
+            Path target = targetDir.resolve(filename);
+            Files.copy(source, target);
+            return "/uploads/" + subDir + "/" + filename;
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to copy file " + source, e);
+        }
+    }
+
     /** Best-effort delete of a previously stored file, identified by its public path. */
     public void delete(String publicPath) {
         if (!StringUtils.hasText(publicPath) || !publicPath.startsWith("/uploads/")) {

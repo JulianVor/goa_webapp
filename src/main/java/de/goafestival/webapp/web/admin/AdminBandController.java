@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -29,10 +30,16 @@ public class AdminBandController {
     }
 
     @GetMapping
-    public String list(@PathVariable Long editionId, Model model) {
+    public String list(@PathVariable Long editionId,
+                        @RequestParam(required = false) Long sourceEditionId, Model model) {
         Edition edition = editionService.getByIdOrThrow(editionId);
         model.addAttribute("edition", edition);
         model.addAttribute("bands", bandService.findByEdition(editionId));
+        model.addAttribute("otherEditions", editionService.findAllExcept(editionId));
+        if (sourceEditionId != null) {
+            model.addAttribute("sourceEdition", editionService.getByIdOrThrow(sourceEditionId));
+            model.addAttribute("sourceBands", bandService.findByEdition(sourceEditionId));
+        }
         return "admin/bands-list";
     }
 
@@ -93,6 +100,15 @@ public class AdminBandController {
         bandService.delete(bandId);
         redirectAttributes.addFlashAttribute("success", "Band wurde gelöscht.");
         return "redirect:/admin/editions/" + editionId + "/bands";
+    }
+
+    @PostMapping("/copy")
+    public String copy(@PathVariable Long editionId, @RequestParam Long sourceBandId, @RequestParam Long sourceEditionId,
+                        RedirectAttributes redirectAttributes) {
+        Band copy = bandService.copyToEdition(sourceBandId, editionId);
+        redirectAttributes.addFlashAttribute("success",
+                "Band \"" + copy.getName() + "\" wurde übernommen. Bitte Auftrittszeit prüfen und ergänzen.");
+        return "redirect:/admin/editions/" + editionId + "/bands?sourceEditionId=" + sourceEditionId;
     }
 
     private BandForm toForm(Band band) {

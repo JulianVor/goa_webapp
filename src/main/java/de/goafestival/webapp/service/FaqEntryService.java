@@ -48,6 +48,21 @@ public class FaqEntryService {
         faqEntryRepository.delete(getByIdOrThrow(id));
     }
 
+    /** Appends a copy of every FAQ entry from another edition after this edition's existing ones. */
+    public void copyAllFromEdition(Long targetEditionId, Long sourceEditionId) {
+        Edition target = editionService.getByIdOrThrow(targetEditionId);
+        List<FaqEntry> existing = findByEdition(targetEditionId);
+        int nextOrder = existing.stream().mapToInt(FaqEntry::getSortOrder).max().orElse(-1) + 1;
+        for (FaqEntry source : findByEdition(sourceEditionId)) {
+            FaqEntry copy = new FaqEntry();
+            copy.setEdition(target);
+            copy.setQuestion(source.getQuestion());
+            copy.setAnswer(source.getAnswer());
+            copy.setSortOrder(nextOrder++);
+            faqEntryRepository.save(copy);
+        }
+    }
+
     private void applyForm(FaqEntry entry, FaqEntryForm form) {
         entry.setQuestion(form.getQuestion());
         entry.setAnswer(form.getAnswer());

@@ -50,6 +50,13 @@ public class EditionService {
                 .toList();
     }
 
+    /** All editions except the given one, newest year first — for "copy from another year" pickers. */
+    public List<Edition> findAllExcept(Long editionId) {
+        return findAllOrdered().stream()
+                .filter(e -> !e.getId().equals(editionId))
+                .toList();
+    }
+
     public Edition create(EditionForm form) {
         Edition edition = new Edition();
         applyForm(edition, form);
