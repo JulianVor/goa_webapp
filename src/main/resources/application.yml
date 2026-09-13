@@ -2,10 +2,10 @@ spring:
   application:
     name: goa-webapp
   datasource:
-    url: jdbc:h2:file:./data/goa-webapp;AUTO_SERVER=TRUE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: ""
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/goa_webapp}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:goa}
+    password: ${SPRING_DATASOURCE_PASSWORD:goa}
   jpa:
     hibernate:
       ddl-auto: update

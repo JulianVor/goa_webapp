@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-goa_webapp}
+      POSTGRES_USER: ${POSTGRES_USER:-goa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-goa}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-goa} -d ${POSTGRES_DB:-goa_webapp}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-goa_webapp}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-goa}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-goa}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      APP_UPLOAD_DIR: /data/uploads
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - uploads-data:/data/uploads
+
+volumes:
+  db-data:
+  uploads-data:
