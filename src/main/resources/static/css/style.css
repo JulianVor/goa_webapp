@@ -761,9 +761,13 @@ body.egg-open { overflow: hidden; }
     width: min(640px, 92vw);
     max-height: min(78vh, calc(100vh - 130px));
     overflow-y: auto;
-    padding-top: 10px;
+    padding-top: 18px;
     text-align: center;
     margin-bottom: 130px;
+}
+
+.egg-stage {
+    animation: egg-float 6s ease-in-out infinite;
 }
 
 
@@ -852,6 +856,11 @@ body.egg-open { overflow: hidden; }
     font-size: clamp(0.9rem, 2vw, 1.15rem);
     letter-spacing: 3px;
     -webkit-text-stroke: 1.2px var(--color-primary);
+}
+
+@keyframes egg-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .egg-clock {
