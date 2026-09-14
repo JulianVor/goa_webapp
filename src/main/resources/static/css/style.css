@@ -861,29 +861,32 @@ body.egg-open { overflow: hidden; }
 }
 
 .egg-clock {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-    align-items: start;
-    column-gap: clamp(0.3rem, 1.6vw, 1rem);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(0.3rem, 1.6vw, 1rem);
 }
 
-.egg-time-block { text-align: center; min-width: 0; }
+.egg-time-block { text-align: center; min-width: 0; flex: 0 0 auto; }
 
 .egg-time-value {
-    font-size: clamp(1.3rem, 4vw, 2.6rem);
+    font-size: clamp(1.1rem, 3.6vw, 2.6rem);
     line-height: 1;
+    white-space: nowrap;
 }
 
 .egg-time-label {
     margin-top: 0.3rem;
-    font-size: clamp(0.55rem, 1.2vw, 0.8rem);
+    font-size: clamp(0.5rem, 1.1vw, 0.8rem);
     letter-spacing: 1px;
     -webkit-text-stroke: 1px var(--color-primary);
 }
 
 .egg-separator {
-    font-size: clamp(1.3rem, 4vw, 2.6rem);
+    font-size: clamp(1.1rem, 3.6vw, 2.6rem);
     line-height: 1;
+    flex: 0 0 auto;
 }
 
 .egg-thumbs {

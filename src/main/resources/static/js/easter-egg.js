@@ -80,26 +80,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function formatElapsed(ms) {
         var totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        var totalDays = Math.floor(totalSeconds / 86400);
+        var years = Math.floor(totalDays / 365);
         return {
-            days: String(Math.floor(totalSeconds / 86400)).padStart(2, '0'),
+            years: years,
+            days: String(totalDays % 365).padStart(2, '0'),
             hours: String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0'),
             minutes: String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0'),
             seconds: String(totalSeconds % 60).padStart(2, '0')
         };
     }
 
+    function timeBlock(unit, value, label) {
+        return '<div class="egg-time-block" data-unit="' + unit + '">' +
+            '<div class="egg-time-value">' + value + '</div>' +
+            '<div class="egg-time-label">' + label + '</div>' +
+            '</div>';
+    }
+
     function elapsedMarkup(date) {
         if (!date) return '';
         var elapsed = formatElapsed(Date.now() - date.getTime());
-        var value = '<div class="egg-clock">' +
-                '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.days + '</div><div class="egg-time-label">TAGE</div></div>' +
-                '<div class="egg-separator">:</div>' +
-                '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.hours + '</div><div class="egg-time-label">STUNDEN</div></div>' +
-                '<div class="egg-separator">:</div>' +
-                '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.minutes + '</div><div class="egg-time-label">MINUTEN</div></div>' +
-                '<div class="egg-separator">:</div>' +
-                '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.seconds + '</div><div class="egg-time-label">SEKUNDEN</div></div>' +
-              '</div>';
+        var blocks = [];
+        if (elapsed.years >= 1) {
+            blocks.push(timeBlock('years', String(elapsed.years).padStart(2, '0'), 'JAHRE'));
+        }
+        blocks.push(timeBlock('days', elapsed.days, 'TAGE'));
+        blocks.push(timeBlock('hours', elapsed.hours, 'STUNDEN'));
+        blocks.push(timeBlock('minutes', elapsed.minutes, 'MINUTEN'));
+        blocks.push(timeBlock('seconds', elapsed.seconds, 'SEKUNDEN'));
+
+        var value = '<div class="egg-clock">' + blocks.join('<div class="egg-separator">:</div>') + '</div>';
         return '<div class="egg-elapsed">' + value + '</div><div class="egg-elapsed-label">HAT GESPIELT VOR</div>';
     }
 
@@ -207,14 +218,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function renderElapsedInPlace(stageEl, date) {
             var elapsed = formatElapsed(Date.now() - date.getTime());
-            var d = stageEl.querySelector('.egg-time-block:nth-child(1) .egg-time-value');
-            var h = stageEl.querySelector('.egg-time-block:nth-child(3) .egg-time-value');
-            var m = stageEl.querySelector('.egg-time-block:nth-child(5) .egg-time-value');
-            var s = stageEl.querySelector('.egg-time-block:nth-child(7) .egg-time-value');
-            if (d) d.textContent = elapsed.days;
-            if (h) h.textContent = elapsed.hours;
-            if (m) m.textContent = elapsed.minutes;
-            if (s) s.textContent = elapsed.seconds;
+            var units = {
+                years: elapsed.years >= 1 ? String(elapsed.years).padStart(2, '0') : null,
+                days: elapsed.days,
+                hours: elapsed.hours,
+                minutes: elapsed.minutes,
+                seconds: elapsed.seconds
+            };
+            Object.keys(units).forEach(function (unit) {
+                if (units[unit] == null) return;
+                var el = stageEl.querySelector('.egg-time-block[data-unit="' + unit + '"] .egg-time-value');
+                if (el) el.textContent = units[unit];
+            });
         }
 
         overlay.querySelector('.egg-close').addEventListener('click', closeRecap);
