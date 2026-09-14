@@ -1,10 +1,11 @@
-/* Hidden GOA-2025-Recap: Klick-und-halten aufs Logo (nur auf der
-   Archiv-Seite von 2025) startet eine zufällig gemischte Foto-Diashow. */
+/* Hidden GOA-2025-Recap: Klick-und-halten auf dem großen Hero-Logo (nur
+   auf der Archiv-Seite von 2025) startet eine zufällig gemischte Foto-
+   Diashow. */
 document.addEventListener('DOMContentLoaded', function () {
     if (window.location.pathname !== '/goa/2025') return;
 
-    var brand = document.querySelector('.brand');
-    if (!brand) return;
+    var heroLogo = document.querySelector('.hero-logo') || document.querySelector('.hero-title');
+    if (!heroLogo) return;
 
     var PHOTO_COUNT = 192;
     var PHOTO_BASE = '/images/goa2025-recap/';
@@ -12,45 +13,26 @@ document.addEventListener('DOMContentLoaded', function () {
     var HOLD_MS = 1800;
 
     var holdTimer = null;
-    var holdTriggered = false;
-    var holdBar = document.createElement('span');
-    holdBar.className = 'egg2-hold-bar';
-    brand.appendChild(holdBar);
-    brand.classList.add('egg2-hold-anchor');
 
     function startHold() {
         if (holdTimer || overlay) return;
-        holdBar.classList.add('filling');
         holdTimer = setTimeout(function () {
-            holdTriggered = true;
-            resetHoldVisual();
+            holdTimer = null;
             openSlideshow();
         }, HOLD_MS);
-    }
-
-    function resetHoldVisual() {
-        holdBar.classList.remove('filling');
-        void holdBar.offsetWidth;
     }
 
     function cancelHold() {
         clearTimeout(holdTimer);
         holdTimer = null;
-        resetHoldVisual();
     }
 
-    brand.addEventListener('mousedown', startHold);
-    brand.addEventListener('touchstart', startHold, { passive: true });
-    brand.addEventListener('mouseup', cancelHold);
-    brand.addEventListener('mouseleave', cancelHold);
-    brand.addEventListener('touchend', cancelHold);
-    brand.addEventListener('touchmove', cancelHold);
-    brand.addEventListener('click', function (event) {
-        if (holdTriggered) {
-            event.preventDefault();
-            holdTriggered = false;
-        }
-    });
+    heroLogo.addEventListener('mousedown', startHold);
+    heroLogo.addEventListener('touchstart', startHold, { passive: true });
+    heroLogo.addEventListener('mouseup', cancelHold);
+    heroLogo.addEventListener('mouseleave', cancelHold);
+    heroLogo.addEventListener('touchend', cancelHold);
+    heroLogo.addEventListener('touchmove', cancelHold);
 
     var overlay = null;
     var order = [];

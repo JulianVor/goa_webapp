@@ -761,6 +761,7 @@ body.egg-open { overflow: hidden; }
     width: min(640px, 92vw);
     max-height: min(78vh, calc(100vh - 130px));
     overflow-y: auto;
+    padding-top: 10px;
     text-align: center;
     margin-bottom: 130px;
 }
@@ -918,26 +919,8 @@ body.egg-open { overflow: hidden; }
     transform: scale(1.08);
 }
 
-/* Hidden GOA-2025-Recap (js/easter-egg-2025.js): press-and-hold the logo
-   to open a shuffled fullscreen photo slideshow. */
-.egg2-hold-anchor { position: relative; }
-
-.egg2-hold-bar {
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    height: 3px;
-    width: 0;
-    background: var(--color-accent);
-    border-radius: 2px;
-    pointer-events: none;
-}
-
-.egg2-hold-bar.filling {
-    width: 100%;
-    transition: width 1.8s linear;
-}
-
+/* Hidden GOA-2025-Recap (js/easter-egg-2025.js): press-and-hold the hero
+   logo to open a shuffled fullscreen photo slideshow. */
 .egg2-overlay {
     position: fixed;
     top: 0;

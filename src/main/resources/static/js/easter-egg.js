@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!brand) return;
 
     var VIDEO_SRC = '/videos/goa2026-recap.mp4';
-    var SLIDE_MS = 2800;
+    var SLIDE_MS = 5000;
 
     var clicks = 0;
     var resetTimer = null;
