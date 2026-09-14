@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var tickTimer = null;
     var slides = [];
     var index = 0;
+    var manuallySelected = false;
 
     brand.addEventListener('click', function (event) {
         event.preventDefault();
@@ -65,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return {
                 photo: band.photo,
                 title: band.name,
-                sub: band.performance ? 'GESPIELT AM ' + band.performance.toUpperCase() : '',
                 date: band.date
             };
         });
@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (overlay) return;
         slides = buildSlides();
         index = 0;
+        manuallySelected = false;
 
         overlay = document.createElement('div');
         overlay.className = 'egg-overlay';
@@ -190,18 +191,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         thumbs.querySelectorAll('.egg-thumb').forEach(function (thumb) {
             thumb.addEventListener('click', function () {
+                manuallySelected = true;
                 clearInterval(slideTimer);
                 goToSlide(stage, thumbs, Number(thumb.getAttribute('data-index')));
-                slideTimer = setInterval(advance, SLIDE_MS);
             });
         });
 
         function advance() {
+            if (manuallySelected) return;
             var nextIndex = index + 1;
-            if (nextIndex >= slides.length) {
-                closeRecap();
-                return;
-            }
+            if (nextIndex >= slides.length) nextIndex = 0;
             goToSlide(stage, thumbs, nextIndex);
         }
 
