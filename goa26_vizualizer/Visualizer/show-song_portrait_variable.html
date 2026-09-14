@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Festival Now Playing</title>
+
+  <style>
+    @font-face {
+      font-family: "Brugty";
+      src: url("BrugtyDemo-Regular.otf") format("opentype");
+    }
+
+    :root {
+      --gold: #d9a441;
+      --green: #2a5d5a;
+      --shadow: rgba(0,0,0,0.6);
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    body {
+      position: relative;
+      font-family: "Brugty", sans-serif;
+      text-transform: uppercase;
+    }
+
+    .player {
+      position: absolute;
+      bottom: 0; /* unten kleben */
+      left: 50%;
+      transform: translateX(-50%); /* horizontal zentriert */
+      margin-bottom: 40px; /* Abstand nach unten */
+      width: 420px;
+      min-height: 300px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 28px 20px;
+      border: 5px solid var(--green);
+      border-radius: 28px;
+      background: rgba(25, 25, 25, 0.82);
+      box-shadow: 0 18px 50px var(--shadow);
+      text-align: center;
+    }
+
+    .player {
+      width: 420px;
+      min-height: 300px;
+      height: auto; /* passt sich Inhalt an */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 28px 20px;
+      border: 5px solid var(--green);
+      border-radius: 28px;
+      background: rgba(25, 25, 25, 0.82);
+      box-shadow: 0 18px 50px var(--shadow);
+      text-align: center;
+    }
+
+    .cover {
+      width: 260px;
+      height: 260px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 5px solid var(--gold);
+      box-shadow: 0 0 0 3px var(--green);
+    }
+
+    .kicker {
+      font-size: 28px;
+      color: var(--green);
+      letter-spacing: 0.08em;
+    }
+
+    .track {
+      font-size: clamp(64px, 6vw, 80px);
+      color: var(--gold);
+      line-height: 0.95;
+      text-shadow: 3px 3px 0 var(--shadow);
+      overflow-wrap: anywhere;
+      max-height: 3.5em;
+    }
+
+    .artist {
+      font-size: clamp(40px, 4vw, 52px);
+      color: var(--gold);
+      text-shadow: 3px 3px 0 var(--shadow);
+      overflow-wrap: anywhere;
+      max-height: 3em;
+    }
+
+    .pulse {
+      width: 18px;
+      height: 18px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 10px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: scale(0.7); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="player">
+    <img class="cover" id="cover" src="https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png">
+
+    <div class="kicker"><span class="pulse"></span>Jetzt läuft</div>
+
+    <div class="track" id="track">Test Track</div>
+    <div class="artist" id="artist">Test Artist</div>
+  </div>
+
+  <script>
+    const LASTFM_USER = "julianvornfeld";
+    const LASTFM_API_KEY = "4edcdb8858dfc56bc2b51203b78f684a";
+
+    async function update() {
+      try {
+        const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
+        const data = await res.json();
+
+        const track = data.recenttracks.track[0];
+
+        document.getElementById("track").textContent = track.name;
+        document.getElementById("artist").textContent = track.artist["#text"];
+
+        const img = track.image.pop()["#text"];
+        if (img) document.getElementById("cover").src = img;
+
+      } catch(e) {
+        console.log(e);
+      }
+    }
+
+    setInterval(update, 8000);
+    update();
+  </script>
+</body>
+</html>
