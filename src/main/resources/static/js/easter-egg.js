@@ -80,30 +80,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function formatElapsed(ms) {
         var totalSeconds = Math.max(0, Math.floor(ms / 1000));
-        var totalHours = Math.floor(totalSeconds / 3600);
-
-        if (totalHours >= 24) {
-            var days = Math.floor(totalHours / 24);
-            return { mode: 'days', text: days + (days === 1 ? ' Tag' : ' Tage') };
-        }
-
-        var hours = Math.floor(totalSeconds / 3600);
-        var minutes = Math.floor((totalSeconds % 3600) / 60);
-        var seconds = totalSeconds % 60;
         return {
-            mode: 'clock',
-            hours: String(hours).padStart(2, '0'),
-            minutes: String(minutes).padStart(2, '0'),
-            seconds: String(seconds).padStart(2, '0')
+            days: String(Math.floor(totalSeconds / 86400)).padStart(2, '0'),
+            hours: String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0'),
+            minutes: String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0'),
+            seconds: String(totalSeconds % 60).padStart(2, '0')
         };
     }
 
     function elapsedMarkup(date) {
         if (!date) return '';
         var elapsed = formatElapsed(Date.now() - date.getTime());
-        var value = elapsed.mode === 'days'
-            ? escapeHtml(elapsed.text)
-            : '<div class="egg-clock">' +
+        var value = '<div class="egg-clock">' +
+                '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.days + '</div><div class="egg-time-label">TAGE</div></div>' +
+                '<div class="egg-separator">:</div>' +
                 '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.hours + '</div><div class="egg-time-label">STUNDEN</div></div>' +
                 '<div class="egg-separator">:</div>' +
                 '<div class="egg-time-block"><div class="egg-time-value">' + elapsed.minutes + '</div><div class="egg-time-label">MINUTEN</div></div>' +
@@ -164,10 +154,8 @@ document.addEventListener('DOMContentLoaded', function () {
             '<video class="egg-video" loop playsinline></video>' +
             '<div class="egg-scrim"></div>' +
             '<button type="button" class="egg-close" aria-label="Schließen">&times;</button>' +
-            '<div class="egg-card">' +
-            '<div class="egg-stage"></div>' +
-            '<div class="egg-thumbs"></div>' +
-            '</div>';
+            '<div class="egg-card"><div class="egg-stage"></div></div>' +
+            '<div class="egg-thumbs"></div>';
         document.body.appendChild(overlay);
         document.body.classList.add('egg-open');
 
@@ -219,14 +207,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function renderElapsedInPlace(stageEl, date) {
             var elapsed = formatElapsed(Date.now() - date.getTime());
-            if (elapsed.mode === 'days') {
-                var el = stageEl.querySelector('.egg-elapsed');
-                if (el) el.textContent = elapsed.text;
-                return;
-            }
-            var h = stageEl.querySelector('.egg-time-block:nth-child(1) .egg-time-value');
-            var m = stageEl.querySelector('.egg-time-block:nth-child(3) .egg-time-value');
-            var s = stageEl.querySelector('.egg-time-block:nth-child(5) .egg-time-value');
+            var d = stageEl.querySelector('.egg-time-block:nth-child(1) .egg-time-value');
+            var h = stageEl.querySelector('.egg-time-block:nth-child(3) .egg-time-value');
+            var m = stageEl.querySelector('.egg-time-block:nth-child(5) .egg-time-value');
+            var s = stageEl.querySelector('.egg-time-block:nth-child(7) .egg-time-value');
+            if (d) d.textContent = elapsed.days;
             if (h) h.textContent = elapsed.hours;
             if (m) m.textContent = elapsed.minutes;
             if (s) s.textContent = elapsed.seconds;
