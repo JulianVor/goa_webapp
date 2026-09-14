@@ -765,9 +765,6 @@ body.egg-open { overflow: hidden; }
     margin-bottom: 130px;
 }
 
-.egg-stage {
-    animation: egg-float 6s ease-in-out infinite;
-}
 
 .egg-slide {
     opacity: 0;
@@ -825,10 +822,6 @@ body.egg-open { overflow: hidden; }
     -webkit-text-stroke: 1.2px var(--color-primary);
 }
 
-@keyframes egg-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
 
 .egg-elapsed,
 .egg-elapsed-label,
