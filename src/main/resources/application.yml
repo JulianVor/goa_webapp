@@ -13,6 +13,19 @@ spring:
     properties:
       hibernate:
         format_sql: false
+  sql:
+    init:
+      # Runs schema.sql against the real (non-embedded) Postgres database too, not just
+      # H2/embedded DBs. schema.sql only contains idempotent, additive fixes for schema
+      # changes Hibernate's ddl-auto:update can't do safely on its own (backfilling a new
+      # NOT NULL column, dropping a constraint that no longer applies) - it's safe to run
+      # on every startup and runs before Hibernate's own schema check.
+      mode: always
+      # schema.sql uses Postgres DO $$ ... $$ blocks, which contain their own semicolons;
+      # Spring's script splitter doesn't understand $$ dollar-quoting and would otherwise
+      # cut a block apart at its first internal ";". Terminating each top-level statement
+      # with "//" instead tells it where statements actually end.
+      separator: "//"
   servlet:
     multipart:
       max-file-size: ${APP_MAX_UPLOAD_SIZE:50MB}
