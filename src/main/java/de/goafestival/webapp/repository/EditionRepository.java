@@ -16,6 +16,4 @@ public interface EditionRepository extends JpaRepository<Edition, Long> {
     List<Edition> findAllByOrderByYearDesc();
 
     List<Edition> findByTypeOrderByStartDateDesc(EditionType type);
-
-    boolean existsByType(EditionType type);
 }

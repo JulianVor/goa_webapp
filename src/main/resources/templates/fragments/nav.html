@@ -14,7 +14,10 @@
         <a class="pill" th:if="${edition.isShowEventInfos()}" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
         <a class="pill" th:if="${edition.isShowLineup()}" th:href="${baseUrl} + '#line-up'">Line-Up</a>
         <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
-        <a class="pill" th:if="${hasKneipenkonzerte}" th:href="@{/kneipenkonzerte}">Kneipenkonzerte</a>
+        <a class="pill" th:if="${navKneipenkonzerte != null and #lists.size(navKneipenkonzerte) == 1}"
+           th:href="@{'/kneipenkonzerte/' + ${navKneipenkonzerte[0].id}}"
+           th:text="${navKneipenkonzerte[0].title}">Kneipenkonzert</a>
+        <a class="pill" th:if="${navKneipenkonzerte != null and #lists.size(navKneipenkonzerte) > 1}" th:href="@{/kneipenkonzerte}">Kneipenkonzerte</a>
 
         <span class="nav-socials">
             <a th:if="${not #strings.isEmpty(siteSettings.instagramUrl)}" th:href="${siteSettings.instagramUrl}" target="_blank" rel="noopener" title="Instagram">

@@ -69,11 +69,6 @@ public class EditionService {
         return editionRepository.findByTypeOrderByStartDateDesc(EditionType.KNEIPENKONZERT);
     }
 
-    /** Whether at least one Kneipenkonzert exists — drives the nav link's visibility. */
-    public boolean hasKneipenkonzerte() {
-        return editionRepository.existsByType(EditionType.KNEIPENKONZERT);
-    }
-
     /** The soonest upcoming Kneipenkonzert, if any — the homepage teaser under the logo. */
     public Optional<Edition> findNextKneipenkonzert() {
         LocalDate today = LocalDate.now();
