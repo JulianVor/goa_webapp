@@ -37,8 +37,9 @@
                 <label><span id="start-date-label">Startdatum</span><input type="date" th:field="*{startDate}"/></label>
                 <label id="end-date-field">Enddatum<input type="date" th:field="*{endDate}"/></label>
             </div>
-            <label class="checkbox-row"><input type="checkbox" th:field="*{current}"/> Als aktuelle Festival-Seite ("/") anzeigen</label>
-            <p class="field-hint">Gilt nur für Typ "Festival" – bei Kneipenkonzerten wird das ignoriert.</p>
+            <div id="current-field">
+                <label class="checkbox-row"><input type="checkbox" th:field="*{current}"/> Als aktuelle Festival-Seite ("/") anzeigen</label>
+            </div>
         </fieldset>
 
         <fieldset th:if="${edition == null or edition.isDetailPage()}">
@@ -109,6 +110,7 @@
         var typeSelect = document.getElementById('type');
         var yearField = document.getElementById('year-field');
         var endDateField = document.getElementById('end-date-field');
+        var currentField = document.getElementById('current-field');
         var startDateLabel = document.getElementById('start-date-label');
         var yearInput = yearField.querySelector('input');
         var startDateInput = startDateLabel.closest('label').querySelector('input');
@@ -117,6 +119,7 @@
             var isKneipenkonzert = typeSelect.value === 'KNEIPENKONZERT';
             yearField.style.display = isKneipenkonzert ? 'none' : '';
             endDateField.style.display = isKneipenkonzert ? 'none' : '';
+            currentField.style.display = isKneipenkonzert ? 'none' : '';
             yearInput.required = !isKneipenkonzert;
             startDateInput.required = isKneipenkonzert;
             startDateLabel.textContent = isKneipenkonzert ? 'Datum' : 'Startdatum';

@@ -38,4 +38,10 @@ public class GlobalModelAttributes {
     public List<Edition> navKneipenkonzerte() {
         return editionService.findKneipenkonzerte();
     }
+
+    /** The current Festival edition, if any - lets a Kneipenkonzert fall back to its background image. */
+    @ModelAttribute("currentEdition")
+    public Edition currentEdition() {
+        return editionService.findCurrent().orElse(null);
+    }
 }

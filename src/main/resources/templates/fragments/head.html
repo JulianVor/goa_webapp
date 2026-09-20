@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(edition, pageTitle)">
+<head th:fragment="head(edition, pageTitle)"
+      th:with="effectiveBackground=${edition != null ? (edition.backgroundImagePath != null ? edition.backgroundImagePath : (edition.type.name() == 'KNEIPENKONZERT' and currentEdition != null ? currentEdition.backgroundImagePath : null)) : null}">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title th:text="${pageTitle} ?: (${edition} != null ? ${edition.title} + ' ' + ${edition.displayLabel} : 'GOA Festival')">GOA Festival</title>
@@ -8,16 +9,17 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <!-- The fixed background photo covers the whole viewport and is usually the largest
          asset on the page; preloading it avoids the browser discovering it late (it's
-         only referenced from a CSS custom property, not a plain <img>). -->
-    <link rel="preload" as="image" th:if="${edition != null and edition.backgroundImagePath != null}"
-          th:href="${edition.backgroundImagePath}"/>
+         only referenced from a CSS custom property, not a plain <img>). A Kneipenkonzert
+         without its own background falls back to the current Festival edition's. -->
+    <link rel="preload" as="image" th:if="${effectiveBackground != null}"
+          th:href="${effectiveBackground}"/>
     <style th:if="${edition != null}" th:utext="|
         :root {
             --color-primary: ${edition.colorPrimary};
             --color-secondary: ${edition.colorSecondary};
             --color-accent: ${edition.colorAccent};
             --color-text: ${edition.colorText};
-            --bg-image: url('${edition.backgroundImagePath ?: ''}');
+            --bg-image: url('${effectiveBackground ?: ''}');
         }
     |"></style>
 </head>
