@@ -16,7 +16,7 @@ public class EditionForm {
     @NotNull
     private EditionType type = EditionType.FESTIVAL;
 
-    @NotNull
+    /** Required for FESTIVAL; for KNEIPENKONZERT it's derived from startDate instead (see EditionService). */
     private Integer year;
 
     @NotBlank

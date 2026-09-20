@@ -32,6 +32,12 @@ public class AdminEditionController {
         if (type != null) {
             form.setType(type);
         }
+        editionService.findCurrent().ifPresent(current -> {
+            form.setColorPrimary(current.getColorPrimary());
+            form.setColorSecondary(current.getColorSecondary());
+            form.setColorAccent(current.getColorAccent());
+            form.setColorText(current.getColorText());
+        });
         model.addAttribute("editionForm", form);
         model.addAttribute("isNew", true);
         return "admin/edition-form";

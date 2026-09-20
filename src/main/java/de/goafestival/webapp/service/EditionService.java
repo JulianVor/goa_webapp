@@ -33,6 +33,11 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Keine aktuelle Festival-Ausgabe konfiguriert."));
     }
 
+    /** The current Festival edition, if one is configured — used to pre-fill a new edition's color scheme. */
+    public Optional<Edition> findCurrent() {
+        return editionRepository.findByCurrentTrue();
+    }
+
     /** Looks up a FESTIVAL-type edition by year — the "/goa/{year}" route. */
     public Edition getByYearOrThrow(int year) {
         return editionRepository.findByYearAndType(year, EditionType.FESTIVAL)
@@ -162,16 +167,23 @@ public class EditionService {
 
     private void applyForm(Edition edition, EditionForm form) {
         edition.setType(form.getType());
-        if (form.getType() == EditionType.KNEIPENKONZERT) {
+        boolean isKneipenkonzert = form.getType() == EditionType.KNEIPENKONZERT;
+        if (isKneipenkonzert) {
             edition.setCurrent(false);
         }
-        edition.setYear(form.getYear());
+        // A Kneipenkonzert has no "Jahr" field of its own - the year is derived from its single date.
+        Integer year = form.getYear();
+        if (isKneipenkonzert) {
+            year = form.getStartDate() != null ? form.getStartDate().getYear() : LocalDate.now().getYear();
+        }
+        edition.setYear(year);
         edition.setDisplayLabel(form.getDisplayLabel());
         edition.setTitle(form.getTitle());
         edition.setHeadlinerName(form.getHeadlinerName());
         edition.setHeadlinerDateLabel(form.getHeadlinerDateLabel());
         edition.setStartDate(form.getStartDate());
-        edition.setEndDate(form.getEndDate());
+        // A Kneipenkonzert is a single day - it never has a separate end date, even if one was submitted.
+        edition.setEndDate(isKneipenkonzert ? null : form.getEndDate());
         edition.setLocationName(form.getLocationName());
         edition.setLocationStreet(form.getLocationStreet());
         edition.setLocationZipCity(form.getLocationZipCity());
