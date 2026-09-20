@@ -42,6 +42,16 @@ html, body {
     scroll-behavior: smooth;
 }
 
+/* Keeps the footer pinned to the bottom of the viewport on short pages
+   instead of floating right after the content - .site-footer (the last
+   flex item) gets pushed down by margin-top:auto. */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+}
+
 a { color: inherit; }
 img { max-width: 100%; display: block; }
 
@@ -600,9 +610,9 @@ img { max-width: 100%; display: block; }
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.2s ease;
 }
 
-.show-card-noimage { transition: transform 0.2s ease; }
 .show-card-noimage:hover { transform: scale(1.03); }
 
 .show-card-noimage .show-card-overlay {
@@ -615,8 +625,7 @@ img { max-width: 100%; display: block; }
 }
 
 .show-card-noimage .show-card-title {
-    -webkit-text-stroke: 1px var(--color-primary);
-    paint-order: stroke fill;
+    color: var(--color-primary);
     font-size: clamp(1.3rem, 5vw, 1.7rem);
     overflow-wrap: break-word;
 }
@@ -679,6 +688,7 @@ img { max-width: 100%; display: block; }
 /* ---------------------------------- Footer ---------------------------------- */
 
 .site-footer {
+    margin-top: auto;
     text-align: center;
     padding: 1.5rem;
     background: #0000004f;
