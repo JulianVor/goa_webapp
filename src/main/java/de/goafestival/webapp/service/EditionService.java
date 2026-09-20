@@ -7,7 +7,10 @@ import de.goafestival.webapp.repository.EditionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -69,6 +72,14 @@ public class EditionService {
     /** Whether at least one Kneipenkonzert exists — drives the nav link's visibility. */
     public boolean hasKneipenkonzerte() {
         return editionRepository.existsByType(EditionType.KNEIPENKONZERT);
+    }
+
+    /** The soonest upcoming Kneipenkonzert, if any — the homepage teaser under the logo. */
+    public Optional<Edition> findNextKneipenkonzert() {
+        LocalDate today = LocalDate.now();
+        return findKneipenkonzerte().stream()
+                .filter(e -> e.getStartDate() != null && !e.getStartDate().isBefore(today))
+                .min(Comparator.comparing(Edition::getStartDate));
     }
 
     /** All editions except the given one, newest year first — for "copy from another year" pickers. */

@@ -13,6 +13,13 @@
             <div class="hero-year" th:text="${edition.displayLabel}">2026</div>
         </th:block>
 
+        <a class="kneipenkonzert-teaser" th:if="${nextKneipenkonzert != null}"
+           th:href="@{'/kneipenkonzerte/' + ${nextKneipenkonzert.id}}">
+            <span class="kneipenkonzert-teaser-label">Nächstes Kneipenkonzert</span>
+            <span class="kneipenkonzert-teaser-title" th:text="${nextKneipenkonzert.title}">Grumbrechtstraßen Open Air</span>
+            <span class="kneipenkonzert-teaser-date" th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(nextKneipenkonzert.startDate)}">12. Oktober 2026</span>
+        </a>
+
         <th:block th:if="${edition.isShowHeadliner()}">
             <img class="hero-location-image" th:if="${edition.locationImagePath}" th:src="${edition.locationImagePath}" th:alt="${edition.headlinerName}"/>
             <div class="headliner-box" th:if="${edition.locationImagePath == null and edition.headlinerName != null}">

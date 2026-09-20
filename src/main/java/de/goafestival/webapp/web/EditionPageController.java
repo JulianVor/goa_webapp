@@ -37,6 +37,7 @@ public class EditionPageController {
     public String home(Model model) {
         Edition current = editionService.getCurrentOrThrow();
         populateModel(model, current, true);
+        model.addAttribute("nextKneipenkonzert", editionService.findNextKneipenkonzert().orElse(null));
         return "edition";
     }
 
