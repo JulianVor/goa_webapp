@@ -234,6 +234,19 @@ img { max-width: 100%; display: block; }
     text-align: center;
 }
 
+/* Above the mobile nav breakpoint, the nav bar has one consistent, predictable
+   height (no wrapping brand text), so the hero can fill exactly the rest of
+   the viewport instead of the 85vh approximation - which otherwise leaves a
+   sliver of the next section peeking in below the fold on tall/wide screens,
+   forcing an unnecessary nudge-scroll even though the hero visually looks
+   like it already fills the screen. */
+@media (min-width: 701px) {
+    .hero {
+        min-height: calc(100vh - 70px);
+        min-height: calc(100svh - 70px);
+    }
+}
+
 .hero-inner { max-width: 1100px; min-width: 0; width: 100%; }
 
 .hero-logo {
