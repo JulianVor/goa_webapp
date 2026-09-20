@@ -281,32 +281,20 @@ img { max-width: 100%; display: block; }
     transform: rotate(-2.5deg);
 }
 
+/* Solid primary-colored text, no outline - accent-on-secondary often doesn't
+   contrast well enough for an accent-fill/primary-stroke treatment to carry it. */
 .headliner-name {
     font-family: var(--font-display);
     font-size: clamp(2rem, 7vw, 3.2rem);
-    color: var(--color-accent);
-    -webkit-text-stroke: 1.5px var(--color-primary);
-    paint-order: stroke fill;
+    color: var(--color-primary);
     overflow-wrap: break-word;
 }
 
 .headliner-date {
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 5.5vw, 2.4rem);
-    color: var(--color-accent);
-    -webkit-text-stroke: 1px var(--color-primary);
-    paint-order: stroke fill;
-    margin-top: 0.25rem;
-}
-
-/* A Kneipenkonzert's own headliner box (its venue + date) reads the same way as
-   the teaser advertising it on the homepage: solid primary-colored text with no
-   outline, since accent-on-secondary often doesn't contrast well enough for the
-   stroke-outline treatment above to carry it. */
-.headliner-box--kneipenkonzert .headliner-name,
-.headliner-box--kneipenkonzert .headliner-date {
     color: var(--color-primary);
-    -webkit-text-stroke: 0;
+    margin-top: 0.25rem;
 }
 
 .kneipenkonzert-teaser {
@@ -587,6 +575,7 @@ img { max-width: 100%; display: block; }
     font-size: 0.9rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    color: var(--color-text);
     opacity: 0.85;
 }
 
@@ -597,7 +586,7 @@ img { max-width: 100%; display: block; }
     margin-top: 0.15rem;
 }
 
-.show-card-headliner { font-size: 1rem; opacity: 0.9; margin-top: 0.15rem; }
+.show-card-headliner { font-size: 1rem; color: var(--color-text); opacity: 0.9; margin-top: 0.15rem; }
 
 .show-card-past { opacity: 0.75; }
 
