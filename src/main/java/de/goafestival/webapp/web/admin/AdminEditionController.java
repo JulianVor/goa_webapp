@@ -4,6 +4,7 @@ import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.EditionType;
 import de.goafestival.webapp.dto.EditionForm;
 import de.goafestival.webapp.service.EditionService;
+import de.goafestival.webapp.service.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminEditionController {
 
     private final EditionService editionService;
+    private final LocationService locationService;
 
-    public AdminEditionController(EditionService editionService) {
+    public AdminEditionController(EditionService editionService, LocationService locationService) {
         this.editionService = editionService;
+        this.locationService = locationService;
     }
 
     @GetMapping("/new")
@@ -39,6 +42,7 @@ public class AdminEditionController {
             form.setColorText(current.getColorText());
         });
         model.addAttribute("editionForm", form);
+        model.addAttribute("locations", locationService.findAllOrdered());
         model.addAttribute("isNew", true);
         return "admin/edition-form";
     }
@@ -48,6 +52,7 @@ public class AdminEditionController {
         Edition edition = editionService.getByIdOrThrow(id);
         model.addAttribute("editionForm", toForm(edition));
         model.addAttribute("edition", edition);
+        model.addAttribute("locations", locationService.findAllOrdered());
         model.addAttribute("isNew", false);
         return "admin/edition-form";
     }
@@ -56,6 +61,7 @@ public class AdminEditionController {
     public String create(@Valid @ModelAttribute("editionForm") EditionForm form, BindingResult result, Model model,
                           RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            model.addAttribute("locations", locationService.findAllOrdered());
             model.addAttribute("isNew", true);
             return "admin/edition-form";
         }
@@ -69,6 +75,7 @@ public class AdminEditionController {
                           Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("edition", editionService.getByIdOrThrow(id));
+            model.addAttribute("locations", locationService.findAllOrdered());
             model.addAttribute("isNew", false);
             return "admin/edition-form";
         }
@@ -98,13 +105,9 @@ public class AdminEditionController {
         form.setYear(edition.getYear());
         form.setDisplayLabel(edition.getDisplayLabel());
         form.setTitle(edition.getTitle());
-        form.setHeadlinerName(edition.getHeadlinerName());
-        form.setHeadlinerDateLabel(edition.getHeadlinerDateLabel());
         form.setStartDate(edition.getStartDate());
         form.setEndDate(edition.getEndDate());
-        form.setLocationName(edition.getLocationName());
-        form.setLocationStreet(edition.getLocationStreet());
-        form.setLocationZipCity(edition.getLocationZipCity());
+        form.setLocationId(edition.getLocation() != null ? edition.getLocation().getId() : null);
         form.setAboutText(edition.getAboutText());
         form.setColorPrimary(edition.getColorPrimary());
         form.setColorSecondary(edition.getColorSecondary());

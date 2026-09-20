@@ -3,10 +3,12 @@ package de.goafestival.webapp.config;
 import de.goafestival.webapp.domain.Band;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.FaqEntry;
+import de.goafestival.webapp.domain.Location;
 import de.goafestival.webapp.domain.SiteSettings;
 import de.goafestival.webapp.repository.BandRepository;
 import de.goafestival.webapp.repository.EditionRepository;
 import de.goafestival.webapp.repository.FaqEntryRepository;
+import de.goafestival.webapp.repository.LocationRepository;
 import de.goafestival.webapp.repository.SiteSettingsRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -26,13 +28,16 @@ public class DataInitializer implements CommandLineRunner {
     private final BandRepository bandRepository;
     private final FaqEntryRepository faqEntryRepository;
     private final SiteSettingsRepository siteSettingsRepository;
+    private final LocationRepository locationRepository;
 
     public DataInitializer(EditionRepository editionRepository, BandRepository bandRepository,
-                            FaqEntryRepository faqEntryRepository, SiteSettingsRepository siteSettingsRepository) {
+                            FaqEntryRepository faqEntryRepository, SiteSettingsRepository siteSettingsRepository,
+                            LocationRepository locationRepository) {
         this.editionRepository = editionRepository;
         this.bandRepository = bandRepository;
         this.faqEntryRepository = faqEntryRepository;
         this.siteSettingsRepository = siteSettingsRepository;
+        this.locationRepository = locationRepository;
     }
 
     @Override
@@ -41,17 +46,19 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
+        Location tipsyApes = new Location();
+        tipsyApes.setName("Tipsy Apes");
+        tipsyApes.setStreet("Am Radeland 25");
+        tipsyApes.setZipCity("21079 Hamburg");
+        tipsyApes = locationRepository.save(tipsyApes);
+
         Edition edition2026 = new Edition();
         edition2026.setYear(2026);
         edition2026.setDisplayLabel("2026");
         edition2026.setTitle("Grumbrechtstraßen Open Air");
-        edition2026.setHeadlinerName("Tipsy Apes");
-        edition2026.setHeadlinerDateLabel("10./11.07.26");
         edition2026.setStartDate(LocalDate.of(2026, 7, 10));
         edition2026.setEndDate(LocalDate.of(2026, 7, 11));
-        edition2026.setLocationName("Tipsy Apes");
-        edition2026.setLocationStreet("Am Radeland 25");
-        edition2026.setLocationZipCity("21079 Hamburg");
+        edition2026.setLocation(tipsyApes);
         edition2026.setAboutText("Das Grumbrechtstraßen Open Air ist ein Indie Rock / Metal Festival von Schanien "
                 + "Bands und Sherenernen über Bühnen bolten mobile.");
         edition2026.setColorPrimary("#2f6f68");
@@ -86,17 +93,19 @@ public class DataInitializer implements CommandLineRunner {
         addBand(edition2026, "The Grey", "Hard Rock", "Hamburg",
                 "Klassischer Hard Rock mit modernem Anstrich.", LocalDateTime.of(2026, 7, 11, 22, 0));
 
+        Location grumbrechtstrasse = new Location();
+        grumbrechtstrasse.setName("Grumbrechtstraße");
+        grumbrechtstrasse.setStreet("Grumbrechtstraße 1");
+        grumbrechtstrasse.setZipCity("21079 Hamburg");
+        grumbrechtstrasse = locationRepository.save(grumbrechtstrasse);
+
         Edition edition2025 = new Edition();
         edition2025.setYear(2025);
         edition2025.setDisplayLabel("60");
         edition2025.setTitle("Grumbrechtstraßen Open Air");
-        edition2025.setHeadlinerName("Redestruction");
-        edition2025.setHeadlinerDateLabel("11./12.07.25");
         edition2025.setStartDate(LocalDate.of(2025, 7, 11));
         edition2025.setEndDate(LocalDate.of(2025, 7, 12));
-        edition2025.setLocationName("Grumbrechtstraße");
-        edition2025.setLocationStreet("Grumbrechtstraße 1");
-        edition2025.setLocationZipCity("21079 Hamburg");
+        edition2025.setLocation(grumbrechtstrasse);
         edition2025.setAboutText("Die 60. Ausgabe des Grumbrechtstraßen Open Air – ein Rückblick.");
         edition2025.setColorPrimary("#2e5fa3");
         edition2025.setColorSecondary("#c9701f");

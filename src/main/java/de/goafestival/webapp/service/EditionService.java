@@ -4,6 +4,7 @@ import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.EditionType;
 import de.goafestival.webapp.dto.EditionForm;
 import de.goafestival.webapp.repository.EditionRepository;
+import de.goafestival.webapp.repository.LocationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,13 @@ import java.util.Optional;
 public class EditionService {
 
     private final EditionRepository editionRepository;
+    private final LocationRepository locationRepository;
     private final FileStorageService fileStorageService;
 
-    public EditionService(EditionRepository editionRepository, FileStorageService fileStorageService) {
+    public EditionService(EditionRepository editionRepository, LocationRepository locationRepository,
+                           FileStorageService fileStorageService) {
         this.editionRepository = editionRepository;
+        this.locationRepository = locationRepository;
         this.fileStorageService = fileStorageService;
     }
 
@@ -179,14 +183,11 @@ public class EditionService {
         edition.setYear(year);
         edition.setDisplayLabel(form.getDisplayLabel());
         edition.setTitle(form.getTitle());
-        edition.setHeadlinerName(form.getHeadlinerName());
-        edition.setHeadlinerDateLabel(form.getHeadlinerDateLabel());
         edition.setStartDate(form.getStartDate());
         // A Kneipenkonzert is a single day - it never has a separate end date, even if one was submitted.
         edition.setEndDate(isKneipenkonzert ? null : form.getEndDate());
-        edition.setLocationName(form.getLocationName());
-        edition.setLocationStreet(form.getLocationStreet());
-        edition.setLocationZipCity(form.getLocationZipCity());
+        edition.setLocation(form.getLocationId() != null ? locationRepository.findById(form.getLocationId())
+                .orElseThrow(() -> new NotFoundException("Location " + form.getLocationId() + " wurde nicht gefunden.")) : null);
         edition.setAboutText(form.getAboutText());
         edition.setColorPrimary(form.getColorPrimary());
         edition.setColorSecondary(form.getColorSecondary());

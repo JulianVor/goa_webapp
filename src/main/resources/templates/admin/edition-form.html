@@ -30,10 +30,6 @@
             </div>
             <label>Titel<input type="text" th:field="*{title}" placeholder="z.B. Grumbrechtstraßen Open Air" required="required"/></label>
             <div class="form-row">
-                <label>Headliner<input type="text" th:field="*{headlinerName}" placeholder="z.B. Tipsy Apes"/></label>
-                <label>Headliner Datums-Label<input type="text" th:field="*{headlinerDateLabel}" placeholder="z.B. 10./11.07.26"/></label>
-            </div>
-            <div class="form-row">
                 <label><span id="start-date-label">Startdatum</span><input type="date" th:field="*{startDate}"/></label>
                 <label id="end-date-field">Enddatum<input type="date" th:field="*{endDate}"/></label>
             </div>
@@ -61,12 +57,16 @@
         <fieldset>
             <legend>Event-Infos (Was / Wo)</legend>
             <label>Beschreibung ("Was?")<textarea th:field="*{aboutText}" rows="4"></textarea></label>
-            <div class="form-row">
-                <label>Ort / Location<input type="text" th:field="*{locationName}"/></label>
-                <label>Straße & Nr.<input type="text" th:field="*{locationStreet}"/></label>
-                <label>PLZ & Ort<input type="text" th:field="*{locationZipCity}"/></label>
-            </div>
-            <p class="field-hint">Karte & Route-Link nutzen automatisch Straße &amp; Nr. und PLZ &amp; Ort.</p>
+            <label>Location
+                <select th:field="*{locationId}">
+                    <option value="">– bitte wählen –</option>
+                    <option th:each="loc : ${locations}" th:value="${loc.id}" th:text="${loc.name}">Tipsy Apes</option>
+                </select>
+            </label>
+            <p class="field-hint">
+                Steuert Karte, Route-Link und die Headliner-Box im Hero (Name + Datum). Locations werden zentral unter
+                <a th:href="@{/admin/locations}" target="_blank">Locations</a> angelegt und gepflegt.
+            </p>
         </fieldset>
 
         <fieldset>

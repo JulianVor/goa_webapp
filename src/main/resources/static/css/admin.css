@@ -115,6 +115,14 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     margin-bottom: 1.25rem;
 }
 
+.flash-error {
+    background: #fbdedb;
+    color: #c0392b;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+}
+
 .form-error { color: #c0392b; }
 .form-success { color: #1c7a4c; }
 

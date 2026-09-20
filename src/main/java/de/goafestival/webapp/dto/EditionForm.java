@@ -25,17 +25,12 @@ public class EditionForm {
     @NotBlank
     private String title;
 
-    private String headlinerName;
-    private String headlinerDateLabel;
-
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDate;
 
-    private String locationName;
-    private String locationStreet;
-    private String locationZipCity;
+    private Long locationId;
 
     private String aboutText;
 
@@ -99,22 +94,6 @@ public class EditionForm {
         this.title = title;
     }
 
-    public String getHeadlinerName() {
-        return headlinerName;
-    }
-
-    public void setHeadlinerName(String headlinerName) {
-        this.headlinerName = headlinerName;
-    }
-
-    public String getHeadlinerDateLabel() {
-        return headlinerDateLabel;
-    }
-
-    public void setHeadlinerDateLabel(String headlinerDateLabel) {
-        this.headlinerDateLabel = headlinerDateLabel;
-    }
-
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -131,28 +110,12 @@ public class EditionForm {
         this.endDate = endDate;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public Long getLocationId() {
+        return locationId;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
-    public String getLocationStreet() {
-        return locationStreet;
-    }
-
-    public void setLocationStreet(String locationStreet) {
-        this.locationStreet = locationStreet;
-    }
-
-    public String getLocationZipCity() {
-        return locationZipCity;
-    }
-
-    public void setLocationZipCity(String locationZipCity) {
-        this.locationZipCity = locationZipCity;
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
     }
 
     public String getAboutText() {

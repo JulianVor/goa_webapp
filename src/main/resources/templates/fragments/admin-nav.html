@@ -4,6 +4,7 @@
 <nav class="admin-nav" th:fragment="admin-nav">
     <a class="admin-brand" th:href="@{/admin}">GOA Admin</a>
     <div class="admin-nav-links">
+        <a th:href="@{/admin/locations}">Locations</a>
         <a th:href="@{/admin/settings}">Globale Einstellungen</a>
         <a th:href="@{/}" target="_blank">Seite ansehen ↗</a>
         <form th:action="@{/logout}" method="post" class="inline-form">

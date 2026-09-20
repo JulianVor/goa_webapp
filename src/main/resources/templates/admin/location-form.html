@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin(${isNew} ? 'Neue Location anlegen' : 'Location bearbeiten')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <p><a th:href="@{/admin/locations}">← Zurück zu Locations</a></p>
+    <h1 th:text="${isNew} ? 'Neue Location anlegen' : 'Location bearbeiten'">Location</h1>
+
+    <form method="post" class="admin-form"
+          th:action="${isNew} ? @{/admin/locations} : @{'/admin/locations/' + ${locationForm.id}}"
+          th:object="${locationForm}">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <fieldset>
+            <legend>Adresse</legend>
+            <label>Name<input type="text" th:field="*{name}" placeholder="z.B. Tipsy Apes" required="required"/></label>
+            <div class="form-row">
+                <label>Straße & Nr.<input type="text" th:field="*{street}"/></label>
+                <label>PLZ & Ort<input type="text" th:field="*{zipCity}"/></label>
+            </div>
+            <p class="field-hint">Karte & Route-Link auf der Ausgaben-Seite nutzen automatisch Straße &amp; Nr. und PLZ &amp; Ort.</p>
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Speichern</button>
+            <a class="btn" th:href="@{/admin/locations}">Abbrechen</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

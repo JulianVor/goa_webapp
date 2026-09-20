@@ -1,5 +1,6 @@
 package de.goafestival.webapp.domain;
 
+import de.goafestival.webapp.service.GermanDateFormats;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
@@ -48,17 +51,13 @@ public class Edition {
     @Column(nullable = false)
     private String title;
 
-    private String headlinerName;
-
-    /** Free-text date label shown next to the headliner, e.g. "10./11.07.26". */
-    private String headlinerDateLabel;
-
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private String locationName;
-    private String locationStreet;
-    private String locationZipCity;
+    /** The venue. Nullable so a brand new edition can be saved before one's been picked. */
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @Column(length = 4000)
     private String aboutText;
@@ -140,20 +139,14 @@ public class Edition {
         this.title = title;
     }
 
+    /** The venue's name, e.g. "Tipsy Apes" - shown in the hero headliner box. */
     public String getHeadlinerName() {
-        return headlinerName;
+        return location != null ? location.getName() : null;
     }
 
-    public void setHeadlinerName(String headlinerName) {
-        this.headlinerName = headlinerName;
-    }
-
+    /** Short date label for the hero headliner box, derived from start/end date. */
     public String getHeadlinerDateLabel() {
-        return headlinerDateLabel;
-    }
-
-    public void setHeadlinerDateLabel(String headlinerDateLabel) {
-        this.headlinerDateLabel = headlinerDateLabel;
+        return GermanDateFormats.headlinerDateLabel(startDate, endDate);
     }
 
     public LocalDate getStartDate() {
@@ -172,28 +165,24 @@ public class Edition {
         this.endDate = endDate;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getLocationName() {
+        return location != null ? location.getName() : null;
     }
 
     public String getLocationStreet() {
-        return locationStreet;
-    }
-
-    public void setLocationStreet(String locationStreet) {
-        this.locationStreet = locationStreet;
+        return location != null ? location.getStreet() : null;
     }
 
     public String getLocationZipCity() {
-        return locationZipCity;
-    }
-
-    public void setLocationZipCity(String locationZipCity) {
-        this.locationZipCity = locationZipCity;
+        return location != null ? location.getZipCity() : null;
     }
 
     public String getAboutText() {
@@ -206,18 +195,7 @@ public class Edition {
 
     /** Address for the Google Maps embed + "Route berechnen" link, composed from street and zip/city. */
     public String getMapQuery() {
-        boolean hasStreet = locationStreet != null && !locationStreet.isBlank();
-        boolean hasZipCity = locationZipCity != null && !locationZipCity.isBlank();
-        if (hasStreet && hasZipCity) {
-            return locationStreet + ", " + locationZipCity;
-        }
-        if (hasStreet) {
-            return locationStreet;
-        }
-        if (hasZipCity) {
-            return locationZipCity;
-        }
-        return null;
+        return location != null ? location.getMapQuery() : null;
     }
 
     public String getColorPrimary() {

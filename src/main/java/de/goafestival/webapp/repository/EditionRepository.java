@@ -2,6 +2,7 @@ package de.goafestival.webapp.repository;
 
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.EditionType;
+import de.goafestival.webapp.domain.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface EditionRepository extends JpaRepository<Edition, Long> {
     List<Edition> findAllByOrderByYearDesc();
 
     List<Edition> findByTypeOrderByStartDateDesc(EditionType type);
+
+    boolean existsByLocation(Location location);
 }
