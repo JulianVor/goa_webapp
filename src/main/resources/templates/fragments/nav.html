@@ -8,16 +8,23 @@
         <span th:unless="${siteSettings.logoImagePath}" th:text="${edition.title}">GOA</span>
     </a>
 
+    <!-- Several Kneipenkonzerte -> this links to the overview, which is useful from
+         any page (including another Kneipenkonzert's), so it sits right by the logo
+         instead of among the page-section anchors below. -->
+    <a class="pill" th:if="${navKneipenkonzerte != null and #lists.size(navKneipenkonzerte) > 1}"
+       th:href="@{/kneipenkonzerte}">Kneipenkonzerte</a>
+
     <button class="nav-toggle" type="button" aria-label="Menü">☰</button>
 
     <div class="nav-links">
         <a class="pill" th:if="${edition.isShowEventInfos()}" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
         <a class="pill" th:if="${edition.isShowLineup()}" th:href="${baseUrl} + '#line-up'">Line-Up</a>
         <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
-        <a class="pill" th:if="${navKneipenkonzerte != null and #lists.size(navKneipenkonzerte) == 1}"
+        <!-- Only one Kneipenkonzert -> this links straight to it, so it's pointless
+             (and confusing) while already viewing that very page. -->
+        <a class="pill" th:if="${navKneipenkonzerte != null and #lists.size(navKneipenkonzerte) == 1 and edition.type.name() != 'KNEIPENKONZERT'}"
            th:href="@{'/kneipenkonzerte/' + ${navKneipenkonzerte[0].id}}"
            th:text="${navKneipenkonzerte[0].title}">Kneipenkonzert</a>
-        <a class="pill" th:if="${navKneipenkonzerte != null and #lists.size(navKneipenkonzerte) > 1}" th:href="@{/kneipenkonzerte}">Kneipenkonzerte</a>
 
         <span class="nav-socials">
             <a th:if="${not #strings.isEmpty(siteSettings.instagramUrl)}" th:href="${siteSettings.instagramUrl}" target="_blank" rel="noopener" title="Instagram">

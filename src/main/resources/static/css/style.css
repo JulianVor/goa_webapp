@@ -100,7 +100,7 @@ img { max-width: 100%; display: block; }
     flex-wrap: wrap;
 }
 
-.nav-links .pill {
+.site-nav .pill {
     background: var(--color-accent);
     color: var(--color-primary);
     text-decoration: none;
