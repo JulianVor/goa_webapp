@@ -133,3 +133,15 @@ BEGIN
         ALTER TABLE editions DROP COLUMN color_text;
     END IF;
 END $$//
+
+-- Added when "Anzeige-Label (Hero)" was dropped for Kneipenkonzerte (the year isn't
+-- relevant there): clears it for any that already have one, so the label box under
+-- the title stops showing without needing every one to be re-saved through the form.
+DO $$
+BEGIN
+    IF to_regclass('editions') IS NULL THEN
+        RETURN;
+    END IF;
+
+    UPDATE editions SET display_label = '' WHERE type = 'KNEIPENKONZERT' AND display_label <> '';
+END $$//

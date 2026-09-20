@@ -10,7 +10,7 @@
         <img class="hero-logo" th:if="${edition.logoImagePath}" th:src="${edition.logoImagePath}" th:alt="${edition.title}"/>
         <th:block th:unless="${edition.logoImagePath}">
             <h1 class="hero-title" th:text="${edition.title}">Grumbrechtstraßen Open Air</h1>
-            <div class="hero-year" th:text="${edition.displayLabel}">2026</div>
+            <div class="hero-year" th:if="${not #strings.isEmpty(edition.displayLabel)}" th:text="${edition.displayLabel}">2026</div>
         </th:block>
 
         <a class="kneipenkonzert-teaser" th:if="${nextKneipenkonzert != null}"
@@ -22,9 +22,10 @@
 
         <th:block th:if="${edition.isShowHeadliner()}">
             <img class="hero-location-image" th:if="${edition.locationImagePath}" th:src="${edition.locationImagePath}" th:alt="${edition.headlinerName}"/>
-            <div class="headliner-box" th:if="${edition.locationImagePath == null and edition.headlinerName != null}">
+            <div class="headliner-box" th:classappend="${edition.type.name() == 'KNEIPENKONZERT'} ? 'headliner-box--kneipenkonzert' : ''"
+                 th:if="${edition.locationImagePath == null and edition.headlinerName != null}">
                 <div class="headliner-name" th:text="${edition.headlinerName}">Tipsy Apes</div>
-                <div class="headliner-date" th:text="${edition.headlinerDateLabel}">10./11.07.26</div>
+                <div class="headliner-date" th:text="${edition.headlinerDateLabel}">10./11.07.2026</div>
             </div>
         </th:block>
     </div>

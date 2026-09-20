@@ -181,7 +181,8 @@ public class EditionService {
             year = form.getStartDate() != null ? form.getStartDate().getYear() : LocalDate.now().getYear();
         }
         edition.setYear(year);
-        edition.setDisplayLabel(form.getDisplayLabel());
+        // A Kneipenkonzert has no "Anzeige-Label (Hero)" field either - the year isn't relevant there.
+        edition.setDisplayLabel(isKneipenkonzert ? "" : form.getDisplayLabel());
         edition.setTitle(form.getTitle());
         edition.setStartDate(form.getStartDate());
         // A Kneipenkonzert is a single day - it never has a separate end date, even if one was submitted.

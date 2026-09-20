@@ -12,8 +12,8 @@ public final class GermanDateFormats {
     private static final DateTimeFormatter DAY_LABEL = DateTimeFormatter.ofPattern("EEEE d. MMMM yyyy", Locale.GERMAN);
     private static final DateTimeFormatter DATE_LABEL = DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.GERMAN);
     private static final DateTimeFormatter TIME_LABEL = DateTimeFormatter.ofPattern("HH:mm", Locale.GERMAN);
-    private static final DateTimeFormatter SHORT_DATE = DateTimeFormatter.ofPattern("dd.MM.yy", Locale.GERMAN);
-    private static final DateTimeFormatter MONTH_YEAR = DateTimeFormatter.ofPattern("MM.yy", Locale.GERMAN);
+    private static final DateTimeFormatter SHORT_DATE = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
+    private static final DateTimeFormatter MONTH_YEAR = DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN);
 
     private GermanDateFormats() {
     }
@@ -35,8 +35,8 @@ public final class GermanDateFormats {
     }
 
     /**
-     * Short venue-announcement date label, e.g. "11.11.26" for a single day,
-     * "10.&amp;11.07.26" for two consecutive days, "10.-12.07.26" for three or
+     * Short venue-announcement date label, e.g. "11.11.2026" for a single day,
+     * "10.&amp;11.07.2026" for two consecutive days, "10.-12.07.2026" for three or
      * more. Falls back to two full dates when the span crosses a month or year.
      */
     public static String headlinerDateLabel(LocalDate start, LocalDate end) {

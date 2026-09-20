@@ -26,7 +26,7 @@
             </label>
             <div class="form-row">
                 <label id="year-field">Jahr<input type="number" th:field="*{year}" required="required"/></label>
-                <label>Anzeige-Label (Hero)<input type="text" th:field="*{displayLabel}" placeholder="z.B. 2026 oder 60" required="required"/></label>
+                <label id="display-label-field">Anzeige-Label (Hero)<input type="text" th:field="*{displayLabel}" placeholder="z.B. 2026 oder 60" required="required"/></label>
             </div>
             <label>Titel<input type="text" th:field="*{title}" placeholder="z.B. Grumbrechtstraßen Open Air" required="required"/></label>
             <div class="form-row">
@@ -88,7 +88,7 @@
                 <label>Logo (PNG/SVG) – Nav & Hero-Titelbild<input type="file" name="logoImage" accept="image/*"/></label>
                 <label>Hintergrundbild (Hero, fix)<input type="file" name="backgroundImage" accept="image/*"/></label>
             </div>
-            <label>Ort-/Terminbild (z.B. "Tipsy Apes 10./11.07.26") – ersetzt die Headliner-Box im Hero
+            <label>Ort-/Terminbild (z.B. "Tipsy Apes 10./11.07.2026") – ersetzt die Headliner-Box im Hero
                 <input type="file" name="locationImage" accept="image/*"/>
             </label>
             <div class="current-image-preview" th:if="${edition != null}">
@@ -108,18 +108,22 @@
     (function () {
         var typeSelect = document.getElementById('type');
         var yearField = document.getElementById('year-field');
+        var displayLabelField = document.getElementById('display-label-field');
         var endDateField = document.getElementById('end-date-field');
         var currentField = document.getElementById('current-field');
         var startDateLabel = document.getElementById('start-date-label');
         var yearInput = yearField.querySelector('input');
+        var displayLabelInput = displayLabelField.querySelector('input');
         var startDateInput = startDateLabel.closest('label').querySelector('input');
 
         function applyTypeVisibility() {
             var isKneipenkonzert = typeSelect.value === 'KNEIPENKONZERT';
             yearField.style.display = isKneipenkonzert ? 'none' : '';
+            displayLabelField.style.display = isKneipenkonzert ? 'none' : '';
             endDateField.style.display = isKneipenkonzert ? 'none' : '';
             currentField.style.display = isKneipenkonzert ? 'none' : '';
             yearInput.required = !isKneipenkonzert;
+            displayLabelInput.required = !isKneipenkonzert;
             startDateInput.required = isKneipenkonzert;
             startDateLabel.textContent = isKneipenkonzert ? 'Datum' : 'Startdatum';
         }

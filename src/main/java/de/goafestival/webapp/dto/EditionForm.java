@@ -19,7 +19,7 @@ public class EditionForm {
     /** Required for FESTIVAL; for KNEIPENKONZERT it's derived from startDate instead (see EditionService). */
     private Integer year;
 
-    @NotBlank
+    /** Required for FESTIVAL; not shown for KNEIPENKONZERT, where the year isn't relevant (see EditionService). */
     private String displayLabel;
 
     @NotBlank

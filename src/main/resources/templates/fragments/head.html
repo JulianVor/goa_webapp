@@ -4,7 +4,7 @@
       th:with="effectiveBackground=${edition != null ? (edition.backgroundImagePath != null ? edition.backgroundImagePath : (edition.type.name() == 'KNEIPENKONZERT' and currentEdition != null ? currentEdition.backgroundImagePath : null)) : null}">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:text="${pageTitle} ?: (${edition} != null ? ${edition.title} + ' ' + ${edition.displayLabel} : 'GOA Festival')">GOA Festival</title>
+    <title th:text="${pageTitle} ?: (${edition} != null ? (${#strings.isEmpty(edition.displayLabel)} ? ${edition.title} : ${edition.title} + ' ' + ${edition.displayLabel}) : 'GOA Festival')">GOA Festival</title>
     <link rel="icon" th:if="${siteSettings != null and siteSettings.faviconImagePath != null}" th:href="${siteSettings.faviconImagePath}"/>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <!-- The fixed background photo covers the whole viewport and is usually the largest
