@@ -5,7 +5,7 @@
 <div class="page-bg"></div>
 <div th:replace="~{fragments/nav :: nav(${edition}, ${archivedEditions})}"></div>
 
-<header class="hero">
+<header class="hero" th:classappend="${!edition.isShowEventInfos() and !edition.isShowLineup() and !(edition.isShowFaq() and !faqEntries.isEmpty())} ? 'hero--standalone' : ''">
     <div class="hero-inner">
         <img class="hero-logo" th:if="${edition.logoImagePath}" th:src="${edition.logoImagePath}" th:alt="${edition.title}"/>
         <th:block th:unless="${edition.logoImagePath}">

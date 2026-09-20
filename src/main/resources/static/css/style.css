@@ -245,6 +245,15 @@ img { max-width: 100%; display: block; }
         min-height: calc(100vh - 70px);
         min-height: calc(100svh - 70px);
     }
+
+    /* When the hero is the only thing above the footer (no Event-Infos/Line-Up/FAQ
+       sections render), filling the screen right up to the nav leaves no room for
+       the footer - it would then sit just below the fold, needing a scroll despite
+       there visibly being enough space. Reserve the footer's height too here. */
+    .hero--standalone {
+        min-height: calc(100vh - 150px);
+        min-height: calc(100svh - 150px);
+    }
 }
 
 .hero-inner { max-width: 1100px; min-width: 0; width: 100%; }
