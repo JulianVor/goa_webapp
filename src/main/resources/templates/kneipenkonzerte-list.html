@@ -8,15 +8,14 @@
 <header class="hero hero-simple">
     <div class="hero-inner">
         <h1 class="hero-title">Kneipenkonzerte</h1>
-        <p class="hero-subtitle">Kleine Konzertabende bei den Tipsy Apes – vor allem im Herbst und Winter.</p>
     </div>
 </header>
 
 <section class="section-band section-shows">
     <div class="section">
-    <h2 class="section-title">Kommende Termine</h2>
     <div class="show-grid" th:if="${!upcoming.isEmpty()}">
-        <a class="show-card" th:each="show : ${upcoming}" th:href="@{'/kneipenkonzerte/' + ${show.id}}">
+        <a class="show-card" th:classappend="${show.logoImagePath == null and show.backgroundImagePath == null} ? 'show-card-noimage' : ''"
+           th:each="show : ${upcoming}" th:href="@{'/kneipenkonzerte/' + ${show.id}}">
             <img th:if="${show.logoImagePath ?: show.backgroundImagePath}"
                  th:src="${show.logoImagePath ?: show.backgroundImagePath}" th:alt="${show.title}" loading="lazy"/>
             <div class="show-card-overlay">
@@ -36,7 +35,8 @@
     <div class="section">
     <h2 class="section-title">Vergangene Termine</h2>
     <div class="show-grid">
-        <a class="show-card show-card-past" th:each="show : ${past}" th:href="@{'/kneipenkonzerte/' + ${show.id}}">
+        <a class="show-card show-card-past" th:classappend="${show.logoImagePath == null and show.backgroundImagePath == null} ? 'show-card-noimage' : ''"
+           th:each="show : ${past}" th:href="@{'/kneipenkonzerte/' + ${show.id}}">
             <img th:if="${show.logoImagePath ?: show.backgroundImagePath}"
                  th:src="${show.logoImagePath ?: show.backgroundImagePath}" th:alt="${show.title}" loading="lazy"/>
             <div class="show-card-overlay">
