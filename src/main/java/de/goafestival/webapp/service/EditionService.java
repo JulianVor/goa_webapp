@@ -66,6 +66,11 @@ public class EditionService {
         return editionRepository.findByTypeOrderByStartDateDesc(EditionType.KNEIPENKONZERT);
     }
 
+    /** Whether at least one Kneipenkonzert exists — drives the nav link's visibility. */
+    public boolean hasKneipenkonzerte() {
+        return editionRepository.existsByType(EditionType.KNEIPENKONZERT);
+    }
+
     /** All editions except the given one, newest year first — for "copy from another year" pickers. */
     public List<Edition> findAllExcept(Long editionId) {
         return findAllOrdered().stream()
