@@ -1,5 +1,7 @@
 package de.goafestival.webapp.web.admin;
 
+import de.goafestival.webapp.domain.Edition;
+import de.goafestival.webapp.domain.EditionType;
 import de.goafestival.webapp.service.BandService;
 import de.goafestival.webapp.service.EditionService;
 import de.goafestival.webapp.service.SiteSettingsService;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,7 +31,9 @@ public class AdminDashboardController {
 
     @GetMapping
     public String dashboard(Model model) {
-        model.addAttribute("editions", editionService.findAllOrdered());
+        List<Edition> all = editionService.findAllOrdered();
+        model.addAttribute("editions", all.stream().filter(e -> e.getType() == EditionType.FESTIVAL).toList());
+        model.addAttribute("kneipenkonzerte", all.stream().filter(e -> e.getType() == EditionType.KNEIPENKONZERT).toList());
         return "admin/dashboard";
     }
 

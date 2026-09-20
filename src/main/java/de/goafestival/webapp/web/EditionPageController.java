@@ -11,11 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 /**
- * Renders the public festival page: the current edition at "/", and any past
- * edition (the "Historie") at "/goa/{year}".
+ * Renders the public festival page: the current edition at "/", any past
+ * edition (the "Historie") at "/goa/{year}", and the Kneipenkonzerte
+ * (small pub shows) list/detail pages.
  */
 @Controller
 public class EditionPageController {
@@ -41,6 +44,35 @@ public class EditionPageController {
     public String archivedEdition(@PathVariable int year, Model model) {
         Edition edition = editionService.getByYearOrThrow(year);
         populateModel(model, edition, edition.isCurrent());
+        return "edition";
+    }
+
+    @GetMapping("/kneipenkonzerte")
+    public String kneipenkonzerte(Model model) {
+        Edition current = editionService.getCurrentOrThrow();
+        List<Edition> all = editionService.findKneipenkonzerte();
+        LocalDate today = LocalDate.now();
+
+        List<Edition> upcoming = all.stream()
+                .filter(e -> e.getStartDate() != null && !e.getStartDate().isBefore(today))
+                .sorted(Comparator.comparing(Edition::getStartDate))
+                .toList();
+        List<Edition> past = all.stream()
+                .filter(e -> e.getStartDate() == null || e.getStartDate().isBefore(today))
+                .sorted(Comparator.comparing(Edition::getStartDate, Comparator.nullsLast(Comparator.reverseOrder())))
+                .toList();
+
+        model.addAttribute("edition", current);
+        model.addAttribute("upcoming", upcoming);
+        model.addAttribute("past", past);
+        model.addAttribute("archivedEditions", editionService.findArchivedEditions());
+        return "kneipenkonzerte-list";
+    }
+
+    @GetMapping("/kneipenkonzerte/{id}")
+    public String kneipenkonzertDetail(@PathVariable Long id, Model model) {
+        Edition edition = editionService.getKneipenkonzertByIdOrThrow(id);
+        populateModel(model, edition, false);
         return "edition";
     }
 

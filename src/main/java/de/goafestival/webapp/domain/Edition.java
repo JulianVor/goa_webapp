@@ -3,6 +3,8 @@ package de.goafestival.webapp.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,24 +12,30 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * One festival edition ("Jahr"). Holds the year-specific branding (colors, logo,
- * background), the event info shown in the hero/"Event-Infos" section, and owns
- * the bands and FAQ entries that belong to that year.
+ * One festival edition ("Jahr") or, since {@link #type} was added, one small
+ * "Kneipenkonzert" pub show. Holds the branding (colors, logo, background),
+ * the event info shown in the hero/"Event-Infos" section, and owns the bands
+ * and FAQ entries that belong to it. The festival year is unique only among
+ * FESTIVAL-type rows: several Kneipenkonzerte can share the same year (there's
+ * no DB-level constraint enforcing this beyond what the service layer checks).
  */
 @Entity
-@Table(name = "editions", uniqueConstraints = @UniqueConstraint(columnNames = "festival_year"))
+@Table(name = "editions")
 public class Edition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EditionType type = EditionType.FESTIVAL;
 
     @Column(name = "festival_year", nullable = false)
     private Integer year;
@@ -98,6 +106,14 @@ public class Edition {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public EditionType getType() {
+        return type;
+    }
+
+    public void setType(EditionType type) {
+        this.type = type;
     }
 
     public Integer getYear() {
@@ -261,12 +277,23 @@ public class Edition {
     }
 
     /**
-     * An archived (non-current) edition is a past event: it always shows just the
-     * logo and the Line-Up, regardless of the stored toggles, so these three ignore
-     * the toggle once the edition is archived.
+     * Whether this edition gets the full "current festival" treatment (event
+     * info, FAQ, headliner box, exact performance times) rather than the bare
+     * logo-plus-Line-Up view used for archived festival years. True for the
+     * current festival edition and for every Kneipenkonzert (each one is a
+     * standalone page, never just a dated-out archive entry).
+     */
+    public boolean isDetailPage() {
+        return type == EditionType.KNEIPENKONZERT || current;
+    }
+
+    /**
+     * An archived (non-current) festival edition is a past event: it always shows
+     * just the logo and the Line-Up, regardless of the stored toggles, so these
+     * three ignore the toggle once the edition is archived.
      */
     public boolean isShowEventInfos() {
-        return current && (showEventInfos == null || showEventInfos);
+        return isDetailPage() && (showEventInfos == null || showEventInfos);
     }
 
     public void setShowEventInfos(Boolean showEventInfos) {
@@ -275,7 +302,7 @@ public class Edition {
 
     /** The Line-Up always shows on an archived edition, regardless of the stored toggle. */
     public boolean isShowLineup() {
-        return !current || showLineup == null || showLineup;
+        return !isDetailPage() || showLineup == null || showLineup;
     }
 
     public void setShowLineup(Boolean showLineup) {
@@ -283,7 +310,7 @@ public class Edition {
     }
 
     public boolean isShowFaq() {
-        return current && (showFaq == null || showFaq);
+        return isDetailPage() && (showFaq == null || showFaq);
     }
 
     public void setShowFaq(Boolean showFaq) {
@@ -291,7 +318,7 @@ public class Edition {
     }
 
     public boolean isShowHeadliner() {
-        return current && (showHeadliner == null || showHeadliner);
+        return isDetailPage() && (showHeadliner == null || showHeadliner);
     }
 
     public void setShowHeadliner(Boolean showHeadliner) {

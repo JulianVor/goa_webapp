@@ -1,5 +1,6 @@
 package de.goafestival.webapp.dto;
 
+import de.goafestival.webapp.domain.EditionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +12,9 @@ import java.time.LocalDate;
 public class EditionForm {
 
     private Long id;
+
+    @NotNull
+    private EditionType type = EditionType.FESTIVAL;
 
     @NotNull
     private Integer year;
@@ -61,6 +65,14 @@ public class EditionForm {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public EditionType getType() {
+        return type;
+    }
+
+    public void setType(EditionType type) {
+        this.type = type;
     }
 
     public Integer getYear() {

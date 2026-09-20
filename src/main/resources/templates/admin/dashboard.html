@@ -13,7 +13,8 @@
                 <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <button type="submit" class="btn">Bilder optimieren</button>
             </form>
-            <a class="btn btn-primary" th:href="@{/admin/editions/new}">+ Neues Jahr anlegen</a>
+            <a class="btn btn-primary" th:href="@{/admin/editions/new(type='FESTIVAL')}">+ Neues Jahr anlegen</a>
+            <a class="btn btn-primary" th:href="@{/admin/editions/new(type='KNEIPENKONZERT')}">+ Neues Kneipenkonzert</a>
         </div>
     </div>
 
@@ -60,6 +61,48 @@
         </tr>
         <tr th:if="${editions.isEmpty()}">
             <td colspan="5">Noch keine Ausgabe angelegt.</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="admin-header-row" style="margin-top: 2.5rem;">
+        <h2>Kneipenkonzerte</h2>
+    </div>
+
+    <div class="table-scroll">
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Titel</th>
+            <th>Headliner</th>
+            <th>Status</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="show : ${kneipenkonzerte}">
+            <td th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(show.startDate)}">12. Oktober 2026</td>
+            <td th:text="${show.title}">Grumbrechtstraßen Open Air</td>
+            <td th:text="${show.headlinerName}">Tipsy Apes</td>
+            <td>
+                <span class="badge badge-current" th:if="${show.startDate != null and !show.startDate.isBefore(T(java.time.LocalDate).now())}">kommend</span>
+                <span class="badge" th:unless="${show.startDate != null and !show.startDate.isBefore(T(java.time.LocalDate).now())}">vergangen</span>
+            </td>
+            <td class="actions">
+                <a th:href="@{'/admin/editions/' + ${show.id} + '/edit'}">Bearbeiten</a>
+                <a th:href="@{'/admin/editions/' + ${show.id} + '/bands'}">Bands</a>
+                <a th:href="@{'/admin/editions/' + ${show.id} + '/faq'}">FAQ</a>
+                <form th:action="@{'/admin/editions/' + ${show.id} + '/delete'}" method="post" class="inline-form"
+                      onsubmit="return confirm('Dieses Kneipenkonzert inkl. aller Bands und FAQ-Einträge wirklich löschen?');">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button link-danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${kneipenkonzerte.isEmpty()}">
+            <td colspan="5">Noch kein Kneipenkonzert angelegt.</td>
         </tr>
         </tbody>
     </table>

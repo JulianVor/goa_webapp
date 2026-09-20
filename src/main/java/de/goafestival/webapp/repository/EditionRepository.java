@@ -1,6 +1,7 @@
 package de.goafestival.webapp.repository;
 
 import de.goafestival.webapp.domain.Edition;
+import de.goafestival.webapp.domain.EditionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,7 +11,9 @@ public interface EditionRepository extends JpaRepository<Edition, Long> {
 
     Optional<Edition> findByCurrentTrue();
 
-    Optional<Edition> findByYear(Integer year);
+    Optional<Edition> findByYearAndType(Integer year, EditionType type);
 
     List<Edition> findAllByOrderByYearDesc();
+
+    List<Edition> findByTypeOrderByStartDateDesc(EditionType type);
 }

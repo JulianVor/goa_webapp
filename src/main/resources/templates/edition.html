@@ -69,7 +69,7 @@
     <h2 class="section-title">Line – Up</h2>
 
     <div class="day-block" th:each="day : ${dayLineups}">
-        <h3 class="day-title" th:if="${edition.isCurrent()}" th:text="${day.label}">Freitag 10. Juli 2026</h3>
+        <h3 class="day-title" th:if="${edition.isDetailPage()}" th:text="${day.label}">Freitag 10. Juli 2026</h3>
         <div class="band-grid">
             <a class="band-card" th:each="band : ${day.bands}"
                th:with="performanceLabel=${band.performanceAt != null ? T(de.goafestival.webapp.service.GermanDateFormats).dayAndTimeLabel(band.performanceAt) : ''}"
@@ -80,15 +80,15 @@
                 <div class="band-card-overlay">
                     <div class="band-card-name" th:text="${band.name}">Bandname</div>
                     <div class="band-card-genre" th:text="${band.genre}">Genre</div>
-                    <div class="band-card-time" th:if="${edition.isCurrent()}"
+                    <div class="band-card-time" th:if="${edition.isDetailPage()}"
                          th:text="${T(de.goafestival.webapp.service.GermanDateFormats).timeLabel(band.performanceAt)}">18:00 Uhr</div>
                 </div>
             </a>
         </div>
     </div>
 
-    <p class="empty-hint" th:if="${dayLineups.isEmpty() and edition.isCurrent()}">Das Line-Up wird bald bekannt gegeben.</p>
-    <p class="empty-hint" th:if="${dayLineups.isEmpty() and !edition.isCurrent()}">Für diese Ausgabe wurde kein Line-Up hinterlegt.</p>
+    <p class="empty-hint" th:if="${dayLineups.isEmpty() and edition.isDetailPage()}">Das Line-Up wird bald bekannt gegeben.</p>
+    <p class="empty-hint" th:if="${dayLineups.isEmpty() and !edition.isDetailPage()}">Für diese Ausgabe wurde kein Line-Up hinterlegt.</p>
     </div>
 </section>
 

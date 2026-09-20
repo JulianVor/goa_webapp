@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${edition}, 'Kneipenkonzerte')}"></head>
+<body>
+<div class="page-bg"></div>
+<div th:replace="~{fragments/nav :: nav(${edition}, ${archivedEditions})}"></div>
+
+<header class="hero hero-simple">
+    <div class="hero-inner">
+        <h1 class="hero-title">Kneipenkonzerte</h1>
+        <p class="hero-subtitle">Kleine Konzertabende bei den Tipsy Apes – vor allem im Herbst und Winter.</p>
+    </div>
+</header>
+
+<section class="section-band section-shows">
+    <div class="section">
+    <h2 class="section-title">Kommende Termine</h2>
+    <div class="show-grid" th:if="${!upcoming.isEmpty()}">
+        <a class="show-card" th:each="show : ${upcoming}" th:href="@{'/kneipenkonzerte/' + ${show.id}}">
+            <img th:if="${show.logoImagePath ?: show.backgroundImagePath}"
+                 th:src="${show.logoImagePath ?: show.backgroundImagePath}" th:alt="${show.title}" loading="lazy"/>
+            <div class="show-card-overlay">
+                <div class="show-card-date" th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(show.startDate)}">12. Oktober 2026</div>
+                <div class="show-card-title" th:text="${show.title}">Grumbrechtstraßen Open Air</div>
+                <div class="show-card-headliner" th:if="${not #strings.isEmpty(show.headlinerName)}" th:text="${show.headlinerName}">Tipsy Apes</div>
+            </div>
+        </a>
+    </div>
+    <p class="empty-hint" th:if="${upcoming.isEmpty()}">Aktuell ist kein Kneipenkonzert geplant – schau bald wieder vorbei.</p>
+    </div>
+</section>
+
+<hr class="section-divider" th:if="${!past.isEmpty()}"/>
+
+<section class="section-band section-shows" th:if="${!past.isEmpty()}">
+    <div class="section">
+    <h2 class="section-title">Vergangene Termine</h2>
+    <div class="show-grid">
+        <a class="show-card show-card-past" th:each="show : ${past}" th:href="@{'/kneipenkonzerte/' + ${show.id}}">
+            <img th:if="${show.logoImagePath ?: show.backgroundImagePath}"
+                 th:src="${show.logoImagePath ?: show.backgroundImagePath}" th:alt="${show.title}" loading="lazy"/>
+            <div class="show-card-overlay">
+                <div class="show-card-date" th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(show.startDate)}">12. Oktober 2025</div>
+                <div class="show-card-title" th:text="${show.title}">Grumbrechtstraßen Open Air</div>
+                <div class="show-card-headliner" th:if="${not #strings.isEmpty(show.headlinerName)}" th:text="${show.headlinerName}">Tipsy Apes</div>
+            </div>
+        </a>
+    </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

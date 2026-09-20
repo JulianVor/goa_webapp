@@ -12,7 +12,7 @@
 
     <div class="band-detail-card">
         <h1 class="band-detail-name" th:text="${band.name}">Bandname</h1>
-        <p class="band-detail-datetime" th:if="${edition.isCurrent()}"
+        <p class="band-detail-datetime" th:if="${edition.isDetailPage()}"
            th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dayAndTimeLabel(band.performanceAt)}">
             Freitag 10. Juli 2026, 18:00 Uhr
         </p>
@@ -66,7 +66,7 @@
 </section>
 
 <p class="band-detail-back">
-    <a th:href="${edition.current} ? '/#line-up' : ('/goa/' + ${edition.year} + '#line-up')">← Zurück zum Line-Up</a>
+    <a th:href="${edition.current} ? '/#line-up' : (${edition.type.name() == 'KNEIPENKONZERT'} ? ('/kneipenkonzerte/' + ${edition.id} + '#line-up') : ('/goa/' + ${edition.year} + '#line-up'))">← Zurück zum Line-Up</a>
 </p>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

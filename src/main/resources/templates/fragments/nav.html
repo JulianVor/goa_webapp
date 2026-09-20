@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <nav class="site-nav" th:fragment="nav(edition, archivedEditions)"
-     th:with="baseUrl=${edition.current} ? '/' : ('/goa/' + ${edition.year})">
+     th:with="baseUrl=${edition.current} ? '/' : (${edition.type.name() == 'KNEIPENKONZERT'} ? ('/kneipenkonzerte/' + ${edition.id}) : ('/goa/' + ${edition.year}))">
     <a class="brand" th:href="@{/}">
         <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo"/>
         <span th:unless="${siteSettings.logoImagePath}" th:text="${edition.title}">GOA</span>
@@ -14,6 +14,7 @@
         <a class="pill" th:if="${edition.isShowEventInfos()}" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
         <a class="pill" th:if="${edition.isShowLineup()}" th:href="${baseUrl} + '#line-up'">Line-Up</a>
         <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
+        <a class="pill" th:href="@{/kneipenkonzerte}">Kneipenkonzerte</a>
 
         <span class="nav-socials">
             <a th:if="${not #strings.isEmpty(siteSettings.instagramUrl)}" th:href="${siteSettings.instagramUrl}" target="_blank" rel="noopener" title="Instagram">

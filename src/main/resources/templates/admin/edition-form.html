@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head-admin :: head-admin(${isNew} ? 'Neues Jahr anlegen' : 'Ausgabe bearbeiten')}"></head>
+<head th:replace="~{fragments/head-admin :: head-admin(${isNew} ? 'Neue Ausgabe anlegen' : 'Ausgabe bearbeiten')}"></head>
 <body class="admin-body">
 <div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
 
 <main class="admin-main">
-    <h1 th:text="${isNew} ? 'Neues Jahr anlegen' : 'Ausgabe bearbeiten'">Ausgabe</h1>
+    <h1 th:text="${isNew} ? 'Neue Ausgabe anlegen' : 'Ausgabe bearbeiten'">Ausgabe</h1>
     <p class="field-hint">
         Logo, Tab-Icon, Kontakt/Social-Links und das Impressum sind seitenübergreifend und werden unter
         <a th:href="@{/admin/settings}">Globale Einstellungen</a> gepflegt.
@@ -18,6 +18,12 @@
 
         <fieldset>
             <legend>Grunddaten</legend>
+            <label>Typ
+                <select th:field="*{type}">
+                    <option value="FESTIVAL">Festival (großes Jahres-Event)</option>
+                    <option value="KNEIPENKONZERT">Kneipenkonzert</option>
+                </select>
+            </label>
             <div class="form-row">
                 <label>Jahr<input type="number" th:field="*{year}" required="required"/></label>
                 <label>Anzeige-Label (Hero)<input type="text" th:field="*{displayLabel}" placeholder="z.B. 2026 oder 60" required="required"/></label>
@@ -32,9 +38,10 @@
                 <label>Enddatum<input type="date" th:field="*{endDate}"/></label>
             </div>
             <label class="checkbox-row"><input type="checkbox" th:field="*{current}"/> Als aktuelle Festival-Seite ("/") anzeigen</label>
+            <p class="field-hint">Gilt nur für Typ "Festival" – bei Kneipenkonzerten wird das ignoriert.</p>
         </fieldset>
 
-        <fieldset th:if="${edition == null or edition.isCurrent()}">
+        <fieldset th:if="${edition == null or edition.isDetailPage()}">
             <legend>Sichtbare Bereiche</legend>
             <p class="field-hint">
                 Einzelne Bereiche der Seite lassen sich abschalten, z.B. um schon vor Bekanntgabe des
@@ -45,7 +52,7 @@
             <label class="checkbox-row"><input type="checkbox" th:field="*{showFaq}"/> FAQ anzeigen</label>
             <label class="checkbox-row"><input type="checkbox" th:field="*{showHeadliner}"/> Zweites Bild / Headliner-Text im Hero anzeigen</label>
         </fieldset>
-        <p class="field-hint" th:if="${edition != null and !edition.isCurrent()}">
+        <p class="field-hint" th:if="${edition != null and !edition.isDetailPage()}">
             Diese Ausgabe ist archiviert: Es werden automatisch nur Logo und Line-Up angezeigt (ohne Datum/Uhrzeit),
             alle anderen Bereiche sind ausgeblendet.
         </p>

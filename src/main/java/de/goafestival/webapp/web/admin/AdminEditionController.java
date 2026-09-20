@@ -1,6 +1,7 @@
 package de.goafestival.webapp.web.admin;
 
 import de.goafestival.webapp.domain.Edition;
+import de.goafestival.webapp.domain.EditionType;
 import de.goafestival.webapp.dto.EditionForm;
 import de.goafestival.webapp.service.EditionService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -25,8 +27,12 @@ public class AdminEditionController {
     }
 
     @GetMapping("/new")
-    public String newForm(Model model) {
-        model.addAttribute("editionForm", new EditionForm());
+    public String newForm(@RequestParam(required = false) EditionType type, Model model) {
+        EditionForm form = new EditionForm();
+        if (type != null) {
+            form.setType(type);
+        }
+        model.addAttribute("editionForm", form);
         model.addAttribute("isNew", true);
         return "admin/edition-form";
     }
@@ -82,6 +88,7 @@ public class AdminEditionController {
     private EditionForm toForm(Edition edition) {
         EditionForm form = new EditionForm();
         form.setId(edition.getId());
+        form.setType(edition.getType());
         form.setYear(edition.getYear());
         form.setDisplayLabel(edition.getDisplayLabel());
         form.setTitle(edition.getTitle());

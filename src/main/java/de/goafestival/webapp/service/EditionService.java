@@ -1,6 +1,7 @@
 package de.goafestival.webapp.service;
 
 import de.goafestival.webapp.domain.Edition;
+import de.goafestival.webapp.domain.EditionType;
 import de.goafestival.webapp.dto.EditionForm;
 import de.goafestival.webapp.repository.EditionRepository;
 import jakarta.transaction.Transactional;
@@ -29,8 +30,9 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Keine aktuelle Festival-Ausgabe konfiguriert."));
     }
 
+    /** Looks up a FESTIVAL-type edition by year — the "/goa/{year}" route. */
     public Edition getByYearOrThrow(int year) {
-        return editionRepository.findByYear(year)
+        return editionRepository.findByYearAndType(year, EditionType.FESTIVAL)
                 .orElseThrow(() -> new NotFoundException("Ausgabe " + year + " wurde nicht gefunden."));
     }
 
@@ -39,15 +41,29 @@ public class EditionService {
                 .orElseThrow(() -> new NotFoundException("Ausgabe " + id + " wurde nicht gefunden."));
     }
 
+    public Edition getKneipenkonzertByIdOrThrow(Long id) {
+        Edition edition = getByIdOrThrow(id);
+        if (edition.getType() != EditionType.KNEIPENKONZERT) {
+            throw new NotFoundException("Kneipenkonzert " + id + " wurde nicht gefunden.");
+        }
+        return edition;
+    }
+
     /**
-     * All non-current editions, newest year first — the nav's "Archiv" link/dropdown.
-     * Same result on every page, regardless of which edition is being viewed; the
-     * current edition never appears here.
+     * All non-current FESTIVAL editions, newest year first — the nav's "Archiv"
+     * link/dropdown. Same result on every page, regardless of which edition is
+     * being viewed; the current edition never appears here. Kneipenkonzerte have
+     * their own list at "/kneipenkonzerte" and never show up in this dropdown.
      */
     public List<Edition> findArchivedEditions() {
         return findAllOrdered().stream()
-                .filter(e -> !e.isCurrent())
+                .filter(e -> e.getType() == EditionType.FESTIVAL && !e.isCurrent())
                 .toList();
+    }
+
+    /** All Kneipenkonzerte, most recent start date first. */
+    public List<Edition> findKneipenkonzerte() {
+        return editionRepository.findByTypeOrderByStartDateDesc(EditionType.KNEIPENKONZERT);
     }
 
     /** All editions except the given one, newest year first — for "copy from another year" pickers. */
@@ -61,7 +77,7 @@ public class EditionService {
         Edition edition = new Edition();
         applyForm(edition, form);
         Edition saved = editionRepository.save(edition);
-        if (form.isCurrent()) {
+        if (form.isCurrent() && form.getType() == EditionType.FESTIVAL) {
             setCurrent(saved.getId());
         }
         return saved;
@@ -71,7 +87,7 @@ public class EditionService {
         Edition edition = getByIdOrThrow(id);
         applyForm(edition, form);
         Edition saved = editionRepository.save(edition);
-        if (form.isCurrent()) {
+        if (form.isCurrent() && form.getType() == EditionType.FESTIVAL) {
             setCurrent(saved.getId());
         }
         return saved;
@@ -134,6 +150,10 @@ public class EditionService {
     }
 
     private void applyForm(Edition edition, EditionForm form) {
+        edition.setType(form.getType());
+        if (form.getType() == EditionType.KNEIPENKONZERT) {
+            edition.setCurrent(false);
+        }
         edition.setYear(form.getYear());
         edition.setDisplayLabel(form.getDisplayLabel());
         edition.setTitle(form.getTitle());
