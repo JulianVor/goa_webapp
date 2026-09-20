@@ -65,7 +65,6 @@ public class Edition {
     private String colorPrimary = "#2f6f68";
     private String colorSecondary = "#e0559a";
     private String colorAccent = "#f2c14e";
-    private String colorText = "#ffffff";
 
     private String logoImagePath;
     private String backgroundImagePath;
@@ -220,14 +219,6 @@ public class Edition {
 
     public void setColorAccent(String colorAccent) {
         this.colorAccent = colorAccent;
-    }
-
-    public String getColorText() {
-        return colorText;
-    }
-
-    public void setColorText(String colorText) {
-        this.colorText = colorText;
     }
 
     public String getLogoImagePath() {

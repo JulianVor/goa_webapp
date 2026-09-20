@@ -64,7 +64,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2026.setColorPrimary("#2f6f68");
         edition2026.setColorSecondary("#e0559a");
         edition2026.setColorAccent("#f2c14e");
-        edition2026.setColorText("#ffffff");
         edition2026.setCurrent(true);
         edition2026 = editionRepository.save(edition2026);
 
@@ -110,7 +109,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2025.setColorPrimary("#2e5fa3");
         edition2025.setColorSecondary("#c9701f");
         edition2025.setColorAccent("#e07f22");
-        edition2025.setColorText("#ffffff");
         edition2025.setCurrent(false);
         edition2025 = editionRepository.save(edition2025);
 

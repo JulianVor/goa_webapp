@@ -40,8 +40,6 @@ public class EditionForm {
     private String colorSecondary = "#e0559a";
     @NotBlank
     private String colorAccent = "#f2c14e";
-    @NotBlank
-    private String colorText = "#ffffff";
 
     private boolean current;
 
@@ -148,14 +146,6 @@ public class EditionForm {
 
     public void setColorAccent(String colorAccent) {
         this.colorAccent = colorAccent;
-    }
-
-    public String getColorText() {
-        return colorText;
-    }
-
-    public void setColorText(String colorText) {
-        this.colorText = colorText;
     }
 
     public boolean isCurrent() {

@@ -17,7 +17,7 @@
     --color-primary: #2f6f68;
     --color-secondary: #e0559a;
     --color-accent: #f2c14e;
-    --color-text: #ffffff;
+    --color-text: #f2c14e;
     --bg-image: none;
     --font-display: 'Brugty', 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
     --font-body: 'Poppins', 'Segoe UI', Arial, sans-serif;
@@ -323,9 +323,7 @@ img { max-width: 100%; display: block; }
 
 .kneipenkonzert-teaser-title {
     font-family: var(--font-display);
-    color: var(--color-accent);
-    -webkit-text-stroke: 1.3px var(--color-primary);
-    paint-order: stroke fill;
+    color: var(--color-primary);
     font-size: clamp(1.7rem, 4.8vw, 2.6rem);
     line-height: 1.15;
     text-align: center;
@@ -333,9 +331,7 @@ img { max-width: 100%; display: block; }
 
 .kneipenkonzert-teaser-date {
     font-family: var(--font-display);
-    color: var(--color-accent);
-    -webkit-text-stroke: 0.9px var(--color-primary);
-    paint-order: stroke fill;
+    color: var(--color-primary);
     font-size: clamp(1.15rem, 3.2vw, 1.5rem);
 }
 

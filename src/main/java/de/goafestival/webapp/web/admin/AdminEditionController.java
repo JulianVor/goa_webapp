@@ -39,7 +39,6 @@ public class AdminEditionController {
             form.setColorPrimary(current.getColorPrimary());
             form.setColorSecondary(current.getColorSecondary());
             form.setColorAccent(current.getColorAccent());
-            form.setColorText(current.getColorText());
         });
         model.addAttribute("editionForm", form);
         model.addAttribute("locations", locationService.findAllOrdered());
@@ -112,7 +111,6 @@ public class AdminEditionController {
         form.setColorPrimary(edition.getColorPrimary());
         form.setColorSecondary(edition.getColorSecondary());
         form.setColorAccent(edition.getColorAccent());
-        form.setColorText(edition.getColorText());
         form.setCurrent(edition.isCurrent());
         form.setShowEventInfos(edition.isShowEventInfos());
         form.setShowLineup(edition.isShowLineup());
