@@ -22,23 +22,34 @@ public class NewsletterService {
     private final NewsletterSubscriberRepository subscriberRepository;
     private final JavaMailSender mailSender;
     private final String fromAddress;
+    private final boolean enabled;
 
     public NewsletterService(NewsletterSubscriberRepository subscriberRepository, JavaMailSender mailSender,
                               @Value("${app.mail.from:}") String configuredFrom,
-                              @Value("${spring.mail.username:}") String mailUsername) {
+                              @Value("${spring.mail.username:}") String mailUsername,
+                              @Value("${spring.mail.host:}") String mailHost) {
         this.subscriberRepository = subscriberRepository;
         this.mailSender = mailSender;
         this.fromAddress = !configuredFrom.isBlank() ? configuredFrom
                 : !mailUsername.isBlank() ? mailUsername
                 : "newsletter@goa-festival.de";
+        this.enabled = !mailHost.isBlank();
+    }
+
+    /** Whether an SMTP server is configured at all - the whole feature is hidden/rejected otherwise. */
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public List<NewsletterSubscriber> findAllOrdered() {
         return subscriberRepository.findAllByOrderBySubscribedAtDesc();
     }
 
-    /** Stores a new subscriber. Rejects an email that's already signed up. */
+    /** Stores a new subscriber. Rejects an email that's already signed up, or if no mail server is configured. */
     public void subscribe(String email) {
+        if (!enabled) {
+            throw new IllegalStateException("Der Newsletter ist aktuell nicht verfügbar.");
+        }
         String normalized = email.trim().toLowerCase();
         if (subscriberRepository.existsByEmailIgnoreCase(normalized)) {
             throw new IllegalStateException("Diese E-Mail-Adresse ist bereits für den Newsletter angemeldet.");
@@ -66,6 +77,9 @@ public class NewsletterService {
      * Returns how many were sent before a failure, if any (surfaced by the caller).
      */
     public int sendNewsletter(String subject, String htmlBody) {
+        if (!enabled) {
+            throw new IllegalStateException("Der Newsletter ist aktuell nicht verfügbar.");
+        }
         String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         int sent = 0;
         for (NewsletterSubscriber subscriber : findAllOrdered()) {

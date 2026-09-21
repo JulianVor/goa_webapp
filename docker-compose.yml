@@ -37,6 +37,8 @@ services:
       MAIL_FROM: ${MAIL_FROM:-}
       MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-true}
       MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS:-true}
+      RECAPTCHA_SITE_KEY: ${RECAPTCHA_SITE_KEY:-}
+      RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY:-}
     ports:
       - "${APP_PORT:-8080}:8080"
     volumes:

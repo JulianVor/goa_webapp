@@ -44,6 +44,8 @@ public class AdminNewsletterController {
         } catch (NewsletterService.NewsletterSendException e) {
             redirectAttributes.addFlashAttribute("error",
                     e.getMessage() + " " + e.getSentBeforeFailure() + " E-Mail(s) wurden davor bereits erfolgreich versendet.");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/admin/newsletter";
     }

@@ -4,6 +4,8 @@ import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.dto.NewsletterSubscribeForm;
 import de.goafestival.webapp.service.EditionService;
 import de.goafestival.webapp.service.NewsletterService;
+import de.goafestival.webapp.service.RecaptchaService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,18 +27,26 @@ public class NewsletterController {
 
     private final NewsletterService newsletterService;
     private final EditionService editionService;
+    private final RecaptchaService recaptchaService;
 
-    public NewsletterController(NewsletterService newsletterService, EditionService editionService) {
+    public NewsletterController(NewsletterService newsletterService, EditionService editionService,
+                                 RecaptchaService recaptchaService) {
         this.newsletterService = newsletterService;
         this.editionService = editionService;
+        this.recaptchaService = recaptchaService;
     }
 
     @PostMapping("/subscribe")
     public String subscribe(@Valid @ModelAttribute("newsletterSubscribeForm") NewsletterSubscribeForm form, BindingResult result,
+                             @RequestParam(value = "g-recaptcha-response", required = false) String recaptchaResponse,
                              @RequestHeader(value = "Referer", required = false) String referer,
-                             RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
+                             HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        if (!newsletterService.isEnabled()) {
+            redirectAttributes.addFlashAttribute("newsletterError", "Der Newsletter ist aktuell nicht verfügbar.");
+        } else if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("newsletterError", "Bitte eine gültige E-Mail-Adresse eingeben.");
+        } else if (!recaptchaService.verify(recaptchaResponse, request.getRemoteAddr())) {
+            redirectAttributes.addFlashAttribute("newsletterError", "Bitte bestätige, dass du kein Roboter bist.");
         } else {
             try {
                 newsletterService.subscribe(form.getEmail());

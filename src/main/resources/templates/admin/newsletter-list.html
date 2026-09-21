@@ -10,7 +10,13 @@
     <p class="flash-success" th:if="${success}" th:text="${success}"></p>
     <p class="flash-error" th:if="${error}" th:text="${error}"></p>
 
-    <form method="post" class="admin-form" th:action="@{/admin/newsletter/send}" th:object="${sendForm}">
+    <p class="field-hint" th:unless="${newsletterEnabled}">
+        Es ist kein Mailserver konfiguriert - der Versand ist deshalb deaktiviert und die Anmeldung ist auf der
+        Seite selbst ausgeblendet. Setze <code>MAIL_HOST</code> (und die weiteren <code>MAIL_*</code>-Variablen) in
+        der <code>.env</code>, um den Newsletter zu aktivieren.
+    </p>
+
+    <form th:if="${newsletterEnabled}" method="post" class="admin-form" th:action="@{/admin/newsletter/send}" th:object="${sendForm}">
         <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         <fieldset>

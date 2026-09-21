@@ -63,6 +63,11 @@ app:
     # sets this env var, even if empty, so a plain ":default" YAML placeholder
     # wouldn't kick in the way it would for a truly unset property).
     from: ${MAIL_FROM:}
+  recaptcha:
+    # Google reCAPTCHA v2 ("I'm not a robot" checkbox) on the newsletter signup form.
+    # Leave both blank to skip the check entirely (e.g. local dev).
+    site-key: ${RECAPTCHA_SITE_KEY:}
+    secret-key: ${RECAPTCHA_SECRET_KEY:}
 
 logging:
   level:

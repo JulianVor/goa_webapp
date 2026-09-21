@@ -25,7 +25,7 @@
         <a class="pill" th:if="${edition.isShowEventInfos()}" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
         <a class="pill" th:if="${edition.isShowLineup()}" th:href="${baseUrl} + '#line-up'">Line-Up</a>
         <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
-        <button type="button" class="pill" th:if="${currentEdition != null}" data-modal-open="newsletter-modal">Newsletter</button>
+        <button type="button" class="pill" th:if="${currentEdition != null and newsletterEnabled}" data-modal-open="newsletter-modal">Newsletter</button>
 
         <span class="nav-socials">
             <a th:if="${not #strings.isEmpty(siteSettings.instagramUrl)}" th:href="${siteSettings.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
@@ -55,7 +55,7 @@
 <!-- Always uses the current Festival's own colors, regardless of which edition's
      page it's shown on (an archived year, a Kneipenkonzert, ...), since it's the
      one signup for the whole site, not a per-edition thing. -->
-<div class="modal-overlay newsletter-modal" id="newsletter-modal" th:if="${currentEdition != null}"
+<div class="modal-overlay newsletter-modal" id="newsletter-modal" th:if="${currentEdition != null and newsletterEnabled}"
      th:classappend="${newsletterSuccess != null or newsletterError != null} ? ' open' : ''"
      th:style="|--color-primary: ${currentEdition.colorPrimary}; --color-secondary: ${currentEdition.colorSecondary}; --color-accent: ${currentEdition.colorAccent}; --color-text: ${currentEdition.colorAccent};|">
     <div class="modal-box">
@@ -65,12 +65,15 @@
         <form method="post" th:action="@{/newsletter/subscribe}" class="newsletter-form">
             <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <input type="email" name="email" placeholder="deine@email.de" required="required"/>
+            <div class="g-recaptcha" th:if="${not #strings.isEmpty(recaptchaSiteKey)}" th:attr="data-sitekey=${recaptchaSiteKey}"></div>
             <button type="submit" class="newsletter-submit">Anmelden</button>
         </form>
         <p class="newsletter-success" th:if="${newsletterSuccess}" th:text="${newsletterSuccess}"></p>
         <p class="newsletter-error" th:if="${newsletterError}" th:text="${newsletterError}"></p>
     </div>
 </div>
+<script th:if="${currentEdition != null and newsletterEnabled and not #strings.isEmpty(recaptchaSiteKey)}"
+        src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"></script>
 </th:block>
 </body>
 </html>

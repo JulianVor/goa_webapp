@@ -3,6 +3,8 @@ package de.goafestival.webapp.web;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.SiteSettings;
 import de.goafestival.webapp.service.EditionService;
+import de.goafestival.webapp.service.NewsletterService;
+import de.goafestival.webapp.service.RecaptchaService;
 import de.goafestival.webapp.service.SiteSettingsService;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,10 +20,15 @@ public class GlobalModelAttributes {
 
     private final SiteSettingsService siteSettingsService;
     private final EditionService editionService;
+    private final NewsletterService newsletterService;
+    private final RecaptchaService recaptchaService;
 
-    public GlobalModelAttributes(SiteSettingsService siteSettingsService, EditionService editionService) {
+    public GlobalModelAttributes(SiteSettingsService siteSettingsService, EditionService editionService,
+                                  NewsletterService newsletterService, RecaptchaService recaptchaService) {
         this.siteSettingsService = siteSettingsService;
         this.editionService = editionService;
+        this.newsletterService = newsletterService;
+        this.recaptchaService = recaptchaService;
     }
 
     @ModelAttribute("siteSettings")
@@ -43,5 +50,17 @@ public class GlobalModelAttributes {
     @ModelAttribute("currentEdition")
     public Edition currentEdition() {
         return editionService.findCurrent().orElse(null);
+    }
+
+    /** Whether the newsletter signup button/modal should render at all - only with a mail server configured. */
+    @ModelAttribute("newsletterEnabled")
+    public boolean newsletterEnabled() {
+        return newsletterService.isEnabled();
+    }
+
+    /** The reCAPTCHA site key for the newsletter form, or "" if reCAPTCHA isn't configured (widget then just isn't shown). */
+    @ModelAttribute("recaptchaSiteKey")
+    public String recaptchaSiteKey() {
+        return recaptchaService.getSiteKey();
     }
 }
