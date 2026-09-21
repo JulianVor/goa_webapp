@@ -42,4 +42,22 @@ document.addEventListener('DOMContentLoaded', function () {
             dropdown.classList.remove('open');
         });
     });
+
+    document.querySelectorAll('[data-modal-open]').forEach(function (opener) {
+        opener.addEventListener('click', function () {
+            var modal = document.getElementById(opener.getAttribute('data-modal-open'));
+            if (modal) modal.classList.add('open');
+        });
+    });
+    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+        var closeBtn = overlay.querySelector('.modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                overlay.classList.remove('open');
+            });
+        }
+        overlay.addEventListener('click', function (event) {
+            if (event.target === overlay) overlay.classList.remove('open');
+        });
+    });
 });

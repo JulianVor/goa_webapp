@@ -35,6 +35,17 @@ spring:
     # but wastes CPU per request in production. Default to cached; set THYMELEAF_CACHE=false
     # locally if you need template edits to show up without a restart.
     cache: ${THYMELEAF_CACHE:true}
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:true}
 
 server:
   port: 8080
@@ -44,6 +55,14 @@ app:
   admin:
     username: ${ADMIN_USERNAME:admin}
     password: ${ADMIN_PASSWORD:admin}
+  mail:
+    # Sender address for outgoing newsletter mails - most SMTP providers reject
+    # sending as an address the authenticated account doesn't own, so this
+    # usually has to match (or be a verified alias of) MAIL_USERNAME. Falls back
+    # to MAIL_USERNAME in NewsletterService if left blank (docker-compose always
+    # sets this env var, even if empty, so a plain ":default" YAML placeholder
+    # wouldn't kick in the way it would for a truly unset property).
+    from: ${MAIL_FROM:}
 
 logging:
   level:

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('Newsletter')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+
+<main class="admin-main">
+    <h1>Newsletter</h1>
+
+    <p class="flash-success" th:if="${success}" th:text="${success}"></p>
+    <p class="flash-error" th:if="${error}" th:text="${error}"></p>
+
+    <form method="post" class="admin-form" th:action="@{/admin/newsletter/send}" th:object="${sendForm}">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <fieldset>
+            <legend>Newsletter versenden</legend>
+            <p class="field-hint">
+                Geht per E-Mail an alle <strong th:text="${#lists.size(subscribers)}">0</strong> Abonnent(en) unten,
+                jeweils einzeln mit eigenem Abmelde-Link. HTML-Tags im Inhalt werden direkt gerendert.
+            </p>
+            <label>Betreff<input type="text" th:field="*{subject}" required="required"/></label>
+            <label>Inhalt (HTML)<textarea th:field="*{htmlBody}" rows="12" placeholder="&lt;h2&gt;Neuigkeiten&lt;/h2&gt;&lt;p&gt;...&lt;/p&gt;" required="required"></textarea></label>
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" th:disabled="${subscribers.isEmpty()}">Newsletter versenden</button>
+        </div>
+    </form>
+
+    <h2 style="margin-top: 2.5rem;">Abonnenten</h2>
+    <div class="table-scroll">
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>E-Mail</th>
+            <th>Angemeldet seit</th>
+            <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="subscriber : ${subscribers}">
+            <td th:text="${subscriber.email}">person@example.com</td>
+            <td th:text="${T(de.goafestival.webapp.service.GermanDateFormats).dateLabel(subscriber.subscribedAt.toLocalDate())} + ', ' + ${T(de.goafestival.webapp.service.GermanDateFormats).timeLabel(subscriber.subscribedAt)}">10. Juli 2026, 14:30 Uhr</td>
+            <td class="actions">
+                <form th:action="@{'/admin/newsletter/' + ${subscriber.id} + '/delete'}" method="post" class="inline-form"
+                      onsubmit="return confirm('Abonnent wirklich löschen?');">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button link-danger">Löschen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${subscribers.isEmpty()}">
+            <td colspan="3">Noch keine Newsletter-Anmeldung.</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</main>
+</body>
+</html>

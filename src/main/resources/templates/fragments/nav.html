@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<nav class="site-nav" th:fragment="nav(edition, archivedEditions)"
+<th:block th:fragment="nav(edition, archivedEditions)">
+<nav class="site-nav"
      th:with="baseUrl=${edition.current} ? '/' : (${edition.type.name() == 'KNEIPENKONZERT'} ? ('/kneipenkonzerte/' + ${edition.id}) : ('/goa/' + ${edition.year}))">
     <a class="brand" th:href="@{/}">
         <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo"/>
@@ -24,6 +25,7 @@
         <a class="pill" th:if="${edition.isShowEventInfos()}" th:href="${baseUrl} + '#event-infos'">Event-Infos</a>
         <a class="pill" th:if="${edition.isShowLineup()}" th:href="${baseUrl} + '#line-up'">Line-Up</a>
         <a class="pill" th:if="${edition.isShowFaq()}" th:href="${baseUrl} + '#faq'">FAQ</a>
+        <button type="button" class="pill" th:if="${currentEdition != null}" data-modal-open="newsletter-modal">Newsletter</button>
 
         <span class="nav-socials">
             <a th:if="${not #strings.isEmpty(siteSettings.instagramUrl)}" th:href="${siteSettings.instagramUrl}" target="_blank" rel="noopener" title="Instagram">
@@ -49,5 +51,26 @@
         </div>
     </div>
 </nav>
+
+<!-- Always uses the current Festival's own colors, regardless of which edition's
+     page it's shown on (an archived year, a Kneipenkonzert, ...), since it's the
+     one signup for the whole site, not a per-edition thing. -->
+<div class="modal-overlay newsletter-modal" id="newsletter-modal" th:if="${currentEdition != null}"
+     th:classappend="${newsletterSuccess != null or newsletterError != null} ? ' open' : ''"
+     th:style="|--color-primary: ${currentEdition.colorPrimary}; --color-secondary: ${currentEdition.colorSecondary}; --color-accent: ${currentEdition.colorAccent}; --color-text: ${currentEdition.colorAccent};|">
+    <div class="modal-box">
+        <button type="button" class="modal-close" aria-label="Schließen">&times;</button>
+        <h3>Newsletter abonnieren</h3>
+        <p>Bleib auf dem Laufenden über Termine, Line-Ups und News.</p>
+        <form method="post" th:action="@{/newsletter/subscribe}" class="newsletter-form">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="email" name="email" placeholder="deine@email.de" required="required"/>
+            <button type="submit" class="newsletter-submit">Anmelden</button>
+        </form>
+        <p class="newsletter-success" th:if="${newsletterSuccess}" th:text="${newsletterSuccess}"></p>
+        <p class="newsletter-error" th:if="${newsletterError}" th:text="${newsletterError}"></p>
+    </div>
+</div>
+</th:block>
 </body>
 </html>

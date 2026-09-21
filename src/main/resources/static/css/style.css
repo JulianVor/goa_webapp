@@ -188,6 +188,89 @@ img { max-width: 100%; display: block; }
     background: color-mix(in srgb, var(--color-primary) 70%, black);
 }
 
+/* ---------------------------------- Modal ----------------------------------- */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+    position: relative;
+    background: var(--color-secondary);
+    border: 4px solid var(--color-primary);
+    border-radius: 24px;
+    padding: 2rem 1.75rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.modal-box h3 {
+    font-family: var(--font-display);
+    color: var(--color-primary);
+    font-size: 1.6rem;
+    margin: 0 0 0.5rem;
+}
+
+.modal-box p {
+    color: var(--color-primary);
+    margin: 0 0 1.25rem;
+}
+
+.modal-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.9rem;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.newsletter-form input[type="email"] {
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: 2px solid var(--color-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+
+.newsletter-submit {
+    background: var(--color-accent);
+    color: var(--color-primary);
+    border: none;
+    border-radius: 999px;
+    padding: 0.7rem 1.4rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.newsletter-submit:hover { transform: scale(1.03); }
+
+.newsletter-success { color: #1c7a4c; font-weight: 600; margin-top: 1rem; margin-bottom: 0; }
+.newsletter-error { color: #c0392b; font-weight: 600; margin-top: 1rem; margin-bottom: 0; }
+
 /* ------------------------------- Fixed backdrop ---------------------------- */
 
 /* A dedicated fixed layer behind everything, instead of
