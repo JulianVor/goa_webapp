@@ -11,10 +11,10 @@
                    style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;">
                 <tr>
                     <!-- Solid-color header, logo/title straight on it (no overlay box needed - it's a
-                         flat color, always readable). Its own rounded bottom corners are what make it
-                         read as a distinct banner sitting above the hero image below. -->
-                    <td th:style="'background-color:' + ${colorPrimary} + ';border-radius:0 0 20px 20px;padding:16px 24px;text-align:center;'">
-                        <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:44px;display:inline-block;"/>
+                         flat color, always readable). Flat, no rounded corners - border-radius on
+                         table cells renders inconsistently across mail/browser engines. -->
+                    <td th:style="'background-color:' + ${colorPrimary} + ';padding:8px 24px;text-align:center;'">
+                        <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:64px;display:inline-block;"/>
                         <h1 th:unless="${logoUrl}" th:text="${editionTitle}"
                             style="color:#ffffff;margin:0;font-size:20px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
                     </td>
