@@ -10,32 +10,38 @@
             <table role="presentation" width="600" cellpadding="0" cellspacing="0"
                    style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;">
                 <tr>
-                    <!-- Solid-color header, logo/title straight on it (no overlay box needed - it's a
-                         flat color, always readable). Flat, no rounded corners - border-radius on
-                         table cells renders inconsistently across mail/browser engines. -->
-                    <td th:style="'background-color:' + ${colorPrimary} + ';padding:8px 24px;text-align:center;'">
-                        <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:64px;display:inline-block;"/>
-                        <h1 th:unless="${logoUrl}" th:text="${editionTitle}"
-                            style="color:#ffffff;margin:0;font-size:20px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
-                    </td>
-                </tr>
-                <tr>
-                    <!-- The edition's hero image runs behind the content/footer, like on the site itself -
-                         those sit on translucent panels on top of it instead of a plain white block below
-                         it. background-image is best-effort (Outlook desktop falls back to colorPrimary
-                         alone), never load-bearing for legibility - the panels are. -->
-                    <td th:style="'background-color:' + ${colorPrimary} + ';' + (${backgroundUrl} != null ? ('background-image:url(' + ${backgroundUrl} + ');background-size:cover;background-position:center;background-repeat:no-repeat;') : '') + 'padding:24px 20px;'">
-                        <!-- border-radius only on the bottom corners: with all four rounded, the
-                             border-top accent line would follow the top corners' curve and visibly
-                             dip inward at both ends instead of staying a flat, straight bar. -->
-                        <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:0 0 12px 12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${colorAccent} + ';'"
-                             th:utext="${contentHtml}">
-                            Inhalt
+                    <!-- The primary color is one continuous fill behind the header text AND the hero
+                         image below it - never rounded itself. The hero image sits on top of that fill
+                         in its own plain div carrying nothing but background-image + border-radius +
+                         overflow:hidden (the same combination that already clips this card's own outer
+                         corners reliably) - keeping that combination isolated on its own element, with
+                         nothing else (padding, text, borders) mixed onto it, is what keeps the rounding
+                         glitch-free; mixing it into the header cell alongside text/padding is what kept
+                         producing weird corners in earlier attempts. A fixed height, not the image's own
+                         (possibly very tall) aspect ratio, keeps the header from ballooning. -->
+                    <td th:style="'background-color:' + ${colorPrimary} + ';padding:0;'">
+                        <div style="padding:8px 24px 16px;text-align:center;">
+                            <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:64px;display:inline-block;"/>
+                            <h1 th:unless="${logoUrl}" th:text="${editionTitle}"
+                                style="color:#ffffff;margin:0;font-size:20px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
                         </div>
 
-                        <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;font-family:Arial,Helvetica,sans-serif;">
-                            <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
-                            <p style="margin:0;"><a th:href="${unsubscribeUrl}" style="color:#666666;">Newsletter abbestellen</a></p>
+                        <div th:if="${backgroundUrl}"
+                             th:style="'height:200px;border-radius:20px 20px 0 0;overflow:hidden;background-image:url(' + ${backgroundUrl} + ');background-size:cover;background-position:center;background-repeat:no-repeat;'"></div>
+
+                        <!-- Content/footer panels pulled up to sit inset into the image, like the site's
+                             own hero. Only pulled up when there's an image to sit on - without one this
+                             is just a plain stack straight below the header. -->
+                        <div th:style="(${backgroundUrl} != null ? 'margin-top:-40px;' : '') + 'padding:0 20px 24px;'">
+                            <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${colorAccent} + ';'"
+                                 th:utext="${contentHtml}">
+                                Inhalt
+                            </div>
+
+                            <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;font-family:Arial,Helvetica,sans-serif;">
+                                <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
+                                <p style="margin:0;"><a th:href="${unsubscribeUrl}" style="color:#666666;">Newsletter abbestellen</a></p>
+                            </div>
                         </div>
                     </td>
                 </tr>
