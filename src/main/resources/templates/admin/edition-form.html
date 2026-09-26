@@ -2,7 +2,7 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head-admin :: head-admin(${isNew} ? 'Neue Ausgabe anlegen' : 'Ausgabe bearbeiten')}"></head>
 <body class="admin-body">
-<div th:replace="~{fragments/admin-nav :: admin-nav}"></div>
+<div th:replace="~{fragments/admin-nav :: admin-nav('')}"></div>
 
 <main class="admin-main">
     <h1 th:text="${isNew} ? 'Neue Ausgabe anlegen' : 'Ausgabe bearbeiten'">Ausgabe</h1>

@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<nav class="admin-nav" th:fragment="admin-nav">
+<!-- "active" names which sidebar entry to highlight - each caller passes it explicitly
+     (e.g. admin-nav('locations')) rather than this fragment guessing it from the request,
+     since edition/band/FAQ sub-pages don't map to any single sidebar entry anyway. -->
+<aside class="admin-sidebar" th:fragment="admin-nav(active)">
     <a class="admin-brand" th:href="@{/admin}">GOA Admin</a>
-    <div class="admin-nav-links">
-        <a th:href="@{/admin/locations}">Locations</a>
-        <a th:href="@{/admin/newsletter}">Newsletter</a>
-        <a th:href="@{/admin/settings}">Globale Einstellungen</a>
+    <nav class="admin-sidebar-nav">
+        <a th:href="@{/admin}" th:classappend="${active == 'dashboard'} ? 'active'"><span class="admin-sidebar-icon">🏠</span> Dashboard</a>
+        <a th:href="@{/admin/locations}" th:classappend="${active == 'locations'} ? 'active'"><span class="admin-sidebar-icon">📍</span> Locations</a>
+        <a th:href="@{/admin/newsletter}" th:classappend="${active == 'newsletter'} ? 'active'"><span class="admin-sidebar-icon">✉️</span> Newsletter</a>
+        <a th:href="@{/admin/settings}" th:classappend="${active == 'settings'} ? 'active'"><span class="admin-sidebar-icon">⚙️</span> Globale Einstellungen</a>
+    </nav>
+    <div class="admin-sidebar-footer">
         <a th:href="@{/}" target="_blank">Seite ansehen ↗</a>
         <form th:action="@{/logout}" method="post" class="inline-form">
             <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" class="link-button">Abmelden</button>
         </form>
     </div>
-</nav>
+</aside>
 </body>
 </html>
