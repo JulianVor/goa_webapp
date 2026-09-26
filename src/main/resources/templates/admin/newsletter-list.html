@@ -61,7 +61,9 @@
         <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;border-radius:12px;overflow:hidden;">
             <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorPrimary : '#2f6f68'} + ';padding:0;'">
                 <div style="padding:8px 24px 16px;text-align:center;">
-                    <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo" style="max-height:64px;display:inline-block;"/>
+                    <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}"
+                         th:alt="${currentEdition != null ? currentEdition.title : 'Newsletter'}"
+                         th:style="'max-height:64px;display:inline-block;color:' + ${currentEdition != null ? currentEdition.colorSecondary : '#e0559a'} + ';font-weight:bold;font-family:Arial,Helvetica,sans-serif;'"/>
                     <h1 th:unless="${siteSettings.logoImagePath}" style="color:#ffffff;margin:0;font-size:20px;"
                         th:text="${currentEdition != null ? currentEdition.title : 'Newsletter'}">GOA</h1>
                 </div>

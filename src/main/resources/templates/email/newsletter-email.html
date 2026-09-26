@@ -20,7 +20,12 @@
                          else on that element, is what keeps the corner glitch-free. -->
                     <td th:style="'background-color:' + ${colorPrimary} + ';padding:0;'">
                         <div style="padding:8px 24px 16px;text-align:center;">
-                            <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:64px;display:inline-block;"/>
+                            <!-- If the logo image itself fails to load, the browser/mail client falls
+                                 back to rendering this alt text using the img's own font styles - so it
+                                 shows the edition title, bold, in the secondary color, instead of a bare
+                                 "Logo" label. -->
+                            <img th:if="${logoUrl}" th:src="${logoUrl}" th:alt="${editionTitle}"
+                                 th:style="'max-height:64px;display:inline-block;color:' + ${colorSecondary} + ';font-weight:bold;font-family:Arial,Helvetica,sans-serif;'"/>
                             <h1 th:unless="${logoUrl}" th:text="${editionTitle}"
                                 style="color:#ffffff;margin:0;font-size:20px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
                         </div>
