@@ -1,5 +1,7 @@
-/* Simple, neutral admin UI — deliberately not festival-themed so it stays
-   readable regardless of the currently configured edition colors. */
+/* The layout/chrome stays neutral, but brand accents (buttons, links, active
+   states) follow the current edition's own colors via these custom properties
+   (set in fragments/head-admin.html) - falling back to the original green
+   before any edition exists. */
 
 * { box-sizing: border-box; }
 
@@ -14,7 +16,7 @@ body.admin-body {
     min-height: 100vh;
 }
 
-a { color: #2f6f68; }
+a { color: var(--admin-primary, #2f6f68); }
 
 .admin-sidebar {
     display: flex;
@@ -39,7 +41,7 @@ a { color: #2f6f68; }
     font-size: 0.95rem;
 }
 .admin-sidebar-nav a:hover { background: rgba(255,255,255,0.06); }
-.admin-sidebar-nav a.active { background: #2f6f68; color: #fff; font-weight: 600; }
+.admin-sidebar-nav a.active { background: var(--admin-primary, #2f6f68); color: #fff; font-weight: 600; }
 .admin-sidebar-icon { font-size: 1.05rem; line-height: 1; }
 
 .admin-sidebar-footer {
@@ -103,7 +105,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     cursor: pointer;
 }
 
-.btn-primary { background: #2f6f68; color: #fff; }
+.btn-primary { background: var(--admin-primary, #2f6f68); color: #fff; }
 
 .admin-table {
     width: 100%;
@@ -175,7 +177,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     min-width: 0;
 }
 
-.admin-form legend { font-weight: 700; padding: 0 0.4rem; color: #2f6f68; }
+.admin-form legend { font-weight: 700; padding: 0 0.4rem; color: var(--admin-primary, #2f6f68); }
 
 .admin-form label {
     display: flex;
@@ -272,7 +274,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     max-width: 340px;
 }
 
-.login-box h1 { text-align: center; margin-bottom: 1.5rem; color: #2f6f68; }
+.login-box h1 { text-align: center; margin-bottom: 1.5rem; color: var(--admin-primary, #2f6f68); }
 .login-logo { display: block; max-height: 64px; max-width: 100%; margin: 0 auto 1.5rem; }
 .login-box form { display: flex; flex-direction: column; gap: 1rem; }
 .login-box label { display: flex; flex-direction: column; gap: 0.35rem; font-weight: 600; font-size: 0.9rem; }
@@ -282,7 +284,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     padding: 0.7rem;
     border-radius: 8px;
     border: none;
-    background: #2f6f68;
+    background: var(--admin-primary, #2f6f68);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
@@ -317,7 +319,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     background: #fff;
 }
 
-.richtext-editor:focus { outline: 2px solid #2f6f68; outline-offset: 1px; }
+.richtext-editor:focus { outline: 2px solid var(--admin-primary, #2f6f68); outline-offset: 1px; }
 
 .newsletter-preview-frame {
     width: 100%;
@@ -389,7 +391,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     width: 56px;
     height: 56px;
     border-radius: 10px;
-    background-color: #2f6f68;
+    background-color: var(--admin-primary, #2f6f68);
     background-size: cover;
     background-position: center;
 }
@@ -420,7 +422,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
     border-bottom: 3px solid transparent;
 }
 
-.tab-btn.active { color: #2f6f68; border-bottom-color: #2f6f68; }
+.tab-btn.active { color: var(--admin-primary, #2f6f68); border-bottom-color: var(--admin-primary, #2f6f68); }
 
 .edition-card-grid {
     display: grid;
@@ -439,7 +441,7 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .edition-card-thumb {
     height: 110px;
-    background-color: #2f6f68;
+    background-color: var(--admin-primary, #2f6f68);
     background-size: cover;
     background-position: center;
     display: flex;

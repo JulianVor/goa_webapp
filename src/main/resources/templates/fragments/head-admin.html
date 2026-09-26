@@ -6,5 +6,10 @@
     <title th:text="${pageTitle} + ' – GOA Admin'">GOA Admin</title>
     <link rel="icon" th:if="${siteSettings != null and siteSettings.faviconImagePath != null}" th:href="${siteSettings.faviconImagePath}"/>
     <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+    <!-- Ties the admin UI's own brand accent (buttons, links, active states) to the current
+         edition's colors instead of a fixed color, via CSS custom properties admin.css reads
+         with a fallback - so it still looks fine before any edition exists. -->
+    <style th:if="${currentEdition != null}"
+           th:utext="':root{--admin-primary:' + ${currentEdition.colorPrimary} + ';--admin-secondary:' + ${currentEdition.colorSecondary} + ';--admin-accent:' + ${currentEdition.colorAccent} + ';}'"></style>
 </head>
 </html>
