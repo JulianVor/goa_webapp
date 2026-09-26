@@ -5,7 +5,10 @@
      (e.g. admin-nav('locations')) rather than this fragment guessing it from the request,
      since edition/band/FAQ sub-pages don't map to any single sidebar entry anyway. -->
 <aside class="admin-sidebar" th:fragment="admin-nav(active)">
-    <a class="admin-brand" th:href="@{/admin}">GOA Admin</a>
+    <a class="admin-brand" th:href="@{/admin}">
+        <img th:if="${siteSettings != null and siteSettings.logoImagePath != null}" th:src="${siteSettings.logoImagePath}" alt="Logo" class="admin-brand-logo"/>
+        <span th:unless="${siteSettings != null and siteSettings.logoImagePath != null}">GOA Admin</span>
+    </a>
     <nav class="admin-sidebar-nav">
         <a th:href="@{/admin}" th:classappend="${active == 'dashboard'} ? 'active'"><span class="admin-sidebar-icon">🏠</span> Dashboard</a>
         <a th:href="@{/admin/locations}" th:classappend="${active == 'locations'} ? 'active'"><span class="admin-sidebar-icon">📍</span> Locations</a>

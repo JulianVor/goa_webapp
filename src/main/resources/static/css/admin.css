@@ -28,6 +28,7 @@ a { color: var(--admin-primary, #2f6f68); }
 }
 
 .admin-brand { color: #fff; font-weight: 700; text-decoration: none; font-size: 1.1rem; display: block; margin-bottom: 1.5rem; }
+.admin-brand-logo { display: block; max-height: 40px; max-width: 100%; }
 
 .admin-sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; }
 .admin-sidebar-nav a {
