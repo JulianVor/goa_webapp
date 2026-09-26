@@ -10,21 +10,21 @@
             <table role="presentation" width="600" cellpadding="0" cellspacing="0"
                    style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;">
                 <tr>
-                    <!-- The edition's hero image runs behind the whole card, like on the site itself -
-                         logo/content/footer all sit on translucent panels on top of it instead of a plain
-                         white block below it. background-image is best-effort (Outlook desktop falls back
-                         to colorPrimary alone), never load-bearing for legibility - the panels are. -->
-                    <td th:style="'background-color:' + ${colorPrimary} + ';' + (${backgroundUrl} != null ? ('background-image:url(' + ${backgroundUrl} + ');background-size:cover;background-position:center;background-repeat:no-repeat;') : '') + 'padding:36px 20px;'">
-                        <div style="text-align:center;margin-bottom:24px;">
-                            <div th:if="${logoUrl}" style="display:inline-block;background-color:rgba(0,0,0,0.45);padding:14px 22px;border-radius:12px;">
-                                <img th:src="${logoUrl}" alt="Logo" style="max-height:56px;display:block;"/>
-                            </div>
-                            <div th:unless="${logoUrl}" style="display:inline-block;background-color:rgba(0,0,0,0.45);padding:14px 26px;border-radius:12px;">
-                                <h1 th:text="${editionTitle}"
-                                    style="color:#ffffff;margin:0;font-size:22px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
-                            </div>
-                        </div>
-
+                    <!-- Solid-color header, logo/title straight on it (no overlay box needed - it's a
+                         flat color, always readable). Its own rounded bottom corners are what make it
+                         read as a distinct banner sitting above the hero image below. -->
+                    <td th:style="'background-color:' + ${colorPrimary} + ';border-radius:0 0 24px 24px;padding:28px 24px;text-align:center;'">
+                        <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:56px;display:inline-block;"/>
+                        <h1 th:unless="${logoUrl}" th:text="${editionTitle}"
+                            style="color:#ffffff;margin:0;font-size:22px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <!-- The edition's hero image runs behind the content/footer, like on the site itself -
+                         those sit on translucent panels on top of it instead of a plain white block below
+                         it. background-image is best-effort (Outlook desktop falls back to colorPrimary
+                         alone), never load-bearing for legibility - the panels are. -->
+                    <td th:style="'background-color:' + ${colorPrimary} + ';' + (${backgroundUrl} != null ? ('background-image:url(' + ${backgroundUrl} + ');background-size:cover;background-position:center;background-repeat:no-repeat;') : '') + 'padding:24px 20px;'">
                         <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${colorAccent} + ';'"
                              th:utext="${contentHtml}">
                             Inhalt
