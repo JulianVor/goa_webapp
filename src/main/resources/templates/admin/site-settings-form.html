@@ -6,6 +6,12 @@
 
 <main class="admin-main">
     <h1>Globale Einstellungen</h1>
+
+    <nav class="admin-subnav">
+        <a class="active" th:href="@{/admin/settings}">Allgemein</a>
+        <a th:href="@{/admin/settings/newsletter-confirmation}">Newsletter-Bestätigungsmail</a>
+    </nav>
+
     <p class="field-hint">
         Logo und Tab-Icon sind seitenübergreifend und unabhängig von der jeweils aktuellen Festival-Ausgabe.
     </p>

@@ -425,6 +425,29 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .tab-btn.active { color: var(--admin-primary, #2f6f68); border-bottom-color: var(--admin-primary, #2f6f68); }
 
+/* Same look as .dashboard-tabs/.tab-btn, but real navigation links between two
+   separate pages (e.g. Globale Einstellungen <-> Newsletter-Bestätigungsmail)
+   instead of JS-toggled panels on one page. */
+.admin-subnav {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid #e4e7ee;
+    margin-bottom: 1.5rem;
+}
+
+.admin-subnav a {
+    display: inline-block;
+    padding: 0.7rem 0.25rem;
+    margin-bottom: -1px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #5a6472;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+}
+
+.admin-subnav a.active { color: var(--admin-primary, #2f6f68); border-bottom-color: var(--admin-primary, #2f6f68); }
+
 .edition-card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

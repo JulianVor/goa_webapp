@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Static branding "shell" for a live preview: Thymeleaf bakes in the real logo/colors
+     server-side, JS only ever swaps the %%CONTENT%% marker on input, so the preview
+     stays accurate without a server round-trip on every keystroke. Shared by every
+     newsletter-related admin page that has a WYSIWYG editor + live preview. -->
+<template id="newsletter-preview-shell" th:fragment="newsletter-preview-shell">
+    <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;border-radius:12px;overflow:hidden;">
+        <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorPrimary : '#2f6f68'} + ';padding:0;'">
+            <div style="padding:8px 24px 16px;text-align:center;">
+                <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}"
+                     th:alt="${currentEdition != null ? currentEdition.title : 'Newsletter'}"
+                     th:style="'max-height:64px;display:inline-block;color:' + ${currentEdition != null ? currentEdition.colorSecondary : '#e0559a'} + ';font-weight:bold;font-family:Arial,Helvetica,sans-serif;'"/>
+                <h1 th:unless="${siteSettings.logoImagePath}" style="color:#ffffff;margin:0;font-size:20px;"
+                    th:text="${currentEdition != null ? currentEdition.title : 'Newsletter'}">GOA</h1>
+            </div>
+
+            <div th:if="${currentEdition != null and not #strings.isEmpty(currentEdition.backgroundImagePath)}"
+                 th:style="'border-radius:20px 20px 0 0;overflow:hidden;background-image:url(' + ${currentEdition.backgroundImagePath} + ');background-size:cover;background-position:center;background-repeat:no-repeat;padding:16px 20px 24px;'">
+                <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:20px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';'">%%CONTENT%%</div>
+
+                <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;">
+                <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
+                <p style="margin:0;"><a href="#" style="color:#666666;">Newsletter abbestellen</a></p>
+                </div>
+            </div>
+
+            <div th:unless="${currentEdition != null and not #strings.isEmpty(currentEdition.backgroundImagePath)}" style="padding:16px 20px 24px;">
+                <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:20px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';'">%%CONTENT%%</div>
+
+                <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;">
+                <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
+                <p style="margin:0;"><a href="#" style="color:#666666;">Newsletter abbestellen</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>
