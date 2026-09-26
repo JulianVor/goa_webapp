@@ -132,6 +132,8 @@ public class NewsletterService {
         context.setVariable("colorAccent", edition != null ? edition.getColorAccent() : "#f2c14e");
         context.setVariable("editionTitle", edition != null ? edition.getTitle() : "Newsletter");
         context.setVariable("logoUrl", (logoPath != null && !logoPath.isBlank()) ? baseUrl + logoPath : null);
+        String backgroundPath = edition != null ? edition.getBackgroundImagePath() : null;
+        context.setVariable("backgroundUrl", (backgroundPath != null && !backgroundPath.isBlank()) ? baseUrl + backgroundPath : null);
         return templateEngine.process("email/newsletter-email", context);
     }
 
