@@ -55,8 +55,20 @@ spring:
 
 server:
   port: 8080
+  # Without this, ServletUriComponentsBuilder (used to build absolute URLs for
+  # newsletter images/links) trusts only the raw request Tomcat sees - "http" and
+  # whatever internal host/port a reverse proxy connects with - instead of the
+  # X-Forwarded-* headers a proxy sets for the real public scheme/host. APP_BASE_URL
+  # below still overrides both when set.
+  forward-headers-strategy: framework
 
 app:
+  # The public URL recipients' mail clients need to reach for newsletter images/links
+  # (e.g. https://goa-festival.de) - set this if the admin panel is reached at a
+  # different address than that (an internal network, a different scheme). Left
+  # blank, the current request's own URL is used, which is fine for a simple setup
+  # with no reverse proxy in front.
+  base-url: ${APP_BASE_URL:}
   upload-dir: uploads
   admin:
     username: ${ADMIN_USERNAME:admin}

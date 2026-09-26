@@ -29,6 +29,7 @@ public class NewsletterService {
     private final SiteSettingsService siteSettingsService;
     private final ITemplateEngine templateEngine;
     private final String fromAddress;
+    private final String configuredBaseUrl;
     private final boolean enabled;
 
     public NewsletterService(NewsletterSubscriberRepository subscriberRepository, JavaMailSender mailSender,
@@ -36,7 +37,8 @@ public class NewsletterService {
                               ITemplateEngine templateEngine,
                               @Value("${app.mail.from:}") String configuredFrom,
                               @Value("${spring.mail.username:}") String mailUsername,
-                              @Value("${spring.mail.host:}") String mailHost) {
+                              @Value("${spring.mail.host:}") String mailHost,
+                              @Value("${app.base-url:}") String configuredBaseUrl) {
         this.subscriberRepository = subscriberRepository;
         this.mailSender = mailSender;
         this.editionService = editionService;
@@ -45,6 +47,7 @@ public class NewsletterService {
         this.fromAddress = !configuredFrom.isBlank() ? configuredFrom
                 : !mailUsername.isBlank() ? mailUsername
                 : "newsletter@goa-festival.de";
+        this.configuredBaseUrl = configuredBaseUrl.isBlank() ? null : stripTrailingSlash(configuredBaseUrl);
         this.enabled = !mailHost.isBlank();
     }
 
@@ -92,7 +95,7 @@ public class NewsletterService {
         if (!enabled) {
             throw new IllegalStateException("Der Newsletter ist aktuell nicht verfügbar.");
         }
-        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        String baseUrl = resolveBaseUrl();
         int sent = 0;
         for (NewsletterSubscriber subscriber : findAllOrdered()) {
             try {
@@ -109,9 +112,27 @@ public class NewsletterService {
 
     /** Renders the exact branded HTML that {@link #sendNewsletter} would send, for the admin's preview step. */
     public String previewHtml(String htmlBody) {
-        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        String baseUrl = resolveBaseUrl();
         String unsubscribeUrl = baseUrl + "/newsletter/unsubscribe?token=vorschau";
         return renderEmailHtml(htmlBody, unsubscribeUrl, baseUrl);
+    }
+
+    /**
+     * The public URL images/links in the mail must use. Prefers the explicitly configured
+     * {@code APP_BASE_URL} - the admin's own request (reverse proxy, internal network, plain
+     * HTTP) may not be the address recipients' mail clients can actually reach - and falls
+     * back to the current request's URL, which is fine when the admin panel is reached at
+     * the same public address the site itself is.
+     */
+    private String resolveBaseUrl() {
+        if (configuredBaseUrl != null) {
+            return configuredBaseUrl;
+        }
+        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+    }
+
+    private static String stripTrailingSlash(String url) {
+        return url.endsWith("/") ? url.substring(0, url.length() - 1) : url;
     }
 
     /**
