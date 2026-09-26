@@ -69,15 +69,13 @@
                         th:text="${currentEdition != null ? currentEdition.title : 'Newsletter'}">GOA</h1>
                 </div>
 
-                <div th:if="${currentEdition != null and not #strings.isEmpty(currentEdition.backgroundImagePath)}" style="position:relative;">
-                    <div th:style="'position:absolute;top:0;left:0;right:0;bottom:0;border-radius:20px 20px 0 0;overflow:hidden;background-image:url(' + ${currentEdition.backgroundImagePath} + ');background-size:cover;background-position:center;background-repeat:no-repeat;'"></div>
-                    <div style="position:relative;padding:16px 20px 24px;">
-                        <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:20px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';'">%%CONTENT%%</div>
+                <div th:if="${currentEdition != null and not #strings.isEmpty(currentEdition.backgroundImagePath)}"
+                     th:style="'border-radius:20px 20px 0 0;overflow:hidden;background-image:url(' + ${currentEdition.backgroundImagePath} + ');background-size:cover;background-position:center;background-repeat:no-repeat;padding:16px 20px 24px;'">
+                    <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:20px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';'">%%CONTENT%%</div>
 
-                        <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;">
-                        <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
-                        <p style="margin:0;"><a href="#" style="color:#666666;">Newsletter abbestellen</a></p>
-                        </div>
+                    <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;">
+                    <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
+                    <p style="margin:0;"><a href="#" style="color:#666666;">Newsletter abbestellen</a></p>
                     </div>
                 </div>
 
