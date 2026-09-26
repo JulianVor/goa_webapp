@@ -33,12 +33,13 @@
                 <button type="button" data-cmd="bold" title="Fett"><strong>F</strong></button>
                 <button type="button" data-cmd="italic" title="Kursiv"><em>K</em></button>
                 <button type="button" data-cmd="underline" title="Unterstrichen"><u>U</u></button>
-                <button type="button" data-cmd="formatBlock" data-value="H2" title="Überschrift">H2</button>
-                <button type="button" data-cmd="formatBlock" data-value="P" title="Absatz">¶</button>
+                <button type="button" data-cmd="formatBlock" data-value="&lt;h1&gt;" title="Überschrift 1">H1</button>
+                <button type="button" data-cmd="formatBlock" data-value="&lt;h2&gt;" title="Überschrift 2">H2</button>
+                <button type="button" data-cmd="formatBlock" data-value="&lt;p&gt;" title="Normaler Text (z.B. aus einer Überschrift)">Text</button>
                 <button type="button" data-cmd="insertUnorderedList" title="Aufzählung">• Liste</button>
                 <button type="button" data-cmd="insertOrderedList" title="Nummerierte Liste">1. Liste</button>
                 <button type="button" data-cmd="createLink" title="Link einfügen">🔗 Link</button>
-                <button type="button" data-cmd="removeFormat" title="Formatierung entfernen">✕ Format</button>
+                <button type="button" data-cmd="clearFormatting" title="Formatierung komplett entfernen (auch Überschriften)">✕ Format</button>
             </div>
             <div class="richtext-editor" id="newsletter-editor" contenteditable="true" th:utext="${sendForm.htmlBody}"></div>
             <textarea th:field="*{htmlBody}" id="newsletter-htmlbody" hidden="hidden"></textarea>
@@ -175,6 +176,12 @@
                     var url = window.prompt('Link-URL eingeben:', 'https://');
                     if (!url) return;
                     document.execCommand('createLink', false, url);
+                } else if (cmd === 'clearFormatting') {
+                    // removeFormat alone only strips inline styles (bold/italic/...) - it leaves a
+                    // heading a heading. Also resetting the block to a plain paragraph is what "clear
+                    // everything" actually looks like to someone using this toolbar.
+                    document.execCommand('removeFormat', false, null);
+                    document.execCommand('formatBlock', false, '<p>');
                 } else if (button.hasAttribute('data-value')) {
                     document.execCommand(cmd, false, button.getAttribute('data-value'));
                 } else {
