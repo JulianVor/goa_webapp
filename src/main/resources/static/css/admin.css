@@ -441,14 +441,30 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 }
 
 .edition-card-thumb {
+    position: relative;
     height: 110px;
     background-color: var(--admin-primary, #2f6f68);
     background-size: cover;
     background-position: center;
+}
+
+.edition-card-thumb .badge { position: absolute; top: 0.6rem; right: 0.6rem; }
+
+.edition-card-thumb-logos {
+    position: absolute;
+    inset: 0;
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: 0.6rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.5rem 2.5rem;
+}
+
+.edition-card-thumb-logos img {
+    max-height: 70px;
+    max-width: 45%;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
 }
 
 .edition-card-body { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }

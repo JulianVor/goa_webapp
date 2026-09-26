@@ -74,6 +74,10 @@
                 <div class="edition-card-thumb" th:style="${not #strings.isEmpty(edition.backgroundImagePath)} ? ('background-image:url(' + ${edition.backgroundImagePath} + ');') : ('background-color:' + ${edition.colorPrimary} + ';')">
                     <span class="badge badge-current" th:if="${edition.current}">aktuell</span>
                     <span class="badge" th:unless="${edition.current}">Archiv</span>
+                    <div class="edition-card-thumb-logos" th:if="${not #strings.isEmpty(edition.logoImagePath) or not #strings.isEmpty(edition.locationImagePath)}">
+                        <img th:if="${not #strings.isEmpty(edition.logoImagePath)}" th:src="${edition.logoImagePath}" alt="Logo"/>
+                        <img th:if="${not #strings.isEmpty(edition.locationImagePath)}" th:src="${edition.locationImagePath}" alt="Termin"/>
+                    </div>
                 </div>
                 <div class="edition-card-body">
                     <span class="edition-card-title" th:text="${edition.title} + ' ' + ${edition.year}">Grumbrechtstraßen Open Air 2026</span>
@@ -108,6 +112,10 @@
                 <div class="edition-card-thumb" th:style="${not #strings.isEmpty(show.backgroundImagePath)} ? ('background-image:url(' + ${show.backgroundImagePath} + ');') : ('background-color:' + ${show.colorPrimary} + ';')">
                     <span class="badge badge-current" th:if="${show.startDate != null and !show.startDate.isBefore(T(java.time.LocalDate).now())}">kommend</span>
                     <span class="badge" th:unless="${show.startDate != null and !show.startDate.isBefore(T(java.time.LocalDate).now())}">vergangen</span>
+                    <div class="edition-card-thumb-logos" th:if="${not #strings.isEmpty(show.logoImagePath) or not #strings.isEmpty(show.locationImagePath)}">
+                        <img th:if="${not #strings.isEmpty(show.logoImagePath)}" th:src="${show.logoImagePath}" alt="Logo"/>
+                        <img th:if="${not #strings.isEmpty(show.locationImagePath)}" th:src="${show.locationImagePath}" alt="Termin"/>
+                    </div>
                 </div>
                 <div class="edition-card-body">
                     <span class="edition-card-title" th:text="${show.title}">Kneipenkonzert Vol. 1</span>
