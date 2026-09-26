@@ -46,6 +46,12 @@ spring:
           auth: ${MAIL_SMTP_AUTH:true}
           starttls:
             enable: ${MAIL_SMTP_STARTTLS:true}
+          # Without these, JavaMail's defaults are *infinite* - an unreachable/misconfigured
+          # MAIL_HOST then hangs the admin's send request forever instead of failing with a
+          # visible error. 10s is generous for a normal SMTP handshake.
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
 
 server:
   port: 8080
