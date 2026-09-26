@@ -16,23 +16,75 @@
         der <code>.env</code>, um den Newsletter zu aktivieren.
     </p>
 
-    <form th:if="${newsletterEnabled}" method="post" class="admin-form" th:action="@{/admin/newsletter/send}" th:object="${sendForm}">
-        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <form th:if="${newsletterEnabled}" method="post" id="newsletter-send-form" class="admin-form" th:action="@{/admin/newsletter/send}" th:object="${sendForm}">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id="newsletter-csrf"/>
 
         <fieldset>
             <legend>Newsletter versenden</legend>
             <p class="field-hint">
                 Geht per E-Mail an alle <strong th:text="${#lists.size(subscribers)}">0</strong> Abonnent(en) unten,
-                jeweils einzeln mit eigenem Abmelde-Link. HTML-Tags im Inhalt werden direkt gerendert.
+                jeweils einzeln mit eigenem Abmelde-Link. Logo und Farben des aktuellen Festivals sowie der
+                Abmelde-Hinweis werden automatisch um den Inhalt herum eingebaut.
             </p>
             <label>Betreff<input type="text" th:field="*{subject}" required="required"/></label>
-            <label>Inhalt (HTML)<textarea th:field="*{htmlBody}" rows="12" placeholder="&lt;h2&gt;Neuigkeiten&lt;/h2&gt;&lt;p&gt;...&lt;/p&gt;" required="required"></textarea></label>
+
+            <label>Inhalt</label>
+            <div class="richtext-toolbar" id="newsletter-toolbar">
+                <button type="button" data-cmd="bold" title="Fett"><strong>F</strong></button>
+                <button type="button" data-cmd="italic" title="Kursiv"><em>K</em></button>
+                <button type="button" data-cmd="underline" title="Unterstrichen"><u>U</u></button>
+                <button type="button" data-cmd="formatBlock" data-value="H2" title="Überschrift">H2</button>
+                <button type="button" data-cmd="formatBlock" data-value="P" title="Absatz">¶</button>
+                <button type="button" data-cmd="insertUnorderedList" title="Aufzählung">• Liste</button>
+                <button type="button" data-cmd="insertOrderedList" title="Nummerierte Liste">1. Liste</button>
+                <button type="button" data-cmd="createLink" title="Link einfügen">🔗 Link</button>
+                <button type="button" data-cmd="removeFormat" title="Formatierung entfernen">✕ Format</button>
+            </div>
+            <div class="richtext-editor" id="newsletter-editor" contenteditable="true" th:utext="${sendForm.htmlBody}"></div>
+            <textarea th:field="*{htmlBody}" id="newsletter-htmlbody" hidden="hidden"></textarea>
+
+            <div class="newsletter-live-preview">
+                <p class="field-hint" style="margin-top: 0.5rem;">Live-Vorschau mit Logo &amp; Farben des aktuellen Festivals:</p>
+                <iframe id="newsletter-live-preview-frame" class="newsletter-preview-frame" title="Live-Vorschau"></iframe>
+            </div>
         </fieldset>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary" th:disabled="${subscribers.isEmpty()}">Newsletter versenden</button>
+            <button type="button" class="btn btn-primary" id="newsletter-preview-btn" th:disabled="${subscribers.isEmpty()}">Vorschau &amp; Versenden</button>
         </div>
     </form>
+
+    <!-- Static branding "shell" for the live preview: Thymeleaf bakes in the real
+         logo/colors server-side, JS only ever swaps the %%CONTENT%% marker on input,
+         so the preview stays accurate without a server round-trip on every keystroke. -->
+    <template id="newsletter-preview-shell" th:if="${newsletterEnabled}">
+        <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;border-radius:8px;overflow:hidden;">
+            <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorPrimary : '#2f6f68'} + ';padding:24px;text-align:center;'">
+                <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo" style="max-height:60px;"/>
+                <h1 th:unless="${siteSettings.logoImagePath}" style="color:#ffffff;margin:0;font-size:22px;"
+                    th:text="${currentEdition != null ? currentEdition.title : 'Newsletter'}">GOA</h1>
+            </div>
+            <div style="padding:32px 24px;color:#222222;font-size:16px;line-height:1.6;">%%CONTENT%%</div>
+            <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';height:4px;line-height:4px;font-size:0;'">&nbsp;</div>
+            <div style="padding:16px 24px;text-align:center;color:#888888;font-size:12px;">
+                <p style="margin:0 0 8px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
+                <p style="margin:0;"><a href="#" style="color:#888888;">Newsletter abbestellen</a></p>
+            </div>
+        </div>
+    </template>
+
+    <!-- Exact preview before the actual send: fetches the real server-rendered HTML
+         (same code path as sendNewsletter) so what's shown here is what recipients get. -->
+    <div class="modal-overlay" id="newsletter-preview-modal" th:if="${newsletterEnabled}">
+        <div class="modal-box modal-box-wide">
+            <button type="button" class="modal-close" aria-label="Schließen">&times;</button>
+            <h3>Vorschau: So kommt die E-Mail an</h3>
+            <iframe id="newsletter-preview-frame" class="newsletter-preview-frame newsletter-preview-frame-large" title="E-Mail-Vorschau"></iframe>
+            <div class="form-actions">
+                <button type="button" class="btn btn-primary" id="newsletter-confirm-send-btn">Jetzt endgültig versenden</button>
+            </div>
+        </div>
+    </div>
 
     <h2 style="margin-top: 2.5rem;">Abonnenten</h2>
     <div class="table-scroll">
@@ -63,5 +115,93 @@
     </table>
     </div>
 </main>
+<script th:if="${newsletterEnabled}">
+    (function () {
+        var toolbar = document.getElementById('newsletter-toolbar');
+        var editor = document.getElementById('newsletter-editor');
+        var hiddenField = document.getElementById('newsletter-htmlbody');
+        var livePreviewFrame = document.getElementById('newsletter-live-preview-frame');
+        var previewShellHtml = document.getElementById('newsletter-preview-shell').innerHTML;
+        var previewBtn = document.getElementById('newsletter-preview-btn');
+        var previewModal = document.getElementById('newsletter-preview-modal');
+        var previewFrame = document.getElementById('newsletter-preview-frame');
+        var confirmSendBtn = document.getElementById('newsletter-confirm-send-btn');
+        var formEl = document.getElementById('newsletter-send-form');
+        var csrfInput = document.getElementById('newsletter-csrf');
+
+        function syncHiddenField() {
+            hiddenField.value = editor.innerHTML;
+        }
+
+        function updateLivePreview() {
+            var doc = livePreviewFrame.contentDocument;
+            if (!doc) return;
+            doc.open();
+            doc.write(previewShellHtml.replace('%%CONTENT%%', editor.innerHTML));
+            doc.close();
+        }
+
+        editor.addEventListener('input', function () {
+            syncHiddenField();
+            updateLivePreview();
+        });
+        syncHiddenField();
+        updateLivePreview();
+
+        toolbar.querySelectorAll('button[data-cmd]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var cmd = button.getAttribute('data-cmd');
+                editor.focus();
+                if (cmd === 'createLink') {
+                    var url = window.prompt('Link-URL eingeben:', 'https://');
+                    if (!url) return;
+                    document.execCommand('createLink', false, url);
+                } else if (button.hasAttribute('data-value')) {
+                    document.execCommand(cmd, false, button.getAttribute('data-value'));
+                } else {
+                    document.execCommand(cmd, false, null);
+                }
+                syncHiddenField();
+                updateLivePreview();
+            });
+        });
+
+        previewBtn.addEventListener('click', function () {
+            syncHiddenField();
+            if (!editor.textContent.trim()) {
+                window.alert('Bitte zuerst einen Inhalt eingeben.');
+                return;
+            }
+            var body = new URLSearchParams();
+            body.set('htmlBody', hiddenField.value);
+            if (csrfInput) body.set(csrfInput.name, csrfInput.value);
+            fetch(formEl.action.replace(/\/send$/, '/preview'), {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: body.toString()
+            }).then(function (response) {
+                if (!response.ok) throw new Error('preview failed');
+                return response.text();
+            }).then(function (html) {
+                previewFrame.srcdoc = html;
+                previewModal.classList.add('open');
+            }).catch(function () {
+                window.alert('Vorschau konnte nicht geladen werden.');
+            });
+        });
+
+        confirmSendBtn.addEventListener('click', function () {
+            previewModal.classList.remove('open');
+            formEl.submit();
+        });
+
+        previewModal.querySelector('.modal-close').addEventListener('click', function () {
+            previewModal.classList.remove('open');
+        });
+        previewModal.addEventListener('click', function (event) {
+            if (event.target === previewModal) previewModal.classList.remove('open');
+        });
+    })();
+</script>
 </body>
 </html>

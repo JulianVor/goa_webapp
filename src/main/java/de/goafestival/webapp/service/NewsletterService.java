@@ -1,6 +1,8 @@
 package de.goafestival.webapp.service;
 
+import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.domain.NewsletterSubscriber;
+import de.goafestival.webapp.domain.SiteSettings;
 import de.goafestival.webapp.repository.NewsletterSubscriberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -11,6 +13,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,15 +25,23 @@ public class NewsletterService {
 
     private final NewsletterSubscriberRepository subscriberRepository;
     private final JavaMailSender mailSender;
+    private final EditionService editionService;
+    private final SiteSettingsService siteSettingsService;
+    private final ITemplateEngine templateEngine;
     private final String fromAddress;
     private final boolean enabled;
 
     public NewsletterService(NewsletterSubscriberRepository subscriberRepository, JavaMailSender mailSender,
+                              EditionService editionService, SiteSettingsService siteSettingsService,
+                              ITemplateEngine templateEngine,
                               @Value("${app.mail.from:}") String configuredFrom,
                               @Value("${spring.mail.username:}") String mailUsername,
                               @Value("${spring.mail.host:}") String mailHost) {
         this.subscriberRepository = subscriberRepository;
         this.mailSender = mailSender;
+        this.editionService = editionService;
+        this.siteSettingsService = siteSettingsService;
+        this.templateEngine = templateEngine;
         this.fromAddress = !configuredFrom.isBlank() ? configuredFrom
                 : !mailUsername.isBlank() ? mailUsername
                 : "newsletter@goa-festival.de";
@@ -84,7 +96,9 @@ public class NewsletterService {
         int sent = 0;
         for (NewsletterSubscriber subscriber : findAllOrdered()) {
             try {
-                send(subscriber, subject, htmlBody, baseUrl);
+                String unsubscribeUrl = baseUrl + "/newsletter/unsubscribe?token=" + subscriber.getUnsubscribeToken();
+                String fullHtml = renderEmailHtml(htmlBody, unsubscribeUrl, baseUrl);
+                send(subscriber, subject, fullHtml);
                 sent++;
             } catch (MessagingException | MailException e) {
                 throw new NewsletterSendException(subscriber.getEmail(), sent, e);
@@ -93,13 +107,35 @@ public class NewsletterService {
         return sent;
     }
 
-    private void send(NewsletterSubscriber subscriber, String subject, String htmlBody, String baseUrl) throws MessagingException {
-        String unsubscribeUrl = baseUrl + "/newsletter/unsubscribe?token=" + subscriber.getUnsubscribeToken();
-        String fullHtml = htmlBody
-                + "<hr style=\"margin-top:2rem;border:none;border-top:1px solid #ccc;\"/>"
-                + "<p style=\"font-size:12px;color:#888;\">Du erhältst diese E-Mail, weil du dich für den Newsletter "
-                + "angemeldet hast. <a href=\"" + unsubscribeUrl + "\">Newsletter abbestellen</a></p>";
+    /** Renders the exact branded HTML that {@link #sendNewsletter} would send, for the admin's preview step. */
+    public String previewHtml(String htmlBody) {
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        String unsubscribeUrl = baseUrl + "/newsletter/unsubscribe?token=vorschau";
+        return renderEmailHtml(htmlBody, unsubscribeUrl, baseUrl);
+    }
 
+    /**
+     * Wraps the admin-authored content in the branded email layout (logo, current
+     * edition's colors, legal unsubscribe footer). Colors are inlined as literal hex
+     * values rather than CSS custom properties, since most email clients strip
+     * {@code <style>} blocks and don't support {@code var(...)} at all.
+     */
+    private String renderEmailHtml(String contentHtml, String unsubscribeUrl, String baseUrl) {
+        Edition edition = editionService.findCurrent().orElse(null);
+        SiteSettings siteSettings = siteSettingsService.get();
+        String logoPath = siteSettings.getLogoImagePath();
+
+        Context context = new Context();
+        context.setVariable("contentHtml", contentHtml);
+        context.setVariable("unsubscribeUrl", unsubscribeUrl);
+        context.setVariable("colorPrimary", edition != null ? edition.getColorPrimary() : "#2f6f68");
+        context.setVariable("colorAccent", edition != null ? edition.getColorAccent() : "#f2c14e");
+        context.setVariable("editionTitle", edition != null ? edition.getTitle() : "Newsletter");
+        context.setVariable("logoUrl", (logoPath != null && !logoPath.isBlank()) ? baseUrl + logoPath : null);
+        return templateEngine.process("email/newsletter-email", context);
+    }
+
+    private void send(NewsletterSubscriber subscriber, String subject, String fullHtml) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
         helper.setTo(subscriber.getEmail());

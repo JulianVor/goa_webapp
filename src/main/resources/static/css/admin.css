@@ -260,6 +260,83 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
+.richtext-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.richtext-toolbar button {
+    padding: 0.4rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #cfd6e4;
+    background: #f4f5f7;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.richtext-toolbar button:hover { background: #e4e7ee; }
+
+.richtext-editor {
+    min-height: 200px;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #cfd6e4;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: #fff;
+}
+
+.richtext-editor:focus { outline: 2px solid #2f6f68; outline-offset: 1px; }
+
+.newsletter-preview-frame {
+    width: 100%;
+    height: 320px;
+    border: 1px solid #e4e7ee;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.newsletter-preview-frame-large { height: 60vh; }
+
+.btn-secondary { background: #e4e7ee; color: #1f2430; }
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 24, 33, 0.6);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 100;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.75rem;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+}
+
+.modal-box-wide { max-width: 700px; }
+
+.modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.9rem;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #5a6472;
+}
+
 @media (max-width: 700px) {
     .admin-main { padding: 1.5rem 1rem 3rem; }
 

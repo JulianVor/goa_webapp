@@ -3,6 +3,7 @@ package de.goafestival.webapp.web.admin;
 import de.goafestival.webapp.dto.NewsletterSendForm;
 import de.goafestival.webapp.service.NewsletterService;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -28,6 +31,13 @@ public class AdminNewsletterController {
         model.addAttribute("subscribers", newsletterService.findAllOrdered());
         model.addAttribute("sendForm", new NewsletterSendForm());
         return "admin/newsletter-list";
+    }
+
+    /** Renders the exact branded HTML the admin's current draft would produce, for the preview-before-send step. */
+    @PostMapping(value = "/preview", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String preview(@RequestParam(defaultValue = "") String htmlBody) {
+        return newsletterService.previewHtml(htmlBody);
     }
 
     @PostMapping("/send")
