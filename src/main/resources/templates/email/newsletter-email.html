@@ -13,10 +13,10 @@
                     <!-- Solid-color header, logo/title straight on it (no overlay box needed - it's a
                          flat color, always readable). Its own rounded bottom corners are what make it
                          read as a distinct banner sitting above the hero image below. -->
-                    <td th:style="'background-color:' + ${colorPrimary} + ';border-radius:0 0 24px 24px;padding:28px 24px;text-align:center;'">
-                        <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:56px;display:inline-block;"/>
+                    <td th:style="'background-color:' + ${colorPrimary} + ';border-radius:0 0 20px 20px;padding:16px 24px;text-align:center;'">
+                        <img th:if="${logoUrl}" th:src="${logoUrl}" alt="Logo" style="max-height:44px;display:inline-block;"/>
                         <h1 th:unless="${logoUrl}" th:text="${editionTitle}"
-                            style="color:#ffffff;margin:0;font-size:22px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
+                            style="color:#ffffff;margin:0;font-size:20px;font-family:Arial,Helvetica,sans-serif;">GOA</h1>
                     </td>
                 </tr>
                 <tr>
@@ -25,7 +25,10 @@
                          it. background-image is best-effort (Outlook desktop falls back to colorPrimary
                          alone), never load-bearing for legibility - the panels are. -->
                     <td th:style="'background-color:' + ${colorPrimary} + ';' + (${backgroundUrl} != null ? ('background-image:url(' + ${backgroundUrl} + ');background-size:cover;background-position:center;background-repeat:no-repeat;') : '') + 'padding:24px 20px;'">
-                        <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${colorAccent} + ';'"
+                        <!-- border-radius only on the bottom corners: with all four rounded, the
+                             border-top accent line would follow the top corners' curve and visibly
+                             dip inward at both ends instead of staying a flat, straight bar. -->
+                        <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:0 0 12px 12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${colorAccent} + ';'"
                              th:utext="${contentHtml}">
                             Inhalt
                         </div>

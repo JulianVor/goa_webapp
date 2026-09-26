@@ -59,13 +59,13 @@
          so the preview stays accurate without a server round-trip on every keystroke. -->
     <template id="newsletter-preview-shell" th:if="${newsletterEnabled}">
         <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;border-radius:12px;overflow:hidden;">
-            <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorPrimary : '#2f6f68'} + ';border-radius:0 0 24px 24px;padding:28px 24px;text-align:center;'">
-                <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo" style="max-height:56px;display:inline-block;"/>
-                <h1 th:unless="${siteSettings.logoImagePath}" style="color:#ffffff;margin:0;font-size:22px;"
+            <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorPrimary : '#2f6f68'} + ';border-radius:0 0 20px 20px;padding:16px 24px;text-align:center;'">
+                <img th:if="${siteSettings.logoImagePath}" th:src="${siteSettings.logoImagePath}" alt="Logo" style="max-height:44px;display:inline-block;"/>
+                <h1 th:unless="${siteSettings.logoImagePath}" style="color:#ffffff;margin:0;font-size:20px;"
                     th:text="${currentEdition != null ? currentEdition.title : 'Newsletter'}">GOA</h1>
             </div>
             <div th:style="'background-color:' + ${currentEdition != null ? currentEdition.colorPrimary : '#2f6f68'} + ';' + (${currentEdition != null and not #strings.isEmpty(currentEdition.backgroundImagePath)} ? ('background-image:url(' + ${currentEdition.backgroundImagePath} + ');background-size:cover;background-position:center;background-repeat:no-repeat;') : '') + 'padding:24px 20px;'">
-                <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';'">%%CONTENT%%</div>
+                <div th:style="'background-color:rgba(255,255,255,0.95);border-radius:0 0 12px 12px;padding:28px 24px;color:#222222;font-size:16px;line-height:1.6;border-top:4px solid ' + ${currentEdition != null ? currentEdition.colorAccent : '#f2c14e'} + ';'">%%CONTENT%%</div>
 
                 <div style="margin-top:14px;background-color:rgba(255,255,255,0.92);border-radius:10px;padding:14px 18px;text-align:center;color:#666666;font-size:12px;">
                 <p style="margin:0 0 6px;">Du erhältst diese E-Mail, weil du dich für den Newsletter angemeldet hast.</p>
