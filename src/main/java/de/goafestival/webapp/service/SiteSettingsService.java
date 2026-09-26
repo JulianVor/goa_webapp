@@ -43,6 +43,13 @@ public class SiteSettingsService {
         siteSettingsRepository.save(settings);
     }
 
+    public void updateNewsletterConfirmation(String subject, String body) {
+        SiteSettings settings = get();
+        settings.setNewsletterConfirmationSubject(subject);
+        settings.setNewsletterConfirmationBody(body);
+        siteSettingsRepository.save(settings);
+    }
+
     /** Re-optimizes already-stored images (uploaded before automatic resizing existed). Returns how many files were rewritten. */
     public int optimizeImages() {
         SiteSettings settings = get();

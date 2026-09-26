@@ -7,6 +7,8 @@ import de.goafestival.webapp.repository.NewsletterSubscriberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,6 +24,13 @@ import java.util.UUID;
 @Service
 @Transactional
 public class NewsletterService {
+
+    private static final Logger log = LoggerFactory.getLogger(NewsletterService.class);
+
+    private static final String DEFAULT_CONFIRMATION_SUBJECT = "Newsletter-Anmeldung bestätigt";
+    private static final String DEFAULT_CONFIRMATION_BODY =
+            "<p>Hallo,</p><p>danke für deine Anmeldung zum Newsletter! Du bekommst ab jetzt Neuigkeiten und "
+                    + "Updates rund ums Festival direkt in dein Postfach.</p>";
 
     private final NewsletterSubscriberRepository subscriberRepository;
     private final JavaMailSender mailSender;
@@ -73,6 +82,37 @@ public class NewsletterService {
         subscriber.setEmail(normalized);
         subscriber.setUnsubscribeToken(UUID.randomUUID().toString());
         subscriberRepository.save(subscriber);
+        sendConfirmation(subscriber);
+    }
+
+    /** The admin-configured confirmation subject/body, or a sensible default if nothing was saved yet. */
+    public String getConfirmationSubject() {
+        String subject = siteSettingsService.get().getNewsletterConfirmationSubject();
+        return (subject != null && !subject.isBlank()) ? subject : DEFAULT_CONFIRMATION_SUBJECT;
+    }
+
+    public String getConfirmationBody() {
+        String body = siteSettingsService.get().getNewsletterConfirmationBody();
+        return (body != null && !body.isBlank()) ? body : DEFAULT_CONFIRMATION_BODY;
+    }
+
+    public void updateConfirmationTemplate(String subject, String body) {
+        siteSettingsService.updateNewsletterConfirmation(subject, body);
+    }
+
+    /**
+     * Sent right after a successful signup, in the same branded layout as a regular
+     * newsletter. A failure here must never undo the signup itself, so it's just logged.
+     */
+    private void sendConfirmation(NewsletterSubscriber subscriber) {
+        try {
+            String baseUrl = resolveBaseUrl();
+            String unsubscribeUrl = baseUrl + "/newsletter/unsubscribe?token=" + subscriber.getUnsubscribeToken();
+            String fullHtml = renderEmailHtml(getConfirmationBody(), unsubscribeUrl, baseUrl);
+            send(subscriber, getConfirmationSubject(), fullHtml);
+        } catch (MessagingException | MailException e) {
+            log.warn("Newsletter-Bestätigungsmail an {} konnte nicht gesendet werden", subscriber.getEmail(), e);
+        }
     }
 
     /** No-op (not an error) for an already-used or unknown token, since this is a public email link. */

@@ -1,5 +1,6 @@
 package de.goafestival.webapp.web.admin;
 
+import de.goafestival.webapp.dto.NewsletterConfirmationForm;
 import de.goafestival.webapp.dto.NewsletterSendForm;
 import de.goafestival.webapp.service.NewsletterService;
 import jakarta.validation.Valid;
@@ -30,7 +31,28 @@ public class AdminNewsletterController {
     public String list(Model model) {
         model.addAttribute("subscribers", newsletterService.findAllOrdered());
         model.addAttribute("sendForm", new NewsletterSendForm());
+        model.addAttribute("confirmationForm", confirmationFormFromCurrent());
         return "admin/newsletter-list";
+    }
+
+    private NewsletterConfirmationForm confirmationFormFromCurrent() {
+        NewsletterConfirmationForm form = new NewsletterConfirmationForm();
+        form.setSubject(newsletterService.getConfirmationSubject());
+        form.setHtmlBody(newsletterService.getConfirmationBody());
+        return form;
+    }
+
+    @PostMapping("/confirmation")
+    public String saveConfirmation(@Valid @ModelAttribute("confirmationForm") NewsletterConfirmationForm form, BindingResult result,
+                                    Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("subscribers", newsletterService.findAllOrdered());
+            model.addAttribute("sendForm", new NewsletterSendForm());
+            return "admin/newsletter-list";
+        }
+        newsletterService.updateConfirmationTemplate(form.getSubject(), form.getHtmlBody());
+        redirectAttributes.addFlashAttribute("success", "Bestätigungsmail wurde gespeichert.");
+        return "redirect:/admin/newsletter";
     }
 
     /** Renders the exact branded HTML the admin's current draft would produce, for the preview-before-send step. */
@@ -45,6 +67,7 @@ public class AdminNewsletterController {
                         Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("subscribers", newsletterService.findAllOrdered());
+            model.addAttribute("confirmationForm", confirmationFormFromCurrent());
             return "admin/newsletter-list";
         }
         try {

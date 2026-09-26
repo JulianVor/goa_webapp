@@ -30,6 +30,12 @@ public class SiteSettings {
     @Column(columnDefinition = "TEXT")
     private String impressumText;
 
+    /** Subject/body for the auto-sent newsletter signup confirmation - null/blank until an admin configures it. */
+    private String newsletterConfirmationSubject;
+
+    @Column(columnDefinition = "TEXT")
+    private String newsletterConfirmationBody;
+
     public Long getId() {
         return id;
     }
@@ -84,5 +90,21 @@ public class SiteSettings {
 
     public void setImpressumText(String impressumText) {
         this.impressumText = impressumText;
+    }
+
+    public String getNewsletterConfirmationSubject() {
+        return newsletterConfirmationSubject;
+    }
+
+    public void setNewsletterConfirmationSubject(String newsletterConfirmationSubject) {
+        this.newsletterConfirmationSubject = newsletterConfirmationSubject;
+    }
+
+    public String getNewsletterConfirmationBody() {
+        return newsletterConfirmationBody;
+    }
+
+    public void setNewsletterConfirmationBody(String newsletterConfirmationBody) {
+        this.newsletterConfirmationBody = newsletterConfirmationBody;
     }
 }
