@@ -107,6 +107,8 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 }
 
 .btn-primary { background: var(--admin-primary, #2f6f68); color: #fff; }
+.btn-danger { background: #c0392b; color: #fff; }
+.btn-danger:hover { background: #a5311f; }
 
 .admin-table {
     width: 100%;

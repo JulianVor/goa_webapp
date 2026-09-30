@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('Import & Export')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav('data')}"></div>
+
+<main class="admin-main">
+    <h1>Import &amp; Export</h1>
+
+    <p class="flash-success" th:if="${success}" th:text="${success}"></p>
+    <p class="flash-error" th:if="${error}" th:text="${error}"></p>
+
+    <div class="admin-form">
+        <fieldset>
+            <legend>Exportieren</legend>
+            <p class="field-hint">
+                Lädt alle Editionen, Bands, FAQ-Einträge, Locations, Newsletter-Abonnenten und globalen
+                Einstellungen inklusive aller hochgeladenen Bilder als eine einzelne .zip-Datei herunter -
+                praktisch als Backup oder um die Daten z.B. in den Testbetrieb zu übertragen.
+            </p>
+            <div class="form-actions">
+                <a class="btn btn-primary" th:href="@{/admin/data/export}">Export herunterladen</a>
+            </div>
+        </fieldset>
+
+        <form method="post" enctype="multipart/form-data" th:action="@{/admin/data/import}"
+              onsubmit="return confirm('Wirklich ALLE aktuellen Daten und Bilder unwiderruflich durch den Inhalt dieser Datei ersetzen?');">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <fieldset>
+                <legend>Importieren</legend>
+                <p class="field-hint">
+                    <strong>Achtung:</strong> Ein Import ersetzt <strong>alle</strong> aktuellen Daten und Bilder
+                    unwiderruflich durch den Inhalt der ausgewählten Datei - das kann nicht rückgängig gemacht
+                    werden. Erstelle im Zweifel vorher selbst einen Export als Sicherung. Falls der Import an
+                    der Dateigröße scheitert, <code>APP_MAX_UPLOAD_SIZE</code>/<code>APP_MAX_UPLOAD_REQUEST_SIZE</code>
+                    in der <code>.env</code> erhöhen.
+                </p>
+                <label>Export-Datei (.zip)<input type="file" name="file" accept=".zip" required="required"/></label>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger">Import ausführen</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</main>
+</body>
+</html>
