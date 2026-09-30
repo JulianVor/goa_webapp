@@ -73,6 +73,13 @@ app:
   admin:
     username: ${ADMIN_USERNAME:admin}
     password: ${ADMIN_PASSWORD:admin}
+  test-mode:
+    # Whole-site HTTP Basic password gate for a non-production deployment (e.g.
+    # test.goa-festival.de), completely independent of the admin login above -
+    # off by default so the real production site is never accidentally locked.
+    enabled: ${TEST_MODE_ENABLED:false}
+    username: ${TEST_MODE_USERNAME:}
+    password: ${TEST_MODE_PASSWORD:}
   mail:
     # Sender address for outgoing newsletter mails - most SMTP providers reject
     # sending as an address the authenticated account doesn't own, so this

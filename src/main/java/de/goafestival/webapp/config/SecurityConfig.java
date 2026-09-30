@@ -11,11 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Protects the admin area behind a single configurable login (see
  * {@code app.admin.username} / {@code app.admin.password}). Everything else -
- * the public festival pages, static assets and uploaded images - stays open.
+ * the public festival pages, static assets and uploaded images - stays open,
+ * unless {@code app.test-mode.enabled} adds a whole-site password gate in
+ * front of all of it (see {@link SiteLockFilter}).
  */
 @Configuration
 @EnableWebSecurity
@@ -39,7 +42,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+            @Value("${app.test-mode.enabled:false}") boolean testModeEnabled,
+            @Value("${app.test-mode.username:}") String testModeUsername,
+            @Value("${app.test-mode.password:}") String testModePassword) throws Exception {
+        if (testModeEnabled) {
+            http.addFilterBefore(new SiteLockFilter(testModeUsername, testModePassword),
+                    UsernamePasswordAuthenticationFilter.class);
+        }
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
