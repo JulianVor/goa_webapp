@@ -275,12 +275,18 @@ public class DataExportImportService {
         return data;
     }
 
-    /** Replaces the whole uploads/ tree with the imported one - a no-op if the zip had none. */
+    /**
+     * Replaces the whole uploads/ tree with the imported one - a no-op if the zip had
+     * none. Clears uploadRoot's *contents* rather than deleting-and-recreating the
+     * directory itself: in the docker-compose deployment it's a mounted volume, and
+     * removing a mount point's own directory entry fails (device busy) even though
+     * clearing what's inside it works fine.
+     */
     private void replaceUploads(Path importedUploads) throws IOException {
         if (!Files.isDirectory(importedUploads)) {
             return;
         }
-        deleteRecursively(uploadRoot);
+        clearDirectoryContents(uploadRoot);
         Files.createDirectories(uploadRoot);
         try (var walk = Files.walk(importedUploads)) {
             for (Path source : (Iterable<Path>) walk::iterator) {
@@ -383,6 +389,18 @@ public class DataExportImportService {
                 FileSystemUtils.deleteRecursively(dir);
             } catch (IOException e) {
                 throw new UncheckedIOException("Konnte Verzeichnis nicht löschen: " + dir, e);
+            }
+        }
+    }
+
+    /** Deletes everything inside {@code dir}, but never {@code dir} itself. */
+    private void clearDirectoryContents(Path dir) throws IOException {
+        if (!Files.isDirectory(dir)) {
+            return;
+        }
+        try (var entries = Files.list(dir)) {
+            for (Path entry : (Iterable<Path>) entries::iterator) {
+                deleteRecursively(entry);
             }
         }
     }
