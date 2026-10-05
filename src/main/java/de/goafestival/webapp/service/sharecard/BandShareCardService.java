@@ -139,19 +139,22 @@ public class BandShareCardService {
             });
 
             // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
+            // Fixed diameter regardless of the logo's own pixel size/aspect ratio - it
+            // "cover"-fills the circle (like the photo/background) instead of shrinking to
+            // fit inside it, so a wide or tall logo doesn't end up looking smaller than a
+            // square one.
             BufferedImage logo = loadImage(edition.getLogoImagePath());
             if (logo != null) {
-                int badgeSize = 180;
-                int badgeCx = contentX + contentW - 110;
-                int badgeCy = photoY + 100;
+                int badgeSize = 230;
+                int badgeCx = contentX + contentW - 130;
+                int badgeCy = photoY + 120;
                 AffineTransform oldTransform = g.getTransform();
                 g.rotate(Math.toRadians(-14), badgeCx, badgeCy);
                 g.setColor(withAlpha(Color.WHITE, 235));
-                g.fill(new Ellipse2D.Float(badgeCx - badgeSize / 2f - 8, badgeCy - badgeSize / 2f - 8, badgeSize + 16, badgeSize + 16));
-                double logoScale = Math.min((double) badgeSize / logo.getWidth(), (double) badgeSize / logo.getHeight());
-                int lw = (int) Math.round(logo.getWidth() * logoScale);
-                int lh = (int) Math.round(logo.getHeight() * logoScale);
-                g.drawImage(logo, badgeCx - lw / 2, badgeCy - lh / 2, lw, lh, null);
+                g.fill(new Ellipse2D.Float(badgeCx - badgeSize / 2f - 10, badgeCy - badgeSize / 2f - 10, badgeSize + 20, badgeSize + 20));
+                int badgeX = badgeCx - badgeSize / 2;
+                int badgeY = badgeCy - badgeSize / 2;
+                withClip(g, badgeX, badgeY, badgeSize, badgeSize, badgeSize, clipped -> drawCover(clipped, logo, badgeX, badgeY, badgeSize, badgeSize));
                 g.setTransform(oldTransform);
             }
 
