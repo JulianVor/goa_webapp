@@ -5,13 +5,20 @@
 <div class="page-bg"></div>
 <div th:replace="~{fragments/nav :: nav(${edition}, ${archivedEditions})}"></div>
 
-<header class="hero" th:classappend="${!edition.isShowEventInfos() and !edition.isShowLineup() and !(edition.isShowFaq() and !faqEntries.isEmpty())} ? 'hero--standalone' : ''">
+<header class="hero"
+        th:with="allSectionsHidden=${!edition.isShowEventInfos() and !edition.isShowLineup() and !(edition.isShowFaq() and !faqEntries.isEmpty())}"
+        th:classappend="${allSectionsHidden} ? 'hero--standalone' : ''">
     <div class="hero-inner">
         <img class="hero-logo" th:if="${edition.logoImagePath}" th:src="${edition.logoImagePath}" th:alt="${edition.title}"/>
         <th:block th:unless="${edition.logoImagePath}">
             <h1 class="hero-title" th:text="${edition.title}">Grumbrechtstraßen Open Air</h1>
             <div class="hero-year" th:if="${not #strings.isEmpty(edition.displayLabel)}" th:text="${edition.displayLabel}">2026</div>
         </th:block>
+
+        <!-- With every section hidden, the hero would otherwise be the whole page -
+             give visitors somewhere to go besides a bare logo. Only on the current
+             edition's own page, not an archived year's or a Kneipenkonzert's. -->
+        <a class="hero-hall-of-fame-link" th:if="${allSectionsHidden and isCurrentView}" th:href="@{/hall-of-fame}">Hall of Fame</a>
 
         <a class="kneipenkonzert-teaser" th:if="${nextKneipenkonzert != null}"
            th:href="@{'/kneipenkonzerte/' + ${nextKneipenkonzert.id}}">

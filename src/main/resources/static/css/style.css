@@ -402,6 +402,26 @@ img { max-width: 100%; display: block; }
     margin-top: 0.25rem;
 }
 
+.hero-hall-of-fame-link {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.9rem 2.2rem;
+    background: var(--color-accent);
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    text-decoration: none;
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-hall-of-fame-link:hover {
+    transform: scale(1.05);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
 .kneipenkonzert-teaser {
     display: flex;
     flex-direction: column;
