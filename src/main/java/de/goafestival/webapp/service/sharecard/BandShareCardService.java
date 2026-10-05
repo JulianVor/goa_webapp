@@ -44,6 +44,12 @@ public class BandShareCardService {
     private static final int WIDTH = 1080;
     private static final int HEIGHT = 1350;
 
+    // Bumped whenever render(Band) visually changes - folded into the cache filename so a
+    // code deploy invalidates every cached card on its own. Without this, redeploying a
+    // design tweak would keep serving pre-existing PNGs from disk indefinitely, since the
+    // on-disk cache otherwise only reacts to band/edition *data* changes, not code changes.
+    private static final int RENDER_VERSION = 2;
+
     private final BandRepository bandRepository;
     private final Path uploadRoot;
     private final Path cacheDir;
@@ -80,7 +86,7 @@ public class BandShareCardService {
      * band or its edition's branding changes, so it's safe to keep indefinitely otherwise.
      */
     public byte[] renderCached(Band band) throws IOException {
-        Path cached = cacheDir.resolve(band.getId() + ".png");
+        Path cached = cacheDir.resolve(cacheFilename(band.getId()));
         if (Files.exists(cached)) {
             return Files.readAllBytes(cached);
         }
@@ -92,10 +98,14 @@ public class BandShareCardService {
     /** Drops the cached share card for one band, e.g. after it was edited. */
     public void invalidate(Long bandId) {
         try {
-            Files.deleteIfExists(cacheDir.resolve(bandId + ".png"));
+            Files.deleteIfExists(cacheDir.resolve(cacheFilename(bandId)));
         } catch (IOException e) {
             log.warn("Konnte den Share-Karten-Cache für Band {} nicht löschen.", bandId, e);
         }
+    }
+
+    private String cacheFilename(Long bandId) {
+        return bandId + "-v" + RENDER_VERSION + ".png";
     }
 
     /**
