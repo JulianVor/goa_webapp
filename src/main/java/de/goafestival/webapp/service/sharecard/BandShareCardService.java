@@ -1,0 +1,415 @@
+package de.goafestival.webapp.service.sharecard;
+
+import de.goafestival.webapp.domain.Band;
+import de.goafestival.webapp.domain.Edition;
+import de.goafestival.webapp.domain.Location;
+import de.goafestival.webapp.repository.BandRepository;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Renders a shareable "trading card" style PNG for one band - built to be posted to an
+ * Instagram story/feed, so it reuses that year's existing branding (background image,
+ * logo, colors) rather than needing any extra artwork per band. Everything is drawn with
+ * Java2D directly onto a 1080x1350 canvas (Instagram's portrait post size).
+ */
+@Service
+public class BandShareCardService {
+
+    private static final Logger log = LoggerFactory.getLogger(BandShareCardService.class);
+
+    private static final int WIDTH = 1080;
+    private static final int HEIGHT = 1350;
+
+    private final BandRepository bandRepository;
+    private final Path uploadRoot;
+    private Font displayFont;
+
+    public BandShareCardService(BandRepository bandRepository, @Value("${app.upload-dir:uploads}") String uploadDir) {
+        this.bandRepository = bandRepository;
+        this.uploadRoot = Path.of(uploadDir).toAbsolutePath().normalize();
+    }
+
+    @PostConstruct
+    void loadFont() {
+        // Reuses the site's own display font (see --font-display in style.css) so the
+        // card looks like it belongs to the site instead of introducing a second typeface.
+        try (InputStream in = getClass().getResourceAsStream("/static/fonts/Brugty.ttf")) {
+            displayFont = Font.createFont(Font.TRUETYPE_FONT, in);
+        } catch (IOException | FontFormatException e) {
+            log.warn("Konnte die Schriftart für die Share-Karte nicht laden, falle auf eine Systemschrift zurück.", e);
+            displayFont = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+        }
+    }
+
+    /** 1-based position of this band within its edition's whole running order (day-spanning). */
+    public int slotNumber(Band band) {
+        List<Band> ordered = bandRepository.findByEditionIdOrderByPerformanceAtAsc(band.getEdition().getId());
+        for (int i = 0; i < ordered.size(); i++) {
+            if (ordered.get(i).getId().equals(band.getId())) {
+                return i + 1;
+            }
+        }
+        return 1;
+    }
+
+    public byte[] render(Band band) throws IOException {
+        Edition edition = band.getEdition();
+        int slot = slotNumber(band);
+
+        BufferedImage canvas = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = canvas.createGraphics();
+        try {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            Color primary = parseColor(edition.getColorPrimary(), new Color(0x4a1f2b));
+            Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
+            Color secondary = parseColor(edition.getColorSecondary(), new Color(0xc0392b));
+
+            paintBorderBackground(g, edition, primary);
+
+            int outerMargin = 32;
+            int cardX = outerMargin, cardY = outerMargin;
+            int cardW = WIDTH - 2 * outerMargin, cardH = HEIGHT - 2 * outerMargin;
+            int cardRadius = 56;
+
+            paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, withAlpha(primary, 235));
+
+            int pad = 40;
+            int contentX = cardX + pad;
+            int contentW = cardW - 2 * pad;
+            int rightEdge = cardX + cardW - pad;
+
+            // --- header: band name + slot number ---
+            int headerY = cardY + pad;
+            Font nameFont = fitFont(g, band.getName().toUpperCase(Locale.GERMAN), displayFont, 72, 36, contentW - 140);
+            g.setFont(nameFont);
+            g.setColor(accent);
+            FontMetrics nameMetrics = g.getFontMetrics();
+            int nameBaseline = headerY + nameMetrics.getAscent();
+            g.drawString(band.getName().toUpperCase(Locale.GERMAN), contentX, nameBaseline);
+
+            String slotLabel = String.format("No. %02d", slot);
+            Font slotFont = displayFont.deriveFont(38f);
+            g.setFont(slotFont);
+            FontMetrics slotMetrics = g.getFontMetrics();
+            g.drawString(slotLabel, rightEdge - slotMetrics.stringWidth(slotLabel), headerY + slotMetrics.getAscent());
+
+            int headerHeight = Math.max(nameMetrics.getAscent() + nameMetrics.getDescent(), slotMetrics.getAscent() + slotMetrics.getDescent());
+
+            // --- band photo ---
+            int photoY = headerY + headerHeight + 28;
+            int photoH = 660;
+            int photoRadius = 28;
+            BufferedImage photo = loadImage(band.getMainImagePath());
+            paintPanel(g, contentX, photoY, contentW, photoH, photoRadius, Color.BLACK);
+            withClip(g, contentX, photoY, contentW, photoH, photoRadius, clipped -> {
+                if (photo != null) {
+                    BufferedImage toned = duotone(photo, new Color(0x1a0a08), secondary);
+                    drawCover(clipped, toned, contentX, photoY, contentW, photoH);
+                } else {
+                    paintPlaceholderGradient(clipped, contentX, photoY, contentW, photoH, primary, secondary);
+                }
+            });
+
+            // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
+            BufferedImage logo = loadImage(edition.getLogoImagePath());
+            if (logo != null) {
+                int badgeSize = 180;
+                int badgeCx = contentX + contentW - 110;
+                int badgeCy = photoY + 100;
+                AffineTransform oldTransform = g.getTransform();
+                g.rotate(Math.toRadians(-14), badgeCx, badgeCy);
+                g.setColor(withAlpha(Color.WHITE, 235));
+                g.fill(new Ellipse2D.Float(badgeCx - badgeSize / 2f - 8, badgeCy - badgeSize / 2f - 8, badgeSize + 16, badgeSize + 16));
+                double logoScale = Math.min((double) badgeSize / logo.getWidth(), (double) badgeSize / logo.getHeight());
+                int lw = (int) Math.round(logo.getWidth() * logoScale);
+                int lh = (int) Math.round(logo.getHeight() * logoScale);
+                g.drawImage(logo, badgeCx - lw / 2, badgeCy - lh / 2, lw, lh, null);
+                g.setTransform(oldTransform);
+            }
+
+            // --- info panels ---
+            int panelGap = 20;
+            int panelY = photoY + photoH + 24;
+            int panelRadius = 24;
+            Color panelBg = withAlpha(Color.WHITE, 242);
+            Color textColor = new Color(0x2a1a1a);
+
+            boolean hasGenre = StringUtils.hasText(band.getGenre());
+            boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
+            if (hasGenre || hasHerkunft) {
+                int panelH = 118;
+                paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                int half = contentW / 2;
+                if (hasGenre) {
+                    drawIconLabelValue(g, iconMusicNote(), contentX + 28, panelY, half - 28, panelH, "Genre", band.getGenre(), textColor);
+                }
+                if (hasHerkunft) {
+                    drawIconLabelValue(g, iconPin(), contentX + half + 28, panelY, half - 56, panelH, "Herkunft", band.getHerkunft(), textColor);
+                }
+                if (hasGenre && hasHerkunft) {
+                    g.setColor(new Color(0, 0, 0, 40));
+                    g.fillRect(contentX + half, panelY + 20, 2, panelH - 40);
+                }
+                panelY += panelH + panelGap;
+            }
+
+            if (band.getPerformanceAt() != null) {
+                int panelH = 96;
+                paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                String label = formatPerformanceLabel(band);
+                drawCenteredIconText(g, iconCalendar(), contentX, panelY, contentW, panelH, label, textColor);
+                panelY += panelH + panelGap;
+            }
+
+            Location location = edition.getLocation();
+            if (location != null && StringUtils.hasText(location.getName())) {
+                int panelH = 96;
+                paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                String label = StringUtils.hasText(location.getZipCity())
+                        ? location.getName() + ", " + location.getZipCity()
+                        : location.getName();
+                drawCenteredIconText(g, iconPin(), contentX, panelY, contentW, panelH, label, textColor);
+            }
+        } finally {
+            g.dispose();
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(canvas, "png", out);
+        return out.toByteArray();
+    }
+
+    private String formatPerformanceLabel(Band band) {
+        DateTimeFormatter dayMonth = DateTimeFormatter.ofPattern("EEEE d. MMMM", Locale.GERMAN);
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm", Locale.GERMAN);
+        return dayMonth.format(band.getPerformanceAt()) + " " + time.format(band.getPerformanceAt()) + " Uhr";
+    }
+
+    // ---------------------------------------------------------------- drawing helpers
+
+    private void paintBorderBackground(Graphics2D g, Edition edition, Color fallback) {
+        BufferedImage background = loadImage(edition.getBackgroundImagePath());
+        if (background != null) {
+            drawCover(g, background, 0, 0, WIDTH, HEIGHT);
+        } else {
+            g.setColor(fallback.darker());
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+        }
+    }
+
+    private void paintPanel(Graphics2D g, int x, int y, int w, int h, int radius, Color color) {
+        g.setColor(color);
+        g.fill(new RoundRectangle2D.Float(x, y, w, h, radius, radius));
+    }
+
+    private void paintPlaceholderGradient(Graphics2D g, int x, int y, int w, int h, Color from, Color to) {
+        Paint previous = g.getPaint();
+        g.setPaint(new GradientPaint(x, y, from, x + w, y + h, to));
+        g.fillRect(x, y, w, h);
+        g.setPaint(previous);
+    }
+
+    private interface ClippedDraw {
+        void draw(Graphics2D g);
+    }
+
+    private void withClip(Graphics2D g, int x, int y, int w, int h, int radius, ClippedDraw draw) {
+        Shape oldClip = g.getClip();
+        g.setClip(new RoundRectangle2D.Float(x, y, w, h, radius, radius));
+        draw.draw(g);
+        g.setClip(oldClip);
+    }
+
+    /** Scales+crops an image to fill the given rect, like CSS background-size: cover. */
+    private void drawCover(Graphics2D g, BufferedImage img, int x, int y, int w, int h) {
+        double scale = Math.max((double) w / img.getWidth(), (double) h / img.getHeight());
+        int sw = (int) Math.ceil(img.getWidth() * scale);
+        int sh = (int) Math.ceil(img.getHeight() * scale);
+        int sx = x - (sw - w) / 2;
+        int sy = y - (sh - h) / 2;
+        g.drawImage(img, sx, sy, sw, sh, null);
+    }
+
+    /** Maps the image's luminance onto a shadow-to-highlight color ramp (a vintage photo-poster look). */
+    private BufferedImage duotone(BufferedImage src, Color shadow, Color highlight) {
+        int w = src.getWidth(), h = src.getHeight();
+        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        int[] row = new int[w];
+        int[] outRow = new int[w];
+        for (int y = 0; y < h; y++) {
+            src.getRGB(0, y, w, 1, row, 0, w);
+            for (int x = 0; x < w; x++) {
+                int argb = row[x];
+                int a = (argb >>> 24) & 0xFF;
+                int r = (argb >> 16) & 0xFF, gC = (argb >> 8) & 0xFF, b = argb & 0xFF;
+                double lum = (0.299 * r + 0.587 * gC + 0.114 * b) / 255.0;
+                int nr = clamp((int) Math.round(shadow.getRed() + lum * (highlight.getRed() - shadow.getRed())));
+                int ng = clamp((int) Math.round(shadow.getGreen() + lum * (highlight.getGreen() - shadow.getGreen())));
+                int nb = clamp((int) Math.round(shadow.getBlue() + lum * (highlight.getBlue() - shadow.getBlue())));
+                outRow[x] = (a << 24) | (nr << 16) | (ng << 8) | nb;
+            }
+            out.setRGB(0, y, w, 1, outRow, 0, w);
+        }
+        return out;
+    }
+
+    private int clamp(int v) {
+        return Math.max(0, Math.min(255, v));
+    }
+
+    private Color withAlpha(Color c, int alpha) {
+        return new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+    }
+
+    private Color parseColor(String hex, Color fallback) {
+        if (!StringUtils.hasText(hex)) {
+            return fallback;
+        }
+        try {
+            return Color.decode(hex);
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
+    }
+
+    /** Shrinks the font until the given text fits within maxWidth, down to a minimum size. */
+    private Font fitFont(Graphics2D g, String text, Font base, float startSize, float minSize, int maxWidth) {
+        float size = startSize;
+        while (size > minSize) {
+            Font candidate = base.deriveFont(size);
+            FontRenderContext frc = g.getFontRenderContext();
+            double width = new TextLayout(text, candidate, frc).getBounds().getWidth();
+            if (width <= maxWidth) {
+                return candidate;
+            }
+            size -= 2;
+        }
+        return base.deriveFont(minSize);
+    }
+
+    private BufferedImage loadImage(String publicPath) {
+        if (!StringUtils.hasText(publicPath) || !publicPath.startsWith("/uploads/")) {
+            return null;
+        }
+        Path file = uploadRoot.resolve(publicPath.substring("/uploads/".length())).normalize();
+        if (!file.startsWith(uploadRoot) || !Files.exists(file)) {
+            return null;
+        }
+        try (InputStream in = Files.newInputStream(file)) {
+            return ImageIO.read(in);
+        } catch (IOException e) {
+            log.warn("Konnte Bild für die Share-Karte nicht laden: {}", file, e);
+            return null;
+        }
+    }
+
+    // ---------------------------------------------------------------- icons (hand-drawn, no asset files)
+
+    private void drawIconLabelValue(Graphics2D g, Path2D icon, int x, int y, int w, int h, String label, String value, Color color) {
+        int iconSize = 30;
+        int iconX = x;
+        int iconY = y + h / 2 - iconSize / 2;
+        g.setColor(color);
+        drawIcon(g, icon, iconX, iconY, iconSize);
+
+        int textX = iconX + iconSize + 16;
+        Font labelFont = new Font(Font.SANS_SERIF, Font.PLAIN, 22);
+        Font valueFont = displayFont.deriveFont(34f);
+        g.setFont(labelFont);
+        FontMetrics lm = g.getFontMetrics();
+        int centerY = y + h / 2;
+        g.setColor(withAlpha(color, 170));
+        g.drawString(label, textX, centerY - 4);
+
+        g.setFont(fitFont(g, value, valueFont, 34, 18, Math.max(40, x + w - textX)));
+        FontMetrics vm = g.getFontMetrics();
+        g.setColor(color);
+        g.drawString(value, textX, centerY - 4 + lm.getDescent() + vm.getAscent());
+    }
+
+    private void drawCenteredIconText(Graphics2D g, Path2D icon, int x, int y, int w, int h, String text, Color color) {
+        Font font = fitFont(g, text, displayFont.deriveFont(36f), 36, 20, w - 160);
+        g.setFont(font);
+        FontMetrics fm = g.getFontMetrics();
+        int iconSize = 30;
+        int textWidth = fm.stringWidth(text);
+        int totalWidth = iconSize + 14 + textWidth;
+        int startX = x + (w - totalWidth) / 2;
+        g.setColor(color);
+        drawIcon(g, icon, startX, y + h / 2 - iconSize / 2, iconSize);
+        g.drawString(text, startX + iconSize + 14, y + h / 2 - (fm.getAscent() + fm.getDescent()) / 2 + fm.getAscent());
+    }
+
+    private void drawIcon(Graphics2D g, Path2D template, int x, int y, int size) {
+        AffineTransform t = AffineTransform.getTranslateInstance(x, y);
+        t.scale(size / 24.0, size / 24.0);
+        g.fill(t.createTransformedShape(template));
+    }
+
+    /** A simple eighth-note glyph, drawn on a 24x24 grid (plain union of positive shapes). */
+    private Path2D iconMusicNote() {
+        Path2D path = new Path2D.Float();
+        path.append(new Ellipse2D.Float(2, 15, 7.5f, 6), false);
+        path.append(new Rectangle2D.Float(8.3f, 2, 2.2f, 16.5f), false);
+        Path2D flag = new Path2D.Float();
+        flag.moveTo(10.5, 2);
+        flag.curveTo(17, 3.5, 17, 9.5, 10.5, 11.5);
+        flag.lineTo(10.5, 8);
+        flag.curveTo(14.5, 6.8, 14.5, 4.2, 10.5, 2);
+        flag.closePath();
+        path.append(flag, false);
+        return path;
+    }
+
+    /** A simple map-pin glyph, drawn on a 24x24 grid: outline with a circular hole punched via even-odd winding. */
+    private Path2D iconPin() {
+        Path2D outline = new Path2D.Float();
+        outline.moveTo(12, 23);
+        outline.curveTo(12, 23, 4, 14.5, 4, 9);
+        outline.curveTo(4, 4.6, 7.6, 1, 12, 1);
+        outline.curveTo(16.4, 1, 20, 4.6, 20, 9);
+        outline.curveTo(20, 14.5, 12, 23, 12, 23);
+        outline.closePath();
+        Path2D result = new Path2D.Float(Path2D.WIND_EVEN_ODD);
+        result.append(outline, false);
+        result.append(new Ellipse2D.Float(8.2f, 5.2f, 7.6f, 7.6f), false);
+        return result;
+    }
+
+    /** A simple calendar glyph, drawn on a 24x24 grid: body plus two top tabs (plain union, no holes). */
+    private Path2D iconCalendar() {
+        Path2D path = new Path2D.Float();
+        path.append(new RoundRectangle2D.Float(1.5f, 4, 21, 18, 4, 4), false);
+        path.append(new RoundRectangle2D.Float(4.3f, 0.5f, 2.6f, 6.5f, 1.3f, 1.3f), false);
+        path.append(new RoundRectangle2D.Float(17.1f, 0.5f, 2.6f, 6.5f, 1.3f, 1.3f), false);
+        return path;
+    }
+}

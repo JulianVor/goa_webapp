@@ -47,6 +47,11 @@
                 <img th:src="@{/img/icons/youtube.svg}" alt="YouTube"/>
             </a>
         </div>
+
+        <a class="band-detail-share-btn" th:href="@{'/bands/' + ${band.id} + '/share-card.png'}"
+           th:download="${'goa-' + band.name}" target="_blank" rel="noopener">
+            📸 Teilen-Karte herunterladen
+        </a>
     </div>
 </section>
 
