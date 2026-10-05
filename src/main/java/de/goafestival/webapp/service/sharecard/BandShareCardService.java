@@ -88,7 +88,11 @@ public class BandShareCardService {
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            Color primary = parseColor(edition.getColorSecondary(), new Color(0x4a1f2b));
+            // The card's background panel uses the real Primärfarbe (not yet used anywhere
+            // else on the site) - falls back to the Sekundärfarbe for an edition that hasn't
+            // had one set yet, so older/archived editions still render a sensible card.
+            String primaryHex = StringUtils.hasText(edition.getColorPrimary()) ? edition.getColorPrimary() : edition.getColorSecondary();
+            Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
             Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
             Color secondary = parseColor(edition.getColorAccent2(), new Color(0xc0392b));
 
