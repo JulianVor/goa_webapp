@@ -105,6 +105,7 @@ public class BandShareCardService {
             int cardRadius = 56;
 
             paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, withAlpha(primary, 235));
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker().darker(), 8f);
 
             int pad = 40;
             int contentX = cardX + pad;
@@ -243,9 +244,13 @@ public class BandShareCardService {
     }
 
     private void paintPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color color) {
+        paintPanelBorder(g, x, y, w, h, radius, color, 4f);
+    }
+
+    private void paintPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color color, float strokeWidth) {
         g.setColor(color);
-        g.setStroke(new BasicStroke(4f));
-        float inset = 2f;
+        g.setStroke(new BasicStroke(strokeWidth));
+        float inset = strokeWidth / 2f;
         g.draw(new RoundRectangle2D.Float(x + inset, y + inset, w - 2 * inset, h - 2 * inset, radius, radius));
     }
 
