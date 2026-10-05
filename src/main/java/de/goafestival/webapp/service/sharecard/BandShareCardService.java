@@ -300,9 +300,14 @@ public class BandShareCardService {
         }
     }
 
-    /** Shrinks the font until the given text fits within maxWidth, down to a minimum size. */
-    private Font fitFont(Graphics2D g, String text, Font base, float startSize, float minSize, int maxWidth) {
-        float size = startSize;
+    /**
+     * Picks the largest size (down to a minimum) at which the text fits within maxWidth -
+     * so a short value (e.g. "Hamburg") renders much bigger than a long one (e.g.
+     * "Psychedelic Noise Punk") instead of both settling for one size picked to fit the
+     * longest case.
+     */
+    private Font fitFont(Graphics2D g, String text, Font base, float maxSize, float minSize, int maxWidth) {
+        float size = maxSize;
         while (size > minSize) {
             Font candidate = base.deriveFont(size);
             FontRenderContext frc = g.getFontRenderContext();
@@ -342,21 +347,27 @@ public class BandShareCardService {
 
         int textX = iconX + iconSize + 18;
         Font labelFont = new Font(Font.SANS_SERIF, Font.PLAIN, 27);
-        Font valueFont = displayFont.deriveFont(46f);
         g.setFont(labelFont);
         FontMetrics lm = g.getFontMetrics();
         int centerY = y + h / 2;
         g.setColor(withAlpha(color, 170));
         g.drawString(label, textX, centerY - 10);
 
-        g.setFont(fitFont(g, value, valueFont, 46, 24, Math.max(40, x + w - textX)));
+        // Capped by both the column width (long values shrink) and what's left of the
+        // panel's height below the label (very short values don't grow tall enough to
+        // collide with it).
+        int availableWidth = Math.max(40, x + w - textX);
+        int availableHeight = Math.max(24, y + h - (centerY - 10 + lm.getDescent()) - 14);
+        float maxValueSize = Math.min(72, availableHeight);
+        g.setFont(fitFont(g, value, displayFont, maxValueSize, 24, availableWidth));
         FontMetrics vm = g.getFontMetrics();
         g.setColor(color);
         g.drawString(value, textX, centerY - 10 + lm.getDescent() + vm.getAscent());
     }
 
     private void drawCenteredIconText(Graphics2D g, Path2D icon, int x, int y, int w, int h, String text, Color color) {
-        Font font = fitFont(g, text, displayFont.deriveFont(48f), 48, 26, w - 170);
+        float maxSize = Math.min(72, h - 36);
+        Font font = fitFont(g, text, displayFont, maxSize, 26, w - 170);
         g.setFont(font);
         FontMetrics fm = g.getFontMetrics();
         int iconSize = 38;
