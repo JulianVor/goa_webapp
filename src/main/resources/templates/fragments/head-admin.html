@@ -10,6 +10,6 @@
          edition's colors instead of a fixed color, via CSS custom properties admin.css reads
          with a fallback - so it still looks fine before any edition exists. -->
     <style th:if="${currentEdition != null}"
-           th:utext="':root{--admin-primary:' + ${currentEdition.colorPrimary} + ';--admin-secondary:' + ${currentEdition.colorSecondary} + ';--admin-accent:' + ${currentEdition.colorAccent} + ';}'"></style>
+           th:utext="':root{--admin-primary:' + ${currentEdition.colorSecondary} + ';--admin-secondary:' + ${currentEdition.colorAccent2} + ';--admin-accent:' + ${currentEdition.colorAccent} + ';}'"></style>
 </head>
 </html>

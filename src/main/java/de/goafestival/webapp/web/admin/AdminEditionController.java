@@ -38,6 +38,7 @@ public class AdminEditionController {
         editionService.findCurrent().ifPresent(current -> {
             form.setColorPrimary(current.getColorPrimary());
             form.setColorSecondary(current.getColorSecondary());
+            form.setColorAccent2(current.getColorAccent2());
             form.setColorAccent(current.getColorAccent());
         });
         model.addAttribute("editionForm", form);
@@ -110,6 +111,7 @@ public class AdminEditionController {
         form.setAboutText(edition.getAboutText());
         form.setColorPrimary(edition.getColorPrimary());
         form.setColorSecondary(edition.getColorSecondary());
+        form.setColorAccent2(edition.getColorAccent2());
         form.setColorAccent(edition.getColorAccent());
         form.setCurrent(edition.isCurrent());
         form.setShowEventInfos(edition.isShowEventInfos());

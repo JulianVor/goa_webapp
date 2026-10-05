@@ -189,8 +189,8 @@ public class NewsletterService {
         Context context = new Context();
         context.setVariable("contentHtml", contentHtml);
         context.setVariable("unsubscribeUrl", unsubscribeUrl);
-        context.setVariable("colorPrimary", edition != null ? edition.getColorPrimary() : "#2f6f68");
-        context.setVariable("colorSecondary", edition != null ? edition.getColorSecondary() : "#e0559a");
+        context.setVariable("colorPrimary", edition != null ? edition.getColorSecondary() : "#2f6f68");
+        context.setVariable("colorSecondary", edition != null ? edition.getColorAccent2() : "#e0559a");
         context.setVariable("colorAccent", edition != null ? edition.getColorAccent() : "#f2c14e");
         context.setVariable("editionTitle", edition != null ? edition.getTitle() : "Newsletter");
         context.setVariable("logoUrl", (logoPath != null && !logoPath.isBlank()) ? baseUrl + logoPath : null);

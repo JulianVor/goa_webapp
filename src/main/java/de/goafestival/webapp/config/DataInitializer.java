@@ -61,8 +61,8 @@ public class DataInitializer implements CommandLineRunner {
         edition2026.setLocation(tipsyApes);
         edition2026.setAboutText("Das Grumbrechtstraßen Open Air ist ein Indie Rock / Metal Festival von Schanien "
                 + "Bands und Sherenernen über Bühnen bolten mobile.");
-        edition2026.setColorPrimary("#2f6f68");
-        edition2026.setColorSecondary("#e0559a");
+        edition2026.setColorSecondary("#2f6f68");
+        edition2026.setColorAccent2("#e0559a");
         edition2026.setColorAccent("#f2c14e");
         edition2026.setCurrent(true);
         edition2026 = editionRepository.save(edition2026);
@@ -106,8 +106,8 @@ public class DataInitializer implements CommandLineRunner {
         edition2025.setEndDate(LocalDate.of(2025, 7, 12));
         edition2025.setLocation(grumbrechtstrasse);
         edition2025.setAboutText("Die 60. Ausgabe des Grumbrechtstraßen Open Air – ein Rückblick.");
-        edition2025.setColorPrimary("#2e5fa3");
-        edition2025.setColorSecondary("#c9701f");
+        edition2025.setColorSecondary("#2e5fa3");
+        edition2025.setColorAccent2("#c9701f");
         edition2025.setColorAccent("#e07f22");
         edition2025.setCurrent(false);
         edition2025 = editionRepository.save(edition2025);

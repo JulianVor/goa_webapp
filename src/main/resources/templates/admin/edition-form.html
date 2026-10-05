@@ -71,9 +71,11 @@
 
         <fieldset>
             <legend>Farbkonzept</legend>
+            <p class="field-hint">Primärfarbe wird aktuell noch nirgends auf der Seite verwendet.</p>
             <div class="form-row colors">
-                <label>Sekundärfarbe<input type="color" th:field="*{colorPrimary}"/></label>
-                <label>2. Akzentfarbe<input type="color" th:field="*{colorSecondary}"/></label>
+                <label>Primärfarbe<input type="color" th:field="*{colorPrimary}"/></label>
+                <label>Sekundärfarbe<input type="color" th:field="*{colorSecondary}"/></label>
+                <label>2. Akzentfarbe<input type="color" th:field="*{colorAccent2}"/></label>
                 <label>Akzentfarbe<input type="color" th:field="*{colorAccent}"/></label>
             </div>
         </fieldset>

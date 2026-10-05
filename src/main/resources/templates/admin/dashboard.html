@@ -22,7 +22,7 @@
 
     <div class="dashboard-stats">
         <div class="stat-card" th:if="${currentEditionStat != null}">
-            <div class="stat-card-thumb" th:style="${not #strings.isEmpty(currentEditionStat.backgroundImagePath)} ? ('background-image:url(' + ${currentEditionStat.backgroundImagePath} + ');') : ('background-color:' + ${currentEditionStat.colorPrimary} + ';')"></div>
+            <div class="stat-card-thumb" th:style="${not #strings.isEmpty(currentEditionStat.backgroundImagePath)} ? ('background-image:url(' + ${currentEditionStat.backgroundImagePath} + ');') : ('background-color:' + ${currentEditionStat.colorSecondary} + ';')"></div>
             <div class="stat-card-body">
                 <span class="stat-label">Aktuelle Ausgabe</span>
                 <span class="stat-value" th:text="${currentEditionStat.title}">Grumbrechtstraßen Open Air</span>
@@ -71,7 +71,7 @@
     <div class="tab-panel" data-tab-panel="festivals">
         <div class="edition-card-grid">
             <div class="edition-card" th:each="edition : ${editions}">
-                <div class="edition-card-thumb" th:style="${not #strings.isEmpty(edition.backgroundImagePath)} ? ('background-image:url(' + ${edition.backgroundImagePath} + ');') : ('background-color:' + ${edition.colorPrimary} + ';')">
+                <div class="edition-card-thumb" th:style="${not #strings.isEmpty(edition.backgroundImagePath)} ? ('background-image:url(' + ${edition.backgroundImagePath} + ');') : ('background-color:' + ${edition.colorSecondary} + ';')">
                     <span class="badge badge-current" th:if="${edition.current}">aktuell</span>
                     <span class="badge" th:unless="${edition.current}">Archiv</span>
                     <div class="edition-card-thumb-logos" th:if="${not #strings.isEmpty(edition.logoImagePath) or not #strings.isEmpty(edition.locationImagePath)}">
@@ -109,7 +109,7 @@
     <div class="tab-panel" data-tab-panel="kneipenkonzerte" hidden="hidden">
         <div class="edition-card-grid">
             <div class="edition-card" th:each="show : ${kneipenkonzerte}">
-                <div class="edition-card-thumb" th:style="${not #strings.isEmpty(show.backgroundImagePath)} ? ('background-image:url(' + ${show.backgroundImagePath} + ');') : ('background-color:' + ${show.colorPrimary} + ';')">
+                <div class="edition-card-thumb" th:style="${not #strings.isEmpty(show.backgroundImagePath)} ? ('background-image:url(' + ${show.backgroundImagePath} + ');') : ('background-color:' + ${show.colorSecondary} + ';')">
                     <span class="badge badge-current" th:if="${show.startDate != null and !show.startDate.isBefore(T(java.time.LocalDate).now())}">kommend</span>
                     <span class="badge" th:unless="${show.startDate != null and !show.startDate.isBefore(T(java.time.LocalDate).now())}">vergangen</span>
                     <div class="edition-card-thumb-logos" th:if="${not #strings.isEmpty(show.logoImagePath) or not #strings.isEmpty(show.locationImagePath)}">

@@ -57,7 +57,7 @@
      one signup for the whole site, not a per-edition thing. -->
 <div class="modal-overlay newsletter-modal" id="newsletter-modal" th:if="${currentEdition != null and newsletterEnabled}"
      th:classappend="${newsletterSuccess != null or newsletterError != null} ? ' open' : ''"
-     th:style="|--color-primary: ${currentEdition.colorPrimary}; --color-secondary: ${currentEdition.colorSecondary}; --color-accent: ${currentEdition.colorAccent}; --color-text: ${currentEdition.colorAccent};|">
+     th:style="|--color-primary: ${currentEdition.colorSecondary}; --color-secondary: ${currentEdition.colorAccent2}; --color-accent: ${currentEdition.colorAccent}; --color-text: ${currentEdition.colorAccent};|">
     <div class="modal-box">
         <button type="button" class="modal-close" aria-label="Schließen">&times;</button>
         <h3>Newsletter abonnieren</h3>

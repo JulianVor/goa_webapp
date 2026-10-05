@@ -88,9 +88,9 @@ public class BandShareCardService {
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            Color primary = parseColor(edition.getColorPrimary(), new Color(0x4a1f2b));
+            Color primary = parseColor(edition.getColorSecondary(), new Color(0x4a1f2b));
             Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
-            Color secondary = parseColor(edition.getColorSecondary(), new Color(0xc0392b));
+            Color secondary = parseColor(edition.getColorAccent2(), new Color(0xc0392b));
 
             paintBorderBackground(g, edition, primary);
 

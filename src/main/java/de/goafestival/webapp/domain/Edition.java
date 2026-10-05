@@ -62,8 +62,10 @@ public class Edition {
     @Column(length = 4000)
     private String aboutText;
 
-    private String colorPrimary = "#2f6f68";
-    private String colorSecondary = "#e0559a";
+    /** The "true" primary/brand color (e.g. Bordeaux red for 2026) - not yet used anywhere in rendering. */
+    private String colorPrimary;
+    private String colorSecondary = "#2f6f68";
+    private String colorAccent2 = "#e0559a";
     private String colorAccent = "#f2c14e";
 
     private String logoImagePath;
@@ -211,6 +213,14 @@ public class Edition {
 
     public void setColorSecondary(String colorSecondary) {
         this.colorSecondary = colorSecondary;
+    }
+
+    public String getColorAccent2() {
+        return colorAccent2;
+    }
+
+    public void setColorAccent2(String colorAccent2) {
+        this.colorAccent2 = colorAccent2;
     }
 
     public String getColorAccent() {

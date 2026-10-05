@@ -145,3 +145,29 @@ BEGIN
 
     UPDATE editions SET display_label = '' WHERE type = 'KNEIPENKONZERT' AND display_label <> '';
 END $$//
+
+-- Added when a genuine "Primärfarbe" (e.g. Bordeaux red for 2026, not used yet) was
+-- introduced: what used to be stored as color_primary/color_secondary was actually
+-- always the Sekundärfarbe/2. Akzentfarbe (see admin/edition-form.html) - shift the
+-- existing values over one step via a temp name before Hibernate would otherwise just
+-- bolt a fresh, empty color_primary onto the old data. Only runs once (guarded by
+-- color_accent2 not existing yet); a brand new database never has color_primary at
+-- this point (Hibernate hasn't created the table yet), so it's a no-op there too.
+DO $$
+BEGIN
+    IF to_regclass('editions') IS NULL THEN
+        RETURN;
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'editions' AND column_name = 'color_primary'
+    ) AND NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'editions' AND column_name = 'color_accent2'
+    ) THEN
+        ALTER TABLE editions RENAME COLUMN color_secondary TO color_accent2;
+        ALTER TABLE editions RENAME COLUMN color_primary TO color_secondary;
+        ALTER TABLE editions ADD COLUMN color_primary varchar(255);
+    END IF;
+END $$//

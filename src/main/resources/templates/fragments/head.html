@@ -15,8 +15,8 @@
           th:href="${effectiveBackground}"/>
     <style th:if="${edition != null}" th:utext="|
         :root {
-            --color-primary: ${edition.colorPrimary};
-            --color-secondary: ${edition.colorSecondary};
+            --color-primary: ${edition.colorSecondary};
+            --color-secondary: ${edition.colorAccent2};
             --color-accent: ${edition.colorAccent};
             --color-text: ${edition.colorAccent};
             --bg-image: url('${effectiveBackground ?: ''}');

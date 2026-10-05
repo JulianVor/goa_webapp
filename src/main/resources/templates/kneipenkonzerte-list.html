@@ -16,7 +16,7 @@
     <div class="show-grid" th:if="${!upcoming.isEmpty()}">
         <a class="show-card" th:classappend="${show.logoImagePath == null and show.backgroundImagePath == null} ? 'show-card-noimage' : ''"
            th:each="show : ${upcoming}" th:href="@{'/kneipenkonzerte/' + ${show.id}}"
-           th:style="|--color-primary: ${show.colorPrimary}; --color-secondary: ${show.colorSecondary}; --color-accent: ${show.colorAccent}; --color-text: ${show.colorAccent};|">
+           th:style="|--color-primary: ${show.colorSecondary}; --color-secondary: ${show.colorAccent2}; --color-accent: ${show.colorAccent}; --color-text: ${show.colorAccent};|">
             <img th:if="${show.logoImagePath ?: show.backgroundImagePath}"
                  th:src="${show.logoImagePath ?: show.backgroundImagePath}" th:alt="${show.title}" loading="lazy"/>
             <div class="show-card-overlay">
@@ -38,7 +38,7 @@
     <div class="show-grid">
         <a class="show-card show-card-past" th:classappend="${show.logoImagePath == null and show.backgroundImagePath == null} ? 'show-card-noimage' : ''"
            th:each="show : ${past}" th:href="@{'/kneipenkonzerte/' + ${show.id}}"
-           th:style="|--color-primary: ${show.colorPrimary}; --color-secondary: ${show.colorSecondary}; --color-accent: ${show.colorAccent}; --color-text: ${show.colorAccent};|">
+           th:style="|--color-primary: ${show.colorSecondary}; --color-secondary: ${show.colorAccent2}; --color-accent: ${show.colorAccent}; --color-text: ${show.colorAccent};|">
             <img th:if="${show.logoImagePath ?: show.backgroundImagePath}"
                  th:src="${show.logoImagePath ?: show.backgroundImagePath}" th:alt="${show.title}" loading="lazy"/>
             <div class="show-card-overlay">

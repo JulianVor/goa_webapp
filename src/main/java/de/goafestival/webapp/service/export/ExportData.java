@@ -40,6 +40,7 @@ public class ExportData {
         public String aboutText;
         public String colorPrimary;
         public String colorSecondary;
+        public String colorAccent2;
         public String colorAccent;
         public String logoImagePath;
         public String backgroundImagePath;
