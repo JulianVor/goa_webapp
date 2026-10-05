@@ -104,8 +104,8 @@ public class BandShareCardService {
             int cardW = WIDTH - 2 * outerMargin, cardH = HEIGHT - 2 * outerMargin;
             int cardRadius = 56;
 
-            paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, withAlpha(primary, 235));
-            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker().darker(), 8f);
+            paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, primary);
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker(), 8f);
 
             int pad = 40;
             int contentX = cardX + pad;
