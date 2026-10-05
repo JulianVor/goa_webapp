@@ -138,8 +138,8 @@ public class BandShareCardService {
             });
 
             // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
-            // No backing shape - the logo artwork is usually already its own self-contained
-            // badge/sticker graphic, so a plain disc behind it just adds an unwanted halo.
+            // No filled backing disc - just a thin accent-colored ring, matching the site's
+            // own convention (accent = light/thin accents, primary = the dark surface).
             BufferedImage logo = loadImage(edition.getLogoImagePath());
             if (logo != null) {
                 int badgeSize = 180;
@@ -151,6 +151,9 @@ public class BandShareCardService {
                 int lw = (int) Math.round(logo.getWidth() * logoScale);
                 int lh = (int) Math.round(logo.getHeight() * logoScale);
                 g.drawImage(logo, badgeCx - lw / 2, badgeCy - lh / 2, lw, lh, null);
+                g.setColor(accent);
+                g.setStroke(new BasicStroke(4f));
+                g.draw(new Ellipse2D.Float(badgeCx - badgeSize / 2f, badgeCy - badgeSize / 2f, badgeSize, badgeSize));
                 g.setTransform(oldTransform);
             }
 
@@ -158,7 +161,10 @@ public class BandShareCardService {
             int panelGap = 22;
             int panelY = photoY + photoH + 26;
             int panelRadius = 24;
-            Color panelBg = withAlpha(lighten(primary, 0.55f), 242);
+            // Dark panel (a shade of the primary color) with light accent-colored text on top -
+            // matches the site's own convention (accent = light, primary = dark) instead of
+            // the inverted light-panel/dark-text look used before.
+            Color panelBg = withAlpha(darken(primary, 0.22f), 242);
             Color textColor = accent;
 
             boolean hasGenre = StringUtils.hasText(band.getGenre());
@@ -288,11 +294,11 @@ public class BandShareCardService {
         return new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
     }
 
-    /** Blends a color toward white (0 = unchanged, 1 = white) - a tinted off-white instead of flat white. */
-    private Color lighten(Color c, float towardWhite) {
-        int r = clamp(Math.round(c.getRed() + (255 - c.getRed()) * towardWhite));
-        int g = clamp(Math.round(c.getGreen() + (255 - c.getGreen()) * towardWhite));
-        int b = clamp(Math.round(c.getBlue() + (255 - c.getBlue()) * towardWhite));
+    /** Blends a color toward black (0 = unchanged, 1 = black) - a shade of it instead of flat black. */
+    private Color darken(Color c, float towardBlack) {
+        int r = clamp(Math.round(c.getRed() * (1 - towardBlack)));
+        int g = clamp(Math.round(c.getGreen() * (1 - towardBlack)));
+        int b = clamp(Math.round(c.getBlue() * (1 - towardBlack)));
         return new Color(r, g, b);
     }
 
