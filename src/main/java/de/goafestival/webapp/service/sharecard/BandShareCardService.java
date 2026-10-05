@@ -131,14 +131,15 @@ public class BandShareCardService {
             paintPanel(g, contentX, photoY, contentW, photoH, photoRadius, Color.BLACK);
             withClip(g, contentX, photoY, contentW, photoH, photoRadius, clipped -> {
                 if (photo != null) {
-                    BufferedImage toned = duotone(photo, new Color(0x1a0a08), secondary);
-                    drawCover(clipped, toned, contentX, photoY, contentW, photoH);
+                    drawCover(clipped, photo, contentX, photoY, contentW, photoH);
                 } else {
                     paintPlaceholderGradient(clipped, contentX, photoY, contentW, photoH, primary, secondary);
                 }
             });
 
             // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
+            // No backing shape - the logo artwork is usually already its own self-contained
+            // badge/sticker graphic, so a plain disc behind it just adds an unwanted halo.
             BufferedImage logo = loadImage(edition.getLogoImagePath());
             if (logo != null) {
                 int badgeSize = 180;
@@ -146,8 +147,6 @@ public class BandShareCardService {
                 int badgeCy = photoY + 100;
                 AffineTransform oldTransform = g.getTransform();
                 g.rotate(Math.toRadians(-14), badgeCx, badgeCy);
-                g.setColor(withAlpha(Color.WHITE, 235));
-                g.fill(new Ellipse2D.Float(badgeCx - badgeSize / 2f - 8, badgeCy - badgeSize / 2f - 8, badgeSize + 16, badgeSize + 16));
                 double logoScale = Math.min((double) badgeSize / logo.getWidth(), (double) badgeSize / logo.getHeight());
                 int lw = (int) Math.round(logo.getWidth() * logoScale);
                 int lh = (int) Math.round(logo.getHeight() * logoScale);
@@ -159,8 +158,8 @@ public class BandShareCardService {
             int panelGap = 22;
             int panelY = photoY + photoH + 26;
             int panelRadius = 24;
-            Color panelBg = withAlpha(lighten(primary, 0.88f), 242);
-            Color textColor = new Color(0x2a1a1a);
+            Color panelBg = withAlpha(lighten(primary, 0.55f), 242);
+            Color textColor = accent;
 
             boolean hasGenre = StringUtils.hasText(band.getGenre());
             boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
