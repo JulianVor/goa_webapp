@@ -159,7 +159,7 @@ public class BandShareCardService {
             int panelGap = 22;
             int panelY = photoY + photoH + 26;
             int panelRadius = 24;
-            Color panelBg = withAlpha(Color.WHITE, 242);
+            Color panelBg = withAlpha(lighten(primary, 0.88f), 242);
             Color textColor = new Color(0x2a1a1a);
 
             boolean hasGenre = StringUtils.hasText(band.getGenre());
@@ -287,6 +287,14 @@ public class BandShareCardService {
 
     private Color withAlpha(Color c, int alpha) {
         return new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+    }
+
+    /** Blends a color toward white (0 = unchanged, 1 = white) - a tinted off-white instead of flat white. */
+    private Color lighten(Color c, float towardWhite) {
+        int r = clamp(Math.round(c.getRed() + (255 - c.getRed()) * towardWhite));
+        int g = clamp(Math.round(c.getGreen() + (255 - c.getGreen()) * towardWhite));
+        int b = clamp(Math.round(c.getBlue() + (255 - c.getBlue()) * towardWhite));
+        return new Color(r, g, b);
     }
 
     private Color parseColor(String hex, Color fallback) {
