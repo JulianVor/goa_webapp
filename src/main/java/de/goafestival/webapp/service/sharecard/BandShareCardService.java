@@ -142,8 +142,8 @@ public class BandShareCardService {
             });
 
             // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
-            // No filled backing disc - just a thin accent-colored ring, matching the site's
-            // own convention (accent = light/thin accents, primary = the dark surface).
+            // No backing shape or ring - just the logo artwork itself, which usually already
+            // brings its own shape/border.
             BufferedImage logo = loadImage(edition.getLogoImagePath());
             if (logo != null) {
                 int badgeSize = 180;
@@ -155,9 +155,6 @@ public class BandShareCardService {
                 int lw = (int) Math.round(logo.getWidth() * logoScale);
                 int lh = (int) Math.round(logo.getHeight() * logoScale);
                 g.drawImage(logo, badgeCx - lw / 2, badgeCy - lh / 2, lw, lh, null);
-                g.setColor(accent);
-                g.setStroke(new BasicStroke(4f));
-                g.draw(new Ellipse2D.Float(badgeCx - badgeSize / 2f, badgeCy - badgeSize / 2f, badgeSize, badgeSize));
                 g.setTransform(oldTransform);
             }
 
