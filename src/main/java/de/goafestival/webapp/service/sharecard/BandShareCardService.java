@@ -168,6 +168,9 @@ public class BandShareCardService {
             // panel, so they read as a clearly separate surface instead of blending into it -
             // accent-colored text on top keeps the same light-on-dark contrast as the header.
             Color panelBg = withAlpha(secondaryColor, 242);
+            // A brighter shade of the same Sekundärfarbe, not the flat color itself - an
+            // identically-colored border on a same-colored fill would be all but invisible.
+            Color panelBorderColor = secondaryColor.brighter().brighter();
             Color textColor = accent;
 
             boolean hasGenre = StringUtils.hasText(band.getGenre());
@@ -175,6 +178,7 @@ public class BandShareCardService {
             if (hasGenre || hasHerkunft) {
                 int panelH = 152;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                paintPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, panelBorderColor);
                 int half = contentW / 2;
                 if (hasGenre) {
                     drawIconLabelValue(g, iconMusicNote(), contentX + 32, panelY, half - 32, panelH, "Genre", band.getGenre(), textColor);
@@ -192,6 +196,7 @@ public class BandShareCardService {
             if (band.getPerformanceAt() != null) {
                 int panelH = 118;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                paintPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, panelBorderColor);
                 String label = formatPerformanceLabel(band);
                 drawCenteredIconText(g, iconCalendar(), contentX, panelY, contentW, panelH, label, textColor);
                 panelY += panelH + panelGap;
@@ -201,6 +206,7 @@ public class BandShareCardService {
             if (location != null && StringUtils.hasText(location.getName())) {
                 int panelH = 118;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                paintPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, panelBorderColor);
                 String label = StringUtils.hasText(location.getZipCity())
                         ? location.getName() + ", " + location.getZipCity()
                         : location.getName();
@@ -236,6 +242,13 @@ public class BandShareCardService {
     private void paintPanel(Graphics2D g, int x, int y, int w, int h, int radius, Color color) {
         g.setColor(color);
         g.fill(new RoundRectangle2D.Float(x, y, w, h, radius, radius));
+    }
+
+    private void paintPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color color) {
+        g.setColor(color);
+        g.setStroke(new BasicStroke(4f));
+        float inset = 2f;
+        g.draw(new RoundRectangle2D.Float(x + inset, y + inset, w - 2 * inset, h - 2 * inset, radius, radius));
     }
 
     private void paintPlaceholderGradient(Graphics2D g, int x, int y, int w, int h, Color from, Color to) {
