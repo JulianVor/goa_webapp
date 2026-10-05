@@ -52,7 +52,7 @@ public class BandShareCardService {
 
     // Separate from RENDER_VERSION since the back's design (see renderEditionBack) changes
     // independently of the front card's - bumping one shouldn't force-invalidate the other.
-    private static final int BACK_RENDER_VERSION = 1;
+    private static final int BACK_RENDER_VERSION = 2;
 
     private final BandRepository bandRepository;
     private final Path uploadRoot;
@@ -318,11 +318,12 @@ public class BandShareCardService {
     }
 
     /**
-     * Renders the "back" of the card: just the edition's background and logo inside the
-     * same layered frame as the front, no band-specific content - so it's the same image
-     * for every band in a given edition (see {@link #renderEditionBackCached(Edition)}).
-     * Falls back to the edition's title (same treatment as the front's band name) when no
-     * logo is set, so the back is never just an empty frame.
+     * Renders the "back" of the card: the edition's own background art, framed by a thick
+     * solid band of its Primärfarbe instead of a flat color panel - like a Pokémon card's
+     * back, where the blue border frames the pokéball art rather than covering it. The
+     * logo sits centered in the art window; falls back to the edition's title (same
+     * treatment as the front's band name) when no logo is set. Same image for every band
+     * in a given edition (see {@link #renderEditionBackCached(Edition)}).
      */
     public byte[] renderEditionBack(Edition edition) throws IOException {
         BufferedImage canvas = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -337,6 +338,8 @@ public class BandShareCardService {
             Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
             Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
 
+            // Painted once across the whole canvas - stays visible both in the window (the
+            // frame below never covers it there) and in the outer margin around the card.
             paintBorderBackground(g, edition, primary);
 
             int outerMargin = 32;
@@ -344,26 +347,30 @@ public class BandShareCardService {
             int cardW = WIDTH - 2 * outerMargin, cardH = HEIGHT - 2 * outerMargin;
             int cardRadius = 56;
 
-            paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, primary);
+            int frameThickness = 72;
+            int windowX = cardX + frameThickness, windowY = cardY + frameThickness;
+            int windowW = cardW - 2 * frameThickness, windowH = cardH - 2 * frameThickness;
+            int windowRadius = 36;
+
+            paintRingFrame(g, cardX, cardY, cardW, cardH, cardRadius, frameThickness, windowRadius, primary);
             paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.brighter(), 3f);
-            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker(), 7f, 5f);
-            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, accent, 3f, 16f);
+            paintPanelBorder(g, windowX, windowY, windowW, windowH, windowRadius, accent, 4f);
 
             BufferedImage logo = loadImage(edition.getLogoImagePath());
             if (logo != null) {
-                int maxSize = Math.min(cardW, cardH) - 180;
+                int maxSize = Math.min(windowW, windowH) - 80;
                 double scale = Math.min((double) maxSize / logo.getWidth(), (double) maxSize / logo.getHeight());
                 int lw = (int) Math.round(logo.getWidth() * scale);
                 int lh = (int) Math.round(logo.getHeight() * scale);
-                g.drawImage(logo, cardX + (cardW - lw) / 2, cardY + (cardH - lh) / 2, lw, lh, null);
+                g.drawImage(logo, windowX + (windowW - lw) / 2, windowY + (windowH - lh) / 2, lw, lh, null);
             } else {
                 String title = edition.getTitle().toUpperCase(Locale.GERMAN);
-                Font titleFont = fitFont(g, title, displayFont, 100, 48, cardW - 160);
+                Font titleFont = fitFont(g, title, displayFont, 100, 48, windowW - 80);
                 g.setFont(titleFont);
                 g.setColor(accent);
                 FontMetrics fm = g.getFontMetrics();
                 int tw = fm.stringWidth(title);
-                g.drawString(title, cardX + (cardW - tw) / 2, cardY + cardH / 2 + fm.getAscent() / 2 - fm.getDescent() / 2);
+                g.drawString(title, windowX + (windowW - tw) / 2, windowY + windowH / 2 + fm.getAscent() / 2 - fm.getDescent() / 2);
             }
         } finally {
             g.dispose();
@@ -395,6 +402,19 @@ public class BandShareCardService {
     private void paintPanel(Graphics2D g, int x, int y, int w, int h, int radius, Color color) {
         g.setColor(color);
         g.fill(new RoundRectangle2D.Float(x, y, w, h, radius, radius));
+    }
+
+    /**
+     * Fills only the band between an outer rounded rect and a smaller, independently
+     * rounded inner cutout - a thick solid "frame" with whatever was already painted
+     * showing through the window, instead of covering it with a flat panel first.
+     */
+    private void paintRingFrame(Graphics2D g, int x, int y, int w, int h, int radius, int thickness, int windowRadius, Color color) {
+        Path2D ring = new Path2D.Float(Path2D.WIND_EVEN_ODD);
+        ring.append(new RoundRectangle2D.Float(x, y, w, h, radius, radius), false);
+        ring.append(new RoundRectangle2D.Float(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness, windowRadius, windowRadius), false);
+        g.setColor(color);
+        g.fill(ring);
     }
 
     private void paintPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color color) {
