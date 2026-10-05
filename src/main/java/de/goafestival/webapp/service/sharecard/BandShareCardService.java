@@ -52,7 +52,7 @@ public class BandShareCardService {
 
     // Separate from RENDER_VERSION since the back's design (see renderEditionBack) changes
     // independently of the front card's - bumping one shouldn't force-invalidate the other.
-    private static final int BACK_RENDER_VERSION = 2;
+    private static final int BACK_RENDER_VERSION = 3;
 
     private final BandRepository bandRepository;
     private final Path uploadRoot;
@@ -338,13 +338,14 @@ public class BandShareCardService {
             Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
             Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
 
-            // Painted once across the whole canvas - stays visible both in the window (the
-            // frame below never covers it there) and in the outer margin around the card.
+            // Painted once across the whole canvas - stays visible in the window further
+            // down, since the frame itself never covers it there.
             paintBorderBackground(g, edition, primary);
 
-            int outerMargin = 32;
-            int cardX = outerMargin, cardY = outerMargin;
-            int cardW = WIDTH - 2 * outerMargin, cardH = HEIGHT - 2 * outerMargin;
+            // No outer margin here (unlike the front) - a real card's border runs right up
+            // to its physical edge, not with a gap of something else showing around it.
+            int cardX = 0, cardY = 0;
+            int cardW = WIDTH, cardH = HEIGHT;
             int cardRadius = 56;
 
             int frameThickness = 72;
