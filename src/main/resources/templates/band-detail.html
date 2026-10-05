@@ -49,8 +49,8 @@
         </div>
 
         <a class="band-detail-share-btn" th:href="@{'/bands/' + ${band.id} + '/share-card.png'}"
-           th:download="${'goa-' + band.name}" target="_blank" rel="noopener">
-            📸 Teilen-Karte herunterladen
+           th:download="${'goa-' + band.name + '.png'}" th:data-share-title="${band.name}" target="_blank" rel="noopener">
+            <span class="share-btn-label">📸 Teilen-Karte herunterladen</span>
         </a>
     </div>
 </section>

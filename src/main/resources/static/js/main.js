@@ -60,4 +60,35 @@ document.addEventListener('DOMContentLoaded', function () {
             if (event.target === overlay) overlay.classList.remove('open');
         });
     });
+
+    // On devices with a native share sheet (Android/iOS), let the share-card
+    // button hand the PNG to navigator.share instead of just downloading it -
+    // everywhere else it keeps acting as a plain download link.
+    document.querySelectorAll('.band-detail-share-btn').forEach(function (btn) {
+        if (!(navigator.share && navigator.canShare)) return;
+
+        var label = btn.querySelector('.share-btn-label');
+        if (label) label.textContent = '📤 Teilen';
+
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            var url = btn.getAttribute('href');
+            var filename = btn.getAttribute('download') || 'share-card.png';
+            var shareTitle = btn.getAttribute('data-share-title') || document.title;
+
+            fetch(url)
+                .then(function (response) { return response.blob(); })
+                .then(function (blob) {
+                    var file = new File([blob], filename, { type: blob.type || 'image/png' });
+                    if (!navigator.canShare({ files: [file] })) {
+                        throw new Error('file-sharing-unsupported');
+                    }
+                    return navigator.share({ files: [file], title: shareTitle });
+                })
+                .catch(function (error) {
+                    if (error && error.name === 'AbortError') return;
+                    window.open(url, '_blank', 'noopener');
+                });
+        });
+    });
 });
