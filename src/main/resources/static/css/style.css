@@ -883,15 +883,15 @@ img { max-width: 100%; display: block; }
 .band-detail-share-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     margin-top: 1.25rem;
-    padding: 0.7rem 1.4rem;
+    padding: 0.4rem 0.9rem;
     border-radius: 999px;
     background: var(--color-accent);
     color: var(--color-primary);
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: 0.85rem;
     text-decoration: none;
     width: fit-content;
     transition: transform 0.2s ease, opacity 0.2s ease;
