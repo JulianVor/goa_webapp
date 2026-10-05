@@ -3,14 +3,21 @@ package de.goafestival.webapp.web;
 import de.goafestival.webapp.domain.Band;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.dto.DayLineup;
+import de.goafestival.webapp.dto.HallOfFameCard;
 import de.goafestival.webapp.service.BandService;
 import de.goafestival.webapp.service.EditionService;
 import de.goafestival.webapp.service.FaqEntryService;
+import de.goafestival.webapp.service.sharecard.BandShareCardService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,11 +36,14 @@ public class EditionPageController {
     private final EditionService editionService;
     private final BandService bandService;
     private final FaqEntryService faqEntryService;
+    private final BandShareCardService bandShareCardService;
 
-    public EditionPageController(EditionService editionService, BandService bandService, FaqEntryService faqEntryService) {
+    public EditionPageController(EditionService editionService, BandService bandService, FaqEntryService faqEntryService,
+                                  BandShareCardService bandShareCardService) {
         this.editionService = editionService;
         this.bandService = bandService;
         this.faqEntryService = faqEntryService;
+        this.bandShareCardService = bandShareCardService;
     }
 
     @GetMapping("/")
@@ -90,16 +100,29 @@ public class EditionPageController {
     @GetMapping("/hall-of-fame")
     public String hallOfFame(Model model) {
         Edition current = editionService.getCurrentOrThrow();
-        List<Band> bands = editionService.findFestivalEditions().stream()
-                .flatMap(e -> bandService.findByEdition(e.getId()).stream())
+        List<HallOfFameCard> cards = editionService.findFestivalEditions().stream()
+                .flatMap(e -> bandService.findByEdition(e.getId()).stream()
+                        .map(band -> new HallOfFameCard(band, e.getId())))
                 .collect(Collectors.toCollection(ArrayList::new));
-        Collections.shuffle(bands);
+        Collections.shuffle(cards);
 
         model.addAttribute("edition", current);
         model.addAttribute("archivedEditions", editionService.findArchivedEditions());
-        model.addAttribute("bands", bands);
+        model.addAttribute("cards", cards);
         model.addAttribute("pageTitle", "Hall of Fame – " + current.getTitle());
         return "hall-of-fame";
+    }
+
+    /** The card "back" for one edition - same image for every band in it, see BandShareCardService. */
+    @GetMapping("/editions/{id}/card-back.png")
+    @ResponseBody
+    public ResponseEntity<byte[]> editionCardBack(@PathVariable Long id) throws IOException {
+        Edition edition = editionService.getByIdOrThrow(id);
+        byte[] png = bandShareCardService.renderEditionBackCached(edition);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600")
+                .body(png);
     }
 
     private void populateModel(Model model, Edition edition, boolean isCurrentView) {

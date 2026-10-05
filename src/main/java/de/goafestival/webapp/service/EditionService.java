@@ -121,6 +121,7 @@ public class EditionService {
         // Every band's share card reflects its edition's colors/logo/background, so a
         // change here invalidates all of them, not just the edition's own data.
         bandShareCardService.invalidateForEdition(saved.getId());
+        bandShareCardService.invalidateBack(saved.getId());
         return saved;
     }
 
@@ -143,6 +144,7 @@ public class EditionService {
         fileStorageService.delete(edition.getBackgroundImagePath());
         fileStorageService.delete(edition.getLocationImagePath());
         bandShareCardService.invalidateForEdition(id);
+        bandShareCardService.invalidateBack(id);
         editionRepository.delete(edition);
     }
 

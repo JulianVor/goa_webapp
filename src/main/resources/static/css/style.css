@@ -973,47 +973,67 @@ img { max-width: 100%; display: block; }
     .hall-of-fame-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+.hof-card-wrap {
+    /* Starts hidden/offset and settles in once scrolled into view (see main.js), with a
+       small per-column delay below so a row cascades in left-to-right instead of popping
+       in all at once. Separate from the flip transform below (applied to .hof-card-inner),
+       since both animating the same element's "transform" would fight each other. */
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    perspective: 1600px;
+}
+
+.hof-card-wrap.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+.hof-card-wrap:nth-child(4n+2) { transition-delay: 0.08s; }
+.hof-card-wrap:nth-child(4n+3) { transition-delay: 0.16s; }
+.hof-card-wrap:nth-child(4n+4) { transition-delay: 0.24s; }
+
 .hof-card {
     display: block;
+    text-decoration: none;
+}
+
+.hof-card-inner {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hof-card:hover .hof-card-inner,
+.hof-card:focus-visible .hof-card-inner {
+    transform: rotateY(180deg);
+}
+
+.hof-card-face {
+    position: absolute;
+    inset: 0;
     border-radius: 28px;
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
-    text-decoration: none;
     background: #222;
-    /* Starts hidden/offset and settles in once scrolled into view (see main.js), with a
-       small per-column delay below so a row cascades in left-to-right instead of popping
-       in all at once. */
-    opacity: 0;
-    transform: translateY(28px) scale(0.96);
-    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    backface-visibility: hidden;
+    transition: box-shadow 0.3s ease;
 }
 
-.hof-card.in-view { opacity: 1; transform: translateY(0) scale(1); }
-
-.hof-card:nth-child(4n+2) { transition-delay: 0.08s; }
-.hof-card:nth-child(4n+3) { transition-delay: 0.16s; }
-.hof-card:nth-child(4n+4) { transition-delay: 0.24s; }
-
-.hof-card img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    transition: transform 0.35s ease, filter 0.35s ease;
-}
-
-.hof-card:hover {
+.hof-card:hover .hof-card-face {
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.55);
 }
 
-.hof-card:hover img {
-    transform: scale(1.05);
-    filter: brightness(1.06);
+/* Pre-rotated so it lands right-side-up once the inner element's own 180deg flip settles. */
+.hof-card-back { transform: rotateY(180deg); }
+
+.hof-card-face img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 @media (max-width: 480px) {
-    .hof-card { border-radius: 18px; }
+    .hof-card-face { border-radius: 18px; }
 }
 
 /* --------------------------------- Responsive -------------------------------- */

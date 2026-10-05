@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Hall of Fame: reveal each card with a fade/rise once it scrolls into view,
     // instead of everything just being there on load - falls back to showing
     // them all immediately if the browser has no IntersectionObserver.
-    var hofCards = document.querySelectorAll('.hof-card');
+    var hofCards = document.querySelectorAll('.hof-card-wrap');
     if (hofCards.length) {
         if ('IntersectionObserver' in window) {
             var hofObserver = new IntersectionObserver(function (entries) {

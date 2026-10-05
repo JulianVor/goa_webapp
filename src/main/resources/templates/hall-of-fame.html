@@ -8,15 +8,24 @@
 <section class="section-band hall-of-fame-page">
     <div class="section">
         <h1 class="section-title">Hall of Fame</h1>
-        <p class="hall-of-fame-intro">Alle Bands, die jemals beim Grumbrechtstraßen Open Air gespielt haben – oder bald spielen werden.</p>
+        <p class="hall-of-fame-intro">Alle Bands, die jemals beim Grumbrechtstraßen Open Air gespielt haben – oder bald spielen werden. Zum Umdrehen über eine Karte hovern.</p>
 
         <div class="hall-of-fame-grid">
-            <a class="hof-card" th:each="band : ${bands}" th:href="@{'/bands/' + ${band.id}}">
-                <img th:src="@{'/bands/' + ${band.id} + '/share-card.png'}" th:alt="${band.name}" loading="lazy"/>
-            </a>
+            <div class="hof-card-wrap" th:each="card : ${cards}">
+                <a class="hof-card" th:href="@{'/bands/' + ${card.band.id}}">
+                    <div class="hof-card-inner">
+                        <div class="hof-card-face hof-card-front">
+                            <img th:src="@{'/bands/' + ${card.band.id} + '/share-card.png'}" th:alt="${card.band.name}" loading="lazy"/>
+                        </div>
+                        <div class="hof-card-face hof-card-back">
+                            <img th:src="@{'/editions/' + ${card.editionId} + '/card-back.png'}" th:alt="'Kartenrückseite'" loading="lazy"/>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
 
-        <p class="empty-hint" th:if="${bands.isEmpty()}">Noch wurden keine Bands hinterlegt.</p>
+        <p class="empty-hint" th:if="${cards.isEmpty()}">Noch wurden keine Bands hinterlegt.</p>
     </div>
 </section>
 

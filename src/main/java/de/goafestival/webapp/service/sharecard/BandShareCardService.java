@@ -50,6 +50,10 @@ public class BandShareCardService {
     // on-disk cache otherwise only reacts to band/edition *data* changes, not code changes.
     private static final int RENDER_VERSION = 4;
 
+    // Separate from RENDER_VERSION since the back's design (see renderEditionBack) changes
+    // independently of the front card's - bumping one shouldn't force-invalidate the other.
+    private static final int BACK_RENDER_VERSION = 1;
+
     private final BandRepository bandRepository;
     private final Path uploadRoot;
     private final Path cacheDir;
@@ -117,6 +121,34 @@ public class BandShareCardService {
     public void invalidateForEdition(Long editionId) {
         bandRepository.findByEditionIdOrderByPerformanceAtAsc(editionId)
                 .forEach(band -> invalidate(band.getId()));
+    }
+
+    /**
+     * Like {@link #renderEditionBack(Edition)}, but reads/writes a cached copy on disk -
+     * one per edition rather than per band, since the back only reflects the edition's own
+     * branding (background/logo/colors), not anything band-specific.
+     */
+    public byte[] renderEditionBackCached(Edition edition) throws IOException {
+        Path cached = cacheDir.resolve(backCacheFilename(edition.getId()));
+        if (Files.exists(cached)) {
+            return Files.readAllBytes(cached);
+        }
+        byte[] png = renderEditionBack(edition);
+        Files.write(cached, png);
+        return png;
+    }
+
+    /** Drops the cached card back for one edition, e.g. after its branding was edited. */
+    public void invalidateBack(Long editionId) {
+        try {
+            Files.deleteIfExists(cacheDir.resolve(backCacheFilename(editionId)));
+        } catch (IOException e) {
+            log.warn("Konnte den Rückseiten-Cache für Edition {} nicht löschen.", editionId, e);
+        }
+    }
+
+    private String backCacheFilename(Long editionId) {
+        return "back-" + editionId + "-v" + BACK_RENDER_VERSION + ".png";
     }
 
     /** 1-based position of this band within its edition's whole running order (day-spanning). */
@@ -275,6 +307,63 @@ public class BandShareCardService {
                         ? location.getName() + ", " + location.getZipCity()
                         : location.getName();
                 drawCenteredIconText(g, iconPin(), contentX, panelY, contentW, panelH, label, textColor);
+            }
+        } finally {
+            g.dispose();
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(canvas, "png", out);
+        return out.toByteArray();
+    }
+
+    /**
+     * Renders the "back" of the card: just the edition's background and logo inside the
+     * same layered frame as the front, no band-specific content - so it's the same image
+     * for every band in a given edition (see {@link #renderEditionBackCached(Edition)}).
+     * Falls back to the edition's title (same treatment as the front's band name) when no
+     * logo is set, so the back is never just an empty frame.
+     */
+    public byte[] renderEditionBack(Edition edition) throws IOException {
+        BufferedImage canvas = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = canvas.createGraphics();
+        try {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            String primaryHex = StringUtils.hasText(edition.getColorPrimary()) ? edition.getColorPrimary() : edition.getColorSecondary();
+            Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
+            Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
+
+            paintBorderBackground(g, edition, primary);
+
+            int outerMargin = 32;
+            int cardX = outerMargin, cardY = outerMargin;
+            int cardW = WIDTH - 2 * outerMargin, cardH = HEIGHT - 2 * outerMargin;
+            int cardRadius = 56;
+
+            paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, primary);
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.brighter(), 3f);
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker(), 7f, 5f);
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, accent, 3f, 16f);
+
+            BufferedImage logo = loadImage(edition.getLogoImagePath());
+            if (logo != null) {
+                int maxSize = Math.min(cardW, cardH) - 180;
+                double scale = Math.min((double) maxSize / logo.getWidth(), (double) maxSize / logo.getHeight());
+                int lw = (int) Math.round(logo.getWidth() * scale);
+                int lh = (int) Math.round(logo.getHeight() * scale);
+                g.drawImage(logo, cardX + (cardW - lw) / 2, cardY + (cardH - lh) / 2, lw, lh, null);
+            } else {
+                String title = edition.getTitle().toUpperCase(Locale.GERMAN);
+                Font titleFont = fitFont(g, title, displayFont, 100, 48, cardW - 160);
+                g.setFont(titleFont);
+                g.setColor(accent);
+                FontMetrics fm = g.getFontMetrics();
+                int tw = fm.stringWidth(title);
+                g.drawString(title, cardX + (cardW - tw) / 2, cardY + cardH / 2 + fm.getAscent() / 2 - fm.getDescent() / 2);
             }
         } finally {
             g.dispose();
