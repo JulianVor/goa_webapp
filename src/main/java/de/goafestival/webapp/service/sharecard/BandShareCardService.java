@@ -176,10 +176,15 @@ public class BandShareCardService {
 
             // --- band photo ---
             int photoY = headerY + headerHeight + 28;
-            int photoH = 600;
+            // Taller than a plain photo would need to be: Genre/Herkunft are overlaid on
+            // its bottom instead of sitting in their own box below it (the extra height is
+            // exactly what that box used to take, so the rest of the layout doesn't shift).
+            int photoH = 774;
             // Same radius as the outer card panel - a tighter curve here would read as two
             // competing roundings instead of one consistent "trading card" shape.
             int photoRadius = cardRadius;
+            boolean hasGenre = StringUtils.hasText(band.getGenre());
+            boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
             BufferedImage photo = loadImage(band.getMainImagePath());
             paintPanel(g, contentX, photoY, contentW, photoH, photoRadius, Color.BLACK);
             withClip(g, contentX, photoY, contentW, photoH, photoRadius, clipped -> {
@@ -187,6 +192,29 @@ public class BandShareCardService {
                     drawCover(clipped, photo, contentX, photoY, contentW, photoH);
                 } else {
                     paintPlaceholderGradient(clipped, contentX, photoY, contentW, photoH, primary, accent2);
+                }
+
+                // Genre/Herkunft read directly off the photo, like the Line-Up grid's own
+                // photo-overlay cards (.band-card-overlay) - a dark bottom-up scrim instead
+                // of a separate panel, so the photo doesn't sit so starkly apart from the
+                // rest of the card's content.
+                if (hasGenre || hasHerkunft) {
+                    int overlayH = 260;
+                    paintVerticalScrim(clipped, contentX, photoY + photoH - overlayH, contentW, overlayH);
+
+                    int textBoxH = 152;
+                    int textBoxY = photoY + photoH - textBoxH;
+                    int half = contentW / 2;
+                    if (hasGenre) {
+                        drawIconLabelValue(clipped, iconMusicNote(), contentX + 32, textBoxY, half - 32, textBoxH, "Genre", band.getGenre(), accent);
+                    }
+                    if (hasHerkunft) {
+                        drawIconLabelValue(clipped, iconPin(), contentX + half + 32, textBoxY, half - 64, textBoxH, "Herkunft", band.getHerkunft(), accent);
+                    }
+                    if (hasGenre && hasHerkunft) {
+                        clipped.setColor(withAlpha(Color.WHITE, 50));
+                        clipped.fillRect(contentX + half, textBoxY + 24, 2, textBoxH - 48);
+                    }
                 }
             });
 
@@ -207,7 +235,7 @@ public class BandShareCardService {
                 g.setTransform(oldTransform);
             }
 
-            // --- info panels ---
+            // --- info panels (Genre/Herkunft now live on the photo itself, see above) ---
             int panelGap = 22;
             int panelY = photoY + photoH + 26;
             int panelRadius = 24;
@@ -217,26 +245,6 @@ public class BandShareCardService {
             Color panelBg = withAlpha(secondaryColor, 242);
             Color textColor = accent;
             Color panelBorderColor = textColor;
-
-            boolean hasGenre = StringUtils.hasText(band.getGenre());
-            boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
-            if (hasGenre || hasHerkunft) {
-                int panelH = 152;
-                paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
-                paintPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, panelBorderColor);
-                int half = contentW / 2;
-                if (hasGenre) {
-                    drawIconLabelValue(g, iconMusicNote(), contentX + 32, panelY, half - 32, panelH, "Genre", band.getGenre(), textColor);
-                }
-                if (hasHerkunft) {
-                    drawIconLabelValue(g, iconPin(), contentX + half + 32, panelY, half - 64, panelH, "Herkunft", band.getHerkunft(), textColor);
-                }
-                if (hasGenre && hasHerkunft) {
-                    g.setColor(new Color(0, 0, 0, 40));
-                    g.fillRect(contentX + half, panelY + 24, 2, panelH - 48);
-                }
-                panelY += panelH + panelGap;
-            }
 
             if (band.getPerformanceAt() != null) {
                 int panelH = 118;
@@ -303,6 +311,14 @@ public class BandShareCardService {
     private void paintPlaceholderGradient(Graphics2D g, int x, int y, int w, int h, Color from, Color to) {
         Paint previous = g.getPaint();
         g.setPaint(new GradientPaint(x, y, from, x + w, y + h, to));
+        g.fillRect(x, y, w, h);
+        g.setPaint(previous);
+    }
+
+    /** A bottom-anchored transparent-to-black gradient for overlaying text on a photo - same idea as the Line-Up grid's own .band-card-overlay. */
+    private void paintVerticalScrim(Graphics2D g, int x, int y, int w, int h) {
+        Paint previous = g.getPaint();
+        g.setPaint(new GradientPaint(x, y, new Color(0, 0, 0, 0), x, y + h, new Color(0, 0, 0, 200)));
         g.fillRect(x, y, w, h);
         g.setPaint(previous);
     }
