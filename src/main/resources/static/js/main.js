@@ -61,6 +61,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Hall of Fame: reveal each card with a fade/rise once it scrolls into view,
+    // instead of everything just being there on load - falls back to showing
+    // them all immediately if the browser has no IntersectionObserver.
+    var hofCards = document.querySelectorAll('.hof-card');
+    if (hofCards.length) {
+        if ('IntersectionObserver' in window) {
+            var hofObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        hofObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+            hofCards.forEach(function (card) { hofObserver.observe(card); });
+        } else {
+            hofCards.forEach(function (card) { card.classList.add('in-view'); });
+        }
+    }
+
     // On devices with a native share sheet (Android/iOS), let the share-card
     // button hand the PNG to navigator.share instead of just downloading it -
     // everywhere else it keeps acting as a plain download link.

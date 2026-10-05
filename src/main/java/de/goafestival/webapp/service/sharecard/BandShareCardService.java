@@ -46,11 +46,13 @@ public class BandShareCardService {
 
     private final BandRepository bandRepository;
     private final Path uploadRoot;
+    private final Path cacheDir;
     private Font displayFont;
 
     public BandShareCardService(BandRepository bandRepository, @Value("${app.upload-dir:uploads}") String uploadDir) {
         this.bandRepository = bandRepository;
         this.uploadRoot = Path.of(uploadDir).toAbsolutePath().normalize();
+        this.cacheDir = uploadRoot.resolve("sharecards");
     }
 
     @PostConstruct
@@ -63,6 +65,48 @@ public class BandShareCardService {
             log.warn("Konnte die Schriftart für die Share-Karte nicht laden, falle auf eine Systemschrift zurück.", e);
             displayFont = new Font(Font.SANS_SERIF, Font.BOLD, 12);
         }
+        try {
+            Files.createDirectories(cacheDir);
+        } catch (IOException e) {
+            log.warn("Konnte das Cache-Verzeichnis für Share-Karten nicht anlegen.", e);
+        }
+    }
+
+    /**
+     * Like {@link #render(Band)}, but reads/writes a copy on disk under the upload
+     * directory - the Hall-of-Fame page shows dozens of these at once, so re-rendering
+     * each one with Java2D on every request would be wasteful. The cache is invalidated
+     * (see {@link #invalidate(Long)}/{@link #invalidateForEdition(Long)}) whenever the
+     * band or its edition's branding changes, so it's safe to keep indefinitely otherwise.
+     */
+    public byte[] renderCached(Band band) throws IOException {
+        Path cached = cacheDir.resolve(band.getId() + ".png");
+        if (Files.exists(cached)) {
+            return Files.readAllBytes(cached);
+        }
+        byte[] png = render(band);
+        Files.write(cached, png);
+        return png;
+    }
+
+    /** Drops the cached share card for one band, e.g. after it was edited. */
+    public void invalidate(Long bandId) {
+        try {
+            Files.deleteIfExists(cacheDir.resolve(bandId + ".png"));
+        } catch (IOException e) {
+            log.warn("Konnte den Share-Karten-Cache für Band {} nicht löschen.", bandId, e);
+        }
+    }
+
+    /**
+     * Drops every cached share card for an edition's bands - needed not just when the
+     * edition's own branding changes (colors/logo/background, which every card in it
+     * reflects), but also whenever one band is added, edited or removed, since each
+     * card's "No. XX" slot number depends on where it falls among its siblings.
+     */
+    public void invalidateForEdition(Long editionId) {
+        bandRepository.findByEditionIdOrderByPerformanceAtAsc(editionId)
+                .forEach(band -> invalidate(band.getId()));
     }
 
     /** 1-based position of this band within its edition's whole running order (day-spanning). */

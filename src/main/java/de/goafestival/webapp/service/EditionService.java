@@ -5,6 +5,7 @@ import de.goafestival.webapp.domain.EditionType;
 import de.goafestival.webapp.dto.EditionForm;
 import de.goafestival.webapp.repository.EditionRepository;
 import de.goafestival.webapp.repository.LocationRepository;
+import de.goafestival.webapp.service.sharecard.BandShareCardService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,14 @@ public class EditionService {
     private final EditionRepository editionRepository;
     private final LocationRepository locationRepository;
     private final FileStorageService fileStorageService;
+    private final BandShareCardService bandShareCardService;
 
     public EditionService(EditionRepository editionRepository, LocationRepository locationRepository,
-                           FileStorageService fileStorageService) {
+                           FileStorageService fileStorageService, BandShareCardService bandShareCardService) {
         this.editionRepository = editionRepository;
         this.locationRepository = locationRepository;
         this.fileStorageService = fileStorageService;
+        this.bandShareCardService = bandShareCardService;
     }
 
     public List<Edition> findAllOrdered() {
@@ -78,6 +81,11 @@ public class EditionService {
         return editionRepository.findByTypeOrderByStartDateDesc(EditionType.KNEIPENKONZERT);
     }
 
+    /** All FESTIVAL editions (including the current one), newest year first - the Hall of Fame page. */
+    public List<Edition> findFestivalEditions() {
+        return editionRepository.findByTypeOrderByYearDesc(EditionType.FESTIVAL);
+    }
+
     /** The soonest upcoming Kneipenkonzert, if any — the homepage teaser under the logo. */
     public Optional<Edition> findNextKneipenkonzert() {
         LocalDate today = LocalDate.now();
@@ -110,6 +118,9 @@ public class EditionService {
         if (form.isCurrent() && form.getType() == EditionType.FESTIVAL) {
             setCurrent(saved.getId());
         }
+        // Every band's share card reflects its edition's colors/logo/background, so a
+        // change here invalidates all of them, not just the edition's own data.
+        bandShareCardService.invalidateForEdition(saved.getId());
         return saved;
     }
 
@@ -131,6 +142,7 @@ public class EditionService {
         fileStorageService.delete(edition.getLogoImagePath());
         fileStorageService.delete(edition.getBackgroundImagePath());
         fileStorageService.delete(edition.getLocationImagePath());
+        bandShareCardService.invalidateForEdition(id);
         editionRepository.delete(edition);
     }
 

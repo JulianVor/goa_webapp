@@ -40,16 +40,21 @@ public class BandPageController {
         return "band-detail";
     }
 
-    /** A shareable "trading card" PNG for this band - see BandShareCardService. */
+    /**
+     * A shareable "trading card" PNG for this band - see BandShareCardService. Served from
+     * its on-disk cache (populated on first request, invalidated on edits), since the Hall
+     * of Fame page loads dozens of these on one page.
+     */
     @GetMapping("/bands/{id}/share-card.png")
     @ResponseBody
     public ResponseEntity<byte[]> shareCard(@PathVariable Long id) throws IOException {
         Band band = bandService.getByIdWithEditionOrThrow(id);
-        byte[] png = bandShareCardService.render(band);
+        byte[] png = bandShareCardService.renderCached(band);
         String filename = "goa-" + band.getName().toLowerCase().replaceAll("[^a-z0-9]+", "-") + ".png";
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600")
                 .body(png);
     }
 }

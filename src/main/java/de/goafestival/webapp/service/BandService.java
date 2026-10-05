@@ -5,6 +5,7 @@ import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.dto.BandForm;
 import de.goafestival.webapp.dto.DayLineup;
 import de.goafestival.webapp.repository.BandRepository;
+import de.goafestival.webapp.service.sharecard.BandShareCardService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,11 +26,14 @@ public class BandService {
     private final BandRepository bandRepository;
     private final EditionService editionService;
     private final FileStorageService fileStorageService;
+    private final BandShareCardService bandShareCardService;
 
-    public BandService(BandRepository bandRepository, EditionService editionService, FileStorageService fileStorageService) {
+    public BandService(BandRepository bandRepository, EditionService editionService, FileStorageService fileStorageService,
+                        BandShareCardService bandShareCardService) {
         this.bandRepository = bandRepository;
         this.editionService = editionService;
         this.fileStorageService = fileStorageService;
+        this.bandShareCardService = bandShareCardService;
     }
 
     public Band getByIdOrThrow(Long id) {
@@ -80,20 +84,30 @@ public class BandService {
         Edition edition = editionService.getByIdOrThrow(form.getEditionId());
         band.setEdition(edition);
         applyForm(band, form);
-        return bandRepository.save(band);
+        Band saved = bandRepository.save(band);
+        // A new band can shift the "No. XX" slot of every sibling that now runs after
+        // it, so the whole edition's cached share cards need to be dropped, not just
+        // this one (which wasn't cached yet anyway).
+        bandShareCardService.invalidateForEdition(edition.getId());
+        return saved;
     }
 
     public Band update(Long id, BandForm form) {
         Band band = getByIdOrThrow(id);
         applyForm(band, form);
-        return bandRepository.save(band);
+        Band saved = bandRepository.save(band);
+        bandShareCardService.invalidateForEdition(band.getEdition().getId());
+        return saved;
     }
 
     public void delete(Long id) {
         Band band = getByIdOrThrow(id);
+        Long editionId = band.getEdition().getId();
         fileStorageService.delete(band.getMainImagePath());
         band.getGalleryImages().forEach(fileStorageService::delete);
+        bandShareCardService.invalidate(id);
         bandRepository.delete(band);
+        bandShareCardService.invalidateForEdition(editionId);
     }
 
     /** Re-optimizes already-stored images (uploaded before automatic resizing existed). Returns how many files were rewritten. */
@@ -156,7 +170,9 @@ public class BandService {
                 .map(image -> fileStorageService.copy(image, "bands/gallery"))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
-        return bandRepository.save(copy);
+        Band saved = bandRepository.save(copy);
+        bandShareCardService.invalidateForEdition(target.getId());
+        return saved;
     }
 
     private void applyForm(Band band, BandForm form) {

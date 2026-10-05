@@ -49,6 +49,8 @@
                 <a th:each="e : ${archivedEditions}" th:href="@{'/goa/' + ${e.year}}" th:text="'GOA ' + ${e.year}">GOA 2025</a>
             </div>
         </div>
+
+        <a class="pill" th:href="@{/hall-of-fame}">Hall of Fame</a>
     </div>
 </nav>
 

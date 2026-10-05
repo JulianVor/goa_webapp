@@ -3,6 +3,7 @@ package de.goafestival.webapp.web;
 import de.goafestival.webapp.domain.Band;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.dto.DayLineup;
+import de.goafestival.webapp.dto.EditionLineup;
 import de.goafestival.webapp.service.BandService;
 import de.goafestival.webapp.service.EditionService;
 import de.goafestival.webapp.service.FaqEntryService;
@@ -75,6 +76,22 @@ public class EditionPageController {
         Edition edition = editionService.getKneipenkonzertByIdOrThrow(id);
         populateModel(model, edition, false);
         return "edition";
+    }
+
+    /** All bands that have ever played the Festival (not the Kneipenkonzerte), one grid per year. */
+    @GetMapping("/hall-of-fame")
+    public String hallOfFame(Model model) {
+        Edition current = editionService.getCurrentOrThrow();
+        List<EditionLineup> sections = editionService.findFestivalEditions().stream()
+                .map(e -> new EditionLineup(e, bandService.findByEdition(e.getId())))
+                .filter(section -> !section.bands().isEmpty())
+                .toList();
+
+        model.addAttribute("edition", current);
+        model.addAttribute("archivedEditions", editionService.findArchivedEditions());
+        model.addAttribute("sections", sections);
+        model.addAttribute("pageTitle", "Hall of Fame – " + current.getTitle());
+        return "hall-of-fame";
     }
 
     private void populateModel(Model model, Edition edition, boolean isCurrentView) {
