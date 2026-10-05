@@ -39,18 +39,20 @@
             </a>
         </span>
 
-        <a class="nav-history" th:if="${archivedEditions != null and #lists.size(archivedEditions) == 1}"
-           th:href="@{'/goa/' + ${archivedEditions[0].year}}"
-           th:text="'GOA ' + ${archivedEditions[0].year}">GOA 2025</a>
+        <!-- Hall of Fame lives here too (not its own pill) - both are "browse something
+             collected/past" in the same spirit, and folding them together keeps the nav
+             from getting crowded. With no archived editions, there's nothing to pair it
+             with, so it's just a plain link like a single archived year would be. -->
+        <a class="nav-history" th:if="${archivedEditions == null or #lists.isEmpty(archivedEditions)}"
+           th:href="@{/hall-of-fame}">Hall of Fame</a>
 
-        <div class="nav-history-dropdown" th:if="${archivedEditions != null and #lists.size(archivedEditions) > 1}">
+        <div class="nav-history-dropdown" th:if="${archivedEditions != null and not #lists.isEmpty(archivedEditions)}">
             <button type="button" class="nav-history dropdown-toggle">Archiv <span class="caret">▾</span></button>
             <div class="dropdown-menu">
+                <a class="dropdown-hof-link" th:href="@{/hall-of-fame}">Hall of Fame</a>
                 <a th:each="e : ${archivedEditions}" th:href="@{'/goa/' + ${e.year}}" th:text="'GOA ' + ${e.year}">GOA 2025</a>
             </div>
         </div>
-
-        <a class="pill" th:href="@{/hall-of-fame}">Hall of Fame</a>
     </div>
 </nav>
 

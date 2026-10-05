@@ -188,6 +188,12 @@ img { max-width: 100%; display: block; }
     background: color-mix(in srgb, var(--color-primary) 70%, black);
 }
 
+.nav-history-dropdown .dropdown-menu a.dropdown-hof-link {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.6rem;
+}
+
 /* ---------------------------------- Modal ----------------------------------- */
 
 .modal-overlay {
