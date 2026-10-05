@@ -94,7 +94,8 @@ public class BandShareCardService {
             String primaryHex = StringUtils.hasText(edition.getColorPrimary()) ? edition.getColorPrimary() : edition.getColorSecondary();
             Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
             Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
-            Color secondary = parseColor(edition.getColorAccent2(), new Color(0xc0392b));
+            Color accent2 = parseColor(edition.getColorAccent2(), new Color(0xc0392b));
+            Color secondaryColor = parseColor(edition.getColorSecondary(), new Color(0x2f6f68));
 
             paintBorderBackground(g, edition, primary);
 
@@ -122,6 +123,7 @@ public class BandShareCardService {
             String slotLabel = String.format("No. %02d", slot);
             Font slotFont = displayFont.deriveFont(50f);
             g.setFont(slotFont);
+            g.setColor(accent2);
             FontMetrics slotMetrics = g.getFontMetrics();
             g.drawString(slotLabel, rightEdge - slotMetrics.stringWidth(slotLabel), headerY + slotMetrics.getAscent());
 
@@ -137,7 +139,7 @@ public class BandShareCardService {
                 if (photo != null) {
                     drawCover(clipped, photo, contentX, photoY, contentW, photoH);
                 } else {
-                    paintPlaceholderGradient(clipped, contentX, photoY, contentW, photoH, primary, secondary);
+                    paintPlaceholderGradient(clipped, contentX, photoY, contentW, photoH, primary, accent2);
                 }
             });
 
@@ -162,10 +164,10 @@ public class BandShareCardService {
             int panelGap = 22;
             int panelY = photoY + photoH + 26;
             int panelRadius = 24;
-            // Dark panel (a shade of the primary color) with light accent-colored text on top -
-            // matches the site's own convention (accent = light, primary = dark) instead of
-            // the inverted light-panel/dark-text look used before.
-            Color panelBg = withAlpha(darken(primary, 0.22f), 242);
+            // Info panels use the Sekundärfarbe rather than a shade of the card's own primary
+            // panel, so they read as a clearly separate surface instead of blending into it -
+            // accent-colored text on top keeps the same light-on-dark contrast as the header.
+            Color panelBg = withAlpha(secondaryColor, 242);
             Color textColor = accent;
 
             boolean hasGenre = StringUtils.hasText(band.getGenre());
@@ -293,14 +295,6 @@ public class BandShareCardService {
 
     private Color withAlpha(Color c, int alpha) {
         return new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
-    }
-
-    /** Blends a color toward black (0 = unchanged, 1 = black) - a shade of it instead of flat black. */
-    private Color darken(Color c, float towardBlack) {
-        int r = clamp(Math.round(c.getRed() * (1 - towardBlack)));
-        int g = clamp(Math.round(c.getGreen() * (1 - towardBlack)));
-        int b = clamp(Math.round(c.getBlue() * (1 - towardBlack)));
-        return new Color(r, g, b);
     }
 
     private Color parseColor(String hex, Color fallback) {
