@@ -48,7 +48,7 @@ public class BandShareCardService {
     // code deploy invalidates every cached card on its own. Without this, redeploying a
     // design tweak would keep serving pre-existing PNGs from disk indefinitely, since the
     // on-disk cache otherwise only reacts to band/edition *data* changes, not code changes.
-    private static final int RENDER_VERSION = 2;
+    private static final int RENDER_VERSION = 3;
 
     private final BandRepository bandRepository;
     private final Path uploadRoot;
@@ -159,7 +159,12 @@ public class BandShareCardService {
             int cardRadius = 56;
 
             paintPanel(g, cardX, cardY, cardW, cardH, cardRadius, primary);
-            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker(), 8f);
+            // A layered "frame within a frame" instead of one flat stroke - a bright
+            // hairline right at the edge, the structural dark stroke just inside it, then
+            // a thin accent lip closest to the content - for the trading-card look.
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.brighter(), 3f);
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, primary.darker(), 7f, 5f);
+            paintPanelBorder(g, cardX, cardY, cardW, cardH, cardRadius, accent, 3f, 16f);
 
             int pad = 40;
             int contentX = cardX + pad;
@@ -227,6 +232,9 @@ public class BandShareCardService {
                     }
                 }
             });
+            // The photo gets its own "art window" frame, like a trading card's inset
+            // artwork border - distinct from the outer card frame around it.
+            paintPanelBorder(g, contentX, photoY, contentW, photoH, photoRadius, accent, 5f);
 
             // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
             // No backing shape or ring - just the logo artwork itself, which usually already
@@ -312,10 +320,20 @@ public class BandShareCardService {
     }
 
     private void paintPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color color, float strokeWidth) {
+        paintPanelBorder(g, x, y, w, h, radius, color, strokeWidth, 0f);
+    }
+
+    /**
+     * Like the other overload, but lets several calls at increasing {@code extraInset}
+     * draw concentric rings instead of a single flat stroke - the layered "frame within a
+     * frame" look trading cards (Pokémon, Yu-Gi-Oh) use instead of a plain border.
+     */
+    private void paintPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color color, float strokeWidth, float extraInset) {
         g.setColor(color);
         g.setStroke(new BasicStroke(strokeWidth));
-        float inset = strokeWidth / 2f;
-        g.draw(new RoundRectangle2D.Float(x + inset, y + inset, w - 2 * inset, h - 2 * inset, radius, radius));
+        float inset = extraInset + strokeWidth / 2f;
+        float r = Math.max(0, radius - extraInset);
+        g.draw(new RoundRectangle2D.Float(x + inset, y + inset, w - 2 * inset, h - 2 * inset, r, r));
     }
 
     private void paintPlaceholderGradient(Graphics2D g, int x, int y, int w, int h, Color from, Color to) {
