@@ -48,7 +48,7 @@ public class BandShareCardService {
     // code deploy invalidates every cached card on its own. Without this, redeploying a
     // design tweak would keep serving pre-existing PNGs from disk indefinitely, since the
     // on-disk cache otherwise only reacts to band/edition *data* changes, not code changes.
-    private static final int RENDER_VERSION = 3;
+    private static final int RENDER_VERSION = 4;
 
     private final BandRepository bandRepository;
     private final Path uploadRoot;
@@ -191,15 +191,10 @@ public class BandShareCardService {
 
             // --- band photo ---
             int photoY = headerY + headerHeight + 28;
-            // Taller than a plain photo would need to be: Genre/Herkunft are overlaid on
-            // its bottom instead of sitting in their own box below it (the extra height is
-            // exactly what that box used to take, so the rest of the layout doesn't shift).
-            int photoH = 774;
+            int photoH = 600;
             // Same radius as the outer card panel - a tighter curve here would read as two
             // competing roundings instead of one consistent "trading card" shape.
             int photoRadius = cardRadius;
-            boolean hasGenre = StringUtils.hasText(band.getGenre());
-            boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
             BufferedImage photo = loadImage(band.getMainImagePath());
             paintPanel(g, contentX, photoY, contentW, photoH, photoRadius, Color.BLACK);
             withClip(g, contentX, photoY, contentW, photoH, photoRadius, clipped -> {
@@ -208,32 +203,11 @@ public class BandShareCardService {
                 } else {
                     paintPlaceholderGradient(clipped, contentX, photoY, contentW, photoH, primary, accent2);
                 }
-
-                // Genre/Herkunft read directly off the photo, like the Line-Up grid's own
-                // photo-overlay cards (.band-card-overlay) - a dark bottom-up scrim instead
-                // of a separate panel, so the photo doesn't sit so starkly apart from the
-                // rest of the card's content.
-                if (hasGenre || hasHerkunft) {
-                    int overlayH = 260;
-                    paintVerticalScrim(clipped, contentX, photoY + photoH - overlayH, contentW, overlayH);
-
-                    int textBoxH = 152;
-                    int textBoxY = photoY + photoH - textBoxH;
-                    int half = contentW / 2;
-                    if (hasGenre) {
-                        drawIconLabelValue(clipped, iconMusicNote(), contentX + 32, textBoxY, half - 32, textBoxH, "Genre", band.getGenre(), accent);
-                    }
-                    if (hasHerkunft) {
-                        drawIconLabelValue(clipped, iconPin(), contentX + half + 32, textBoxY, half - 64, textBoxH, "Herkunft", band.getHerkunft(), accent);
-                    }
-                    if (hasGenre && hasHerkunft) {
-                        clipped.setColor(withAlpha(Color.WHITE, 50));
-                        clipped.fillRect(contentX + half, textBoxY + 24, 2, textBoxH - 48);
-                    }
-                }
             });
             // The photo gets its own "art window" frame, like a trading card's inset
-            // artwork border - distinct from the outer card frame around it.
+            // artwork border - distinct from the outer card frame around it. A real
+            // trading card's art window also stays free of text/stats, which all live in
+            // their own boxes below it (see the info panels further down).
             paintPanelBorder(g, contentX, photoY, contentW, photoH, photoRadius, accent, 5f);
 
             // --- edition logo badge, overlapping the photo's top-right corner like a tilted sticker ---
@@ -253,7 +227,7 @@ public class BandShareCardService {
                 g.setTransform(oldTransform);
             }
 
-            // --- info panels (Genre/Herkunft now live on the photo itself, see above) ---
+            // --- info panels ---
             int panelGap = 22;
             int panelY = photoY + photoH + 26;
             int panelRadius = 24;
@@ -262,12 +236,31 @@ public class BandShareCardService {
             // accent-colored text on top keeps the same light-on-dark contrast as the header.
             Color panelBg = withAlpha(secondaryColor, 242);
             Color textColor = accent;
-            Color panelBorderColor = textColor;
+
+            boolean hasGenre = StringUtils.hasText(band.getGenre());
+            boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
+            if (hasGenre || hasHerkunft) {
+                int panelH = 152;
+                paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
+                paintLayeredPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, secondaryColor.brighter(), accent);
+                int half = contentW / 2;
+                if (hasGenre) {
+                    drawIconLabelValue(g, iconMusicNote(), contentX + 32, panelY, half - 32, panelH, "Genre", band.getGenre(), textColor);
+                }
+                if (hasHerkunft) {
+                    drawIconLabelValue(g, iconPin(), contentX + half + 32, panelY, half - 64, panelH, "Herkunft", band.getHerkunft(), textColor);
+                }
+                if (hasGenre && hasHerkunft) {
+                    g.setColor(new Color(0, 0, 0, 40));
+                    g.fillRect(contentX + half, panelY + 24, 2, panelH - 48);
+                }
+                panelY += panelH + panelGap;
+            }
 
             if (band.getPerformanceAt() != null) {
                 int panelH = 118;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
-                paintPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, panelBorderColor);
+                paintLayeredPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, secondaryColor.brighter(), accent);
                 String label = formatPerformanceLabel(band);
                 drawCenteredIconText(g, iconCalendar(), contentX, panelY, contentW, panelH, label, textColor);
                 panelY += panelH + panelGap;
@@ -277,7 +270,7 @@ public class BandShareCardService {
             if (location != null && StringUtils.hasText(location.getName())) {
                 int panelH = 118;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
-                paintPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, panelBorderColor);
+                paintLayeredPanelBorder(g, contentX, panelY, contentW, panelH, panelRadius, secondaryColor.brighter(), accent);
                 String label = StringUtils.hasText(location.getZipCity())
                         ? location.getName() + ", " + location.getZipCity()
                         : location.getName();
@@ -336,17 +329,15 @@ public class BandShareCardService {
         g.draw(new RoundRectangle2D.Float(x + inset, y + inset, w - 2 * inset, h - 2 * inset, r, r));
     }
 
+    /** A scaled-down echo of the outer card's layered frame, for the smaller info panels. */
+    private void paintLayeredPanelBorder(Graphics2D g, int x, int y, int w, int h, int radius, Color highlightColor, Color accentColor) {
+        paintPanelBorder(g, x, y, w, h, radius, highlightColor, 2f);
+        paintPanelBorder(g, x, y, w, h, radius, accentColor, 3f, 5f);
+    }
+
     private void paintPlaceholderGradient(Graphics2D g, int x, int y, int w, int h, Color from, Color to) {
         Paint previous = g.getPaint();
         g.setPaint(new GradientPaint(x, y, from, x + w, y + h, to));
-        g.fillRect(x, y, w, h);
-        g.setPaint(previous);
-    }
-
-    /** A bottom-anchored transparent-to-black gradient for overlaying text on a photo - same idea as the Line-Up grid's own .band-card-overlay. */
-    private void paintVerticalScrim(Graphics2D g, int x, int y, int w, int h) {
-        Paint previous = g.getPaint();
-        g.setPaint(new GradientPaint(x, y, new Color(0, 0, 0, 0), x, y + h, new Color(0, 0, 0, 200)));
         g.fillRect(x, y, w, h);
         g.setPaint(previous);
     }
