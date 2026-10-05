@@ -108,7 +108,7 @@ public class BandShareCardService {
 
             // --- header: band name + slot number ---
             int headerY = cardY + pad;
-            Font nameFont = fitFont(g, band.getName().toUpperCase(Locale.GERMAN), displayFont, 72, 36, contentW - 140);
+            Font nameFont = fitFont(g, band.getName().toUpperCase(Locale.GERMAN), displayFont, 112, 52, contentW - 170);
             g.setFont(nameFont);
             g.setColor(accent);
             FontMetrics nameMetrics = g.getFontMetrics();
@@ -116,7 +116,7 @@ public class BandShareCardService {
             g.drawString(band.getName().toUpperCase(Locale.GERMAN), contentX, nameBaseline);
 
             String slotLabel = String.format("No. %02d", slot);
-            Font slotFont = displayFont.deriveFont(38f);
+            Font slotFont = displayFont.deriveFont(50f);
             g.setFont(slotFont);
             FontMetrics slotMetrics = g.getFontMetrics();
             g.drawString(slotLabel, rightEdge - slotMetrics.stringWidth(slotLabel), headerY + slotMetrics.getAscent());
@@ -125,7 +125,7 @@ public class BandShareCardService {
 
             // --- band photo ---
             int photoY = headerY + headerHeight + 28;
-            int photoH = 660;
+            int photoH = 600;
             int photoRadius = 28;
             BufferedImage photo = loadImage(band.getMainImagePath());
             paintPanel(g, contentX, photoY, contentW, photoH, photoRadius, Color.BLACK);
@@ -156,8 +156,8 @@ public class BandShareCardService {
             }
 
             // --- info panels ---
-            int panelGap = 20;
-            int panelY = photoY + photoH + 24;
+            int panelGap = 22;
+            int panelY = photoY + photoH + 26;
             int panelRadius = 24;
             Color panelBg = withAlpha(Color.WHITE, 242);
             Color textColor = new Color(0x2a1a1a);
@@ -165,24 +165,24 @@ public class BandShareCardService {
             boolean hasGenre = StringUtils.hasText(band.getGenre());
             boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
             if (hasGenre || hasHerkunft) {
-                int panelH = 118;
+                int panelH = 152;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
                 int half = contentW / 2;
                 if (hasGenre) {
-                    drawIconLabelValue(g, iconMusicNote(), contentX + 28, panelY, half - 28, panelH, "Genre", band.getGenre(), textColor);
+                    drawIconLabelValue(g, iconMusicNote(), contentX + 32, panelY, half - 32, panelH, "Genre", band.getGenre(), textColor);
                 }
                 if (hasHerkunft) {
-                    drawIconLabelValue(g, iconPin(), contentX + half + 28, panelY, half - 56, panelH, "Herkunft", band.getHerkunft(), textColor);
+                    drawIconLabelValue(g, iconPin(), contentX + half + 32, panelY, half - 64, panelH, "Herkunft", band.getHerkunft(), textColor);
                 }
                 if (hasGenre && hasHerkunft) {
                     g.setColor(new Color(0, 0, 0, 40));
-                    g.fillRect(contentX + half, panelY + 20, 2, panelH - 40);
+                    g.fillRect(contentX + half, panelY + 24, 2, panelH - 48);
                 }
                 panelY += panelH + panelGap;
             }
 
             if (band.getPerformanceAt() != null) {
-                int panelH = 96;
+                int panelH = 118;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
                 String label = formatPerformanceLabel(band);
                 drawCenteredIconText(g, iconCalendar(), contentX, panelY, contentW, panelH, label, textColor);
@@ -191,7 +191,7 @@ public class BandShareCardService {
 
             Location location = edition.getLocation();
             if (location != null && StringUtils.hasText(location.getName())) {
-                int panelH = 96;
+                int panelH = 118;
                 paintPanel(g, contentX, panelY, contentW, panelH, panelRadius, panelBg);
                 String label = StringUtils.hasText(location.getZipCity())
                         ? location.getName() + ", " + location.getZipCity()
@@ -334,38 +334,38 @@ public class BandShareCardService {
     // ---------------------------------------------------------------- icons (hand-drawn, no asset files)
 
     private void drawIconLabelValue(Graphics2D g, Path2D icon, int x, int y, int w, int h, String label, String value, Color color) {
-        int iconSize = 30;
+        int iconSize = 38;
         int iconX = x;
         int iconY = y + h / 2 - iconSize / 2;
         g.setColor(color);
         drawIcon(g, icon, iconX, iconY, iconSize);
 
-        int textX = iconX + iconSize + 16;
-        Font labelFont = new Font(Font.SANS_SERIF, Font.PLAIN, 22);
-        Font valueFont = displayFont.deriveFont(34f);
+        int textX = iconX + iconSize + 18;
+        Font labelFont = new Font(Font.SANS_SERIF, Font.PLAIN, 27);
+        Font valueFont = displayFont.deriveFont(46f);
         g.setFont(labelFont);
         FontMetrics lm = g.getFontMetrics();
         int centerY = y + h / 2;
         g.setColor(withAlpha(color, 170));
-        g.drawString(label, textX, centerY - 4);
+        g.drawString(label, textX, centerY - 10);
 
-        g.setFont(fitFont(g, value, valueFont, 34, 18, Math.max(40, x + w - textX)));
+        g.setFont(fitFont(g, value, valueFont, 46, 24, Math.max(40, x + w - textX)));
         FontMetrics vm = g.getFontMetrics();
         g.setColor(color);
-        g.drawString(value, textX, centerY - 4 + lm.getDescent() + vm.getAscent());
+        g.drawString(value, textX, centerY - 10 + lm.getDescent() + vm.getAscent());
     }
 
     private void drawCenteredIconText(Graphics2D g, Path2D icon, int x, int y, int w, int h, String text, Color color) {
-        Font font = fitFont(g, text, displayFont.deriveFont(36f), 36, 20, w - 160);
+        Font font = fitFont(g, text, displayFont.deriveFont(48f), 48, 26, w - 170);
         g.setFont(font);
         FontMetrics fm = g.getFontMetrics();
-        int iconSize = 30;
+        int iconSize = 38;
         int textWidth = fm.stringWidth(text);
-        int totalWidth = iconSize + 14 + textWidth;
+        int totalWidth = iconSize + 16 + textWidth;
         int startX = x + (w - totalWidth) / 2;
         g.setColor(color);
         drawIcon(g, icon, startX, y + h / 2 - iconSize / 2, iconSize);
-        g.drawString(text, startX + iconSize + 14, y + h / 2 - (fm.getAscent() + fm.getDescent()) / 2 + fm.getAscent());
+        g.drawString(text, startX + iconSize + 16, y + h / 2 - (fm.getAscent() + fm.getDescent()) / 2 + fm.getAscent());
     }
 
     private void drawIcon(Graphics2D g, Path2D template, int x, int y, int size) {
