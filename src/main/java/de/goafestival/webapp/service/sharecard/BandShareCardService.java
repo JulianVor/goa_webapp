@@ -177,7 +177,9 @@ public class BandShareCardService {
             // --- band photo ---
             int photoY = headerY + headerHeight + 28;
             int photoH = 600;
-            int photoRadius = 28;
+            // Same radius as the outer card panel - a tighter curve here would read as two
+            // competing roundings instead of one consistent "trading card" shape.
+            int photoRadius = cardRadius;
             BufferedImage photo = loadImage(band.getMainImagePath());
             paintPanel(g, contentX, photoY, contentW, photoH, photoRadius, Color.BLACK);
             withClip(g, contentX, photoY, contentW, photoH, photoRadius, clipped -> {
