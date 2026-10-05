@@ -970,7 +970,7 @@ img { max-width: 100%; display: block; }
 }
 
 @media (max-width: 600px) {
-    .hall-of-fame-grid { grid-template-columns: repeat(2, 1fr); }
+    .hall-of-fame-grid { grid-template-columns: 1fr; }
 }
 
 .hof-card-wrap {
