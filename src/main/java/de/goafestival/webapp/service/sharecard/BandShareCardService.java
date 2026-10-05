@@ -146,11 +146,11 @@ public class BandShareCardService {
             // brings its own shape/border.
             BufferedImage logo = loadImage(edition.getLogoImagePath());
             if (logo != null) {
-                int badgeSize = 180;
-                int badgeCx = contentX + contentW - 110;
-                int badgeCy = photoY + 100;
+                int badgeSize = 210;
+                int badgeCx = contentX + contentW - 70;
+                int badgeCy = photoY + 75;
                 AffineTransform oldTransform = g.getTransform();
-                g.rotate(Math.toRadians(-14), badgeCx, badgeCy);
+                g.rotate(Math.toRadians(14), badgeCx, badgeCy);
                 double logoScale = Math.min((double) badgeSize / logo.getWidth(), (double) badgeSize / logo.getHeight());
                 int lw = (int) Math.round(logo.getWidth() * logoScale);
                 int lh = (int) Math.round(logo.getHeight() * logoScale);
