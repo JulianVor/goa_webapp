@@ -48,7 +48,7 @@ public class BandShareCardService {
     // code deploy invalidates every cached card on its own. Without this, redeploying a
     // design tweak would keep serving pre-existing PNGs from disk indefinitely, since the
     // on-disk cache otherwise only reacts to band/edition *data* changes, not code changes.
-    private static final int RENDER_VERSION = 4;
+    private static final int RENDER_VERSION = 5;
 
     // Separate from RENDER_VERSION since the back's design (see renderEditionBack) changes
     // independently of the front card's - bumping one shouldn't force-invalidate the other.
@@ -563,7 +563,7 @@ public class BandShareCardService {
         drawIcon(g, icon, iconX, iconY, iconSize);
 
         int textX = iconX + iconSize + 18;
-        Font labelFont = new Font(Font.SANS_SERIF, Font.PLAIN, 27);
+        Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 27);
         g.setFont(labelFont);
         FontMetrics lm = g.getFontMetrics();
         int centerY = y + h / 2;
