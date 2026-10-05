@@ -3,7 +3,6 @@ package de.goafestival.webapp.web;
 import de.goafestival.webapp.domain.Band;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.dto.DayLineup;
-import de.goafestival.webapp.dto.EditionLineup;
 import de.goafestival.webapp.service.BandService;
 import de.goafestival.webapp.service.EditionService;
 import de.goafestival.webapp.service.FaqEntryService;
@@ -13,8 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Renders the public festival page: the current edition at "/", any past
@@ -78,18 +80,24 @@ public class EditionPageController {
         return "edition";
     }
 
-    /** All bands that have ever played the Festival (not the Kneipenkonzerte), one grid per year. */
+    /**
+     * All bands that have ever played the Festival (not the Kneipenkonzerte), shuffled
+     * into one grid like a mixed deck of trading cards - freshly reshuffled on every
+     * visit. Which year a band belongs to is still just a click away via the Archiv, so
+     * dropping the per-year grouping here doesn't lose that information, just this page's
+     * own strict chronological order.
+     */
     @GetMapping("/hall-of-fame")
     public String hallOfFame(Model model) {
         Edition current = editionService.getCurrentOrThrow();
-        List<EditionLineup> sections = editionService.findFestivalEditions().stream()
-                .map(e -> new EditionLineup(e, bandService.findByEdition(e.getId())))
-                .filter(section -> !section.bands().isEmpty())
-                .toList();
+        List<Band> bands = editionService.findFestivalEditions().stream()
+                .flatMap(e -> bandService.findByEdition(e.getId()).stream())
+                .collect(Collectors.toCollection(ArrayList::new));
+        Collections.shuffle(bands);
 
         model.addAttribute("edition", current);
         model.addAttribute("archivedEditions", editionService.findArchivedEditions());
-        model.addAttribute("sections", sections);
+        model.addAttribute("bands", bands);
         model.addAttribute("pageTitle", "Hall of Fame – " + current.getTitle());
         return "hall-of-fame";
     }

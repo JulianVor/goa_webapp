@@ -959,19 +959,6 @@ img { max-width: 100%; display: block; }
     opacity: 0.85;
 }
 
-.hall-of-fame-section { margin-bottom: 3rem; }
-
-.hall-of-fame-year {
-    font-family: var(--font-display);
-    color: var(--color-accent);
-    -webkit-text-stroke: 0.14em var(--color-primary);
-    paint-order: stroke fill;
-    line-height: 1.3;
-    text-align: center;
-    font-size: clamp(1.6rem, 5vw, 2.2rem);
-    margin-bottom: 1.5rem;
-}
-
 .hall-of-fame-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

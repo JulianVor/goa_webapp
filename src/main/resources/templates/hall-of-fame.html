@@ -10,16 +10,13 @@
         <h1 class="section-title">Hall of Fame</h1>
         <p class="hall-of-fame-intro">Alle Bands, die jemals beim Grumbrechtstraßen Open Air gespielt haben – oder bald spielen werden.</p>
 
-        <div class="hall-of-fame-section" th:each="section : ${sections}">
-            <h2 class="hall-of-fame-year" th:text="'GOA ' + ${section.edition.year}">GOA 2026</h2>
-            <div class="hall-of-fame-grid">
-                <a class="hof-card" th:each="band : ${section.bands}" th:href="@{'/bands/' + ${band.id}}">
-                    <img th:src="@{'/bands/' + ${band.id} + '/share-card.png'}" th:alt="${band.name}" loading="lazy"/>
-                </a>
-            </div>
+        <div class="hall-of-fame-grid">
+            <a class="hof-card" th:each="band : ${bands}" th:href="@{'/bands/' + ${band.id}}">
+                <img th:src="@{'/bands/' + ${band.id} + '/share-card.png'}" th:alt="${band.name}" loading="lazy"/>
+            </a>
         </div>
 
-        <p class="empty-hint" th:if="${sections.isEmpty()}">Noch wurden keine Bands hinterlegt.</p>
+        <p class="empty-hint" th:if="${bands.isEmpty()}">Noch wurden keine Bands hinterlegt.</p>
     </div>
 </section>
 
