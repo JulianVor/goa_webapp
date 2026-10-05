@@ -346,8 +346,11 @@ public class BandShareCardService {
 
     // ---------------------------------------------------------------- icons (hand-drawn, no asset files)
 
+    /** Fixed size for the Genre/Herkunft/Termin/Location field icons - stays constant regardless of the value text's own (dynamic) size. */
+    private static final int FIELD_ICON_SIZE = 48;
+
     private void drawIconLabelValue(Graphics2D g, Path2D icon, int x, int y, int w, int h, String label, String value, Color color) {
-        int iconSize = 38;
+        int iconSize = FIELD_ICON_SIZE;
         int iconX = x;
         int iconY = y + h / 2 - iconSize / 2;
         g.setColor(color);
@@ -378,7 +381,7 @@ public class BandShareCardService {
         Font font = fitFont(g, text, displayFont, maxSize, 26, w - 170);
         g.setFont(font);
         FontMetrics fm = g.getFontMetrics();
-        int iconSize = 38;
+        int iconSize = FIELD_ICON_SIZE;
         int textWidth = fm.stringWidth(text);
         int totalWidth = iconSize + 16 + textWidth;
         int startX = x + (w - totalWidth) / 2;
