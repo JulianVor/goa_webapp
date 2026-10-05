@@ -48,7 +48,7 @@ public class BandShareCardService {
     // code deploy invalidates every cached card on its own. Without this, redeploying a
     // design tweak would keep serving pre-existing PNGs from disk indefinitely, since the
     // on-disk cache otherwise only reacts to band/edition *data* changes, not code changes.
-    private static final int RENDER_VERSION = 5;
+    private static final int RENDER_VERSION = 6;
 
     // Separate from RENDER_VERSION since the back's design (see renderEditionBack) changes
     // independently of the front card's - bumping one shouldn't force-invalidate the other.
@@ -383,9 +383,9 @@ public class BandShareCardService {
     }
 
     private String formatPerformanceLabel(Band band) {
-        DateTimeFormatter dayMonth = DateTimeFormatter.ofPattern("EEEE d. MMMM", Locale.GERMAN);
+        DateTimeFormatter dayMonthYear = DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.GERMAN);
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm", Locale.GERMAN);
-        return dayMonth.format(band.getPerformanceAt()) + " " + time.format(band.getPerformanceAt()) + " Uhr";
+        return dayMonthYear.format(band.getPerformanceAt()) + " " + time.format(band.getPerformanceAt()) + " Uhr";
     }
 
     // ---------------------------------------------------------------- drawing helpers
