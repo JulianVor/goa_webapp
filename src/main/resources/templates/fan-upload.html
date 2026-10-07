@@ -29,12 +29,15 @@
 
             <ul class="fan-upload-filelist" id="fan-upload-filelist" aria-live="polite"></ul>
 
+            <div class="g-recaptcha fan-upload-recaptcha" th:if="${not #strings.isEmpty(recaptchaSiteKey)}" th:attr="data-sitekey=${recaptchaSiteKey}"></div>
+
             <button type="submit" class="fan-upload-submit">Hochladen</button>
         </form>
     </div>
 </section>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+<script th:if="${not #strings.isEmpty(recaptchaSiteKey)}" src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"></script>
 <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

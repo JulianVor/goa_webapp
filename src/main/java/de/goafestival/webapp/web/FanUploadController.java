@@ -3,6 +3,8 @@ package de.goafestival.webapp.web;
 import de.goafestival.webapp.domain.Edition;
 import de.goafestival.webapp.service.EditionService;
 import de.goafestival.webapp.service.FanUploadService;
+import de.goafestival.webapp.service.RecaptchaService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +29,13 @@ public class FanUploadController {
 
     private final EditionService editionService;
     private final FanUploadService fanUploadService;
+    private final RecaptchaService recaptchaService;
 
-    public FanUploadController(EditionService editionService, FanUploadService fanUploadService) {
+    public FanUploadController(EditionService editionService, FanUploadService fanUploadService,
+                                RecaptchaService recaptchaService) {
         this.editionService = editionService;
         this.fanUploadService = fanUploadService;
+        this.recaptchaService = recaptchaService;
     }
 
     @GetMapping("/upload")
@@ -40,8 +45,9 @@ public class FanUploadController {
 
     @PostMapping("/upload")
     public String currentUpload(@RequestParam(value = "files", required = false) List<MultipartFile> files,
-                                 RedirectAttributes redirectAttributes) {
-        return handleUpload(editionService.getCurrentOrThrow(), files, "/upload", redirectAttributes);
+                                 @RequestParam(value = "g-recaptcha-response", required = false) String recaptchaResponse,
+                                 HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        return handleUpload(editionService.getCurrentOrThrow(), files, "/upload", recaptchaResponse, request, redirectAttributes);
     }
 
     @GetMapping("/goa/{year}/upload")
@@ -52,8 +58,9 @@ public class FanUploadController {
     @PostMapping("/goa/{year}/upload")
     public String yearUpload(@PathVariable int year,
                               @RequestParam(value = "files", required = false) List<MultipartFile> files,
-                              RedirectAttributes redirectAttributes) {
-        return handleUpload(editionService.getByYearOrThrow(year), files, "/goa/" + year + "/upload", redirectAttributes);
+                              @RequestParam(value = "g-recaptcha-response", required = false) String recaptchaResponse,
+                              HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        return handleUpload(editionService.getByYearOrThrow(year), files, "/goa/" + year + "/upload", recaptchaResponse, request, redirectAttributes);
     }
 
     private String uploadForm(Edition edition, String uploadAction, Model model) {
@@ -64,8 +71,12 @@ public class FanUploadController {
         return "fan-upload";
     }
 
-    private String handleUpload(Edition edition, List<MultipartFile> files, String uploadAction,
-                                 RedirectAttributes redirectAttributes) {
+    private String handleUpload(Edition edition, List<MultipartFile> files, String uploadAction, String recaptchaResponse,
+                                 HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        if (!recaptchaService.verify(recaptchaResponse, request.getRemoteAddr())) {
+            redirectAttributes.addFlashAttribute("uploadError", "Bitte bestätige, dass du kein Roboter bist.");
+            return "redirect:" + uploadAction;
+        }
         int stored = fanUploadService.storeAll(edition, files);
         if (stored > 0) {
             redirectAttributes.addFlashAttribute("uploadSuccess", stored == 1
