@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head-admin :: head-admin('Fan-Uploads')}"></head>
+<body class="admin-body">
+<div th:replace="~{fragments/admin-nav :: admin-nav('fan-uploads')}"></div>
+
+<main class="admin-main">
+    <div class="admin-header-row">
+        <h1>Fan-Uploads</h1>
+    </div>
+    <p class="field-hint">
+        Fotos &amp; Videos, die Besucher:innen über die (nicht verlinkte) Upload-Seite eingereicht haben.
+        Die Originaldateien liegen unkomprimiert vor - "Öffnen" lädt die volle Datei.
+    </p>
+
+    <p class="flash-success" th:if="${success}" th:text="${success}"></p>
+
+    <div class="fan-upload-filter">
+        <a th:classappend="${selectedEditionId == null} ? 'active'" th:href="@{/admin/fan-uploads}">Alle Jahre</a>
+        <a th:each="e : ${editions}" th:classappend="${selectedEditionId != null and selectedEditionId == e.id} ? 'active'"
+           th:href="@{/admin/fan-uploads(editionId=${e.id})}" th:text="'GOA ' + ${e.year}">GOA 2026</a>
+    </div>
+
+    <div class="admin-fan-upload-grid">
+        <div class="admin-fan-upload-card" th:each="upload : ${uploads}">
+            <div class="admin-fan-upload-thumb">
+                <img th:if="${upload.mediaType.name() == 'PHOTO'}" th:src="@{'/admin/fan-uploads/' + ${upload.id} + '/file'}"
+                     loading="lazy" th:alt="${upload.originalFilename}"/>
+                <video th:if="${upload.mediaType.name() == 'VIDEO'}" th:src="@{'/admin/fan-uploads/' + ${upload.id} + '/file'}"
+                       controls="controls" preload="none"></video>
+            </div>
+            <div class="admin-fan-upload-meta">
+                <span class="admin-fan-upload-name" th:text="${upload.originalFilename}">foto.jpg</span>
+                <span class="admin-fan-upload-sub"
+                      th:text="${upload.edition.title} + ' ' + ${upload.edition.year} + ' · ' + ${upload.fileSizeLabel} + ' · ' + ${T(de.goafestival.webapp.service.GermanDateFormats).dayAndTimeLabel(upload.uploadedAt)}">
+                    GOA 2026 · 248 MB · Freitag 10. Juli 2026, 18:00 Uhr
+                </span>
+            </div>
+            <div class="admin-fan-upload-actions">
+                <a th:href="@{'/admin/fan-uploads/' + ${upload.id} + '/file'}" target="_blank">Öffnen</a>
+                <form th:action="@{'/admin/fan-uploads/' + ${upload.id} + '/delete'}" method="post" class="inline-form"
+                      onsubmit="return confirm('Datei wirklich löschen?');">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="link-button link-danger">Löschen</button>
+                </form>
+            </div>
+        </div>
+
+        <p th:if="${uploads.isEmpty()}">Noch keine Uploads vorhanden.</p>
+    </div>
+</main>
+</body>
+</html>

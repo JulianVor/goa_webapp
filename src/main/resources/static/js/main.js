@@ -111,4 +111,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     });
+
+    // Fan-upload page: list the chosen files (name + size) so picking a batch of
+    // photos/videos gives some confirmation before submitting, and disable the submit
+    // button with a "please wait" label on submit - a large video can take a while to
+    // upload and a plain form POST otherwise gives no feedback that anything is happening.
+    var fanUploadInput = document.getElementById('fan-upload-input');
+    var fanUploadFilelist = document.getElementById('fan-upload-filelist');
+    if (fanUploadInput && fanUploadFilelist) {
+        fanUploadInput.addEventListener('change', function () {
+            fanUploadFilelist.innerHTML = '';
+            Array.prototype.forEach.call(fanUploadInput.files, function (file) {
+                var li = document.createElement('li');
+                var sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+                li.textContent = file.name + ' (' + sizeMb + ' MB)';
+                fanUploadFilelist.appendChild(li);
+            });
+        });
+    }
+
+    var fanUploadForm = document.getElementById('fan-upload-form');
+    if (fanUploadForm) {
+        fanUploadForm.addEventListener('submit', function () {
+            var submitBtn = fanUploadForm.querySelector('.fan-upload-submit');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Wird hochgeladen – bei großen Videos kann das dauern...';
+            }
+        });
+    }
 });

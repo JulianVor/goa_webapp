@@ -1062,6 +1062,94 @@ img { max-width: 100%; display: block; }
     .hof-card-face { border-radius: 18px; }
 }
 
+/* --------------------------------- Fan-Upload -------------------------------- */
+
+.fan-upload-page { background: #0000004f; min-height: 70vh; min-height: 70svh; }
+
+.fan-upload-section { max-width: 640px; margin: 0 auto; text-align: center; }
+
+.fan-upload-intro { opacity: 0.9; line-height: 1.5; margin-bottom: 2rem; }
+
+.fan-upload-flash { font-size: 1.05rem; margin-bottom: 1.5rem; }
+
+.fan-upload-form { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+
+.fan-upload-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 3rem 1.5rem;
+    background: color-mix(in srgb, var(--color-secondary) 55%, transparent);
+    border: 3px dashed var(--color-accent);
+    border-radius: 28px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.fan-upload-dropzone:hover {
+    transform: scale(1.02);
+    background: color-mix(in srgb, var(--color-secondary) 75%, transparent);
+}
+
+.fan-upload-icon { font-size: 2.8rem; }
+
+.fan-upload-label {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--color-accent);
+}
+
+.fan-upload-hint { font-size: 0.9rem; opacity: 0.8; }
+
+/* The real file input stays in the DOM (for the form submit and for accessibility/
+   keyboard support) but is visually hidden - the whole dropzone label is the control. */
+.fan-upload-dropzone input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.fan-upload-filelist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: left;
+}
+
+.fan-upload-filelist li {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 0.5rem 0.9rem;
+}
+
+.fan-upload-submit {
+    padding: 0.9rem 2.6rem;
+    background: var(--color-accent);
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.fan-upload-submit:hover { transform: scale(1.05); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45); }
+
+.fan-upload-submit:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
 /* --------------------------------- Responsive -------------------------------- */
 
 @media (max-width: 700px) {

@@ -22,13 +22,16 @@ public class EditionService {
     private final LocationRepository locationRepository;
     private final FileStorageService fileStorageService;
     private final BandShareCardService bandShareCardService;
+    private final FanUploadService fanUploadService;
 
     public EditionService(EditionRepository editionRepository, LocationRepository locationRepository,
-                           FileStorageService fileStorageService, BandShareCardService bandShareCardService) {
+                           FileStorageService fileStorageService, BandShareCardService bandShareCardService,
+                           FanUploadService fanUploadService) {
         this.editionRepository = editionRepository;
         this.locationRepository = locationRepository;
         this.fileStorageService = fileStorageService;
         this.bandShareCardService = bandShareCardService;
+        this.fanUploadService = fanUploadService;
     }
 
     public List<Edition> findAllOrdered() {
@@ -145,6 +148,8 @@ public class EditionService {
         fileStorageService.delete(edition.getLocationImagePath());
         bandShareCardService.invalidateForEdition(id);
         bandShareCardService.invalidateBack(id);
+        // Before the edition row itself, or the foreign key on fan_uploads would block it.
+        fanUploadService.deleteForEdition(id);
         editionRepository.delete(edition);
     }
 

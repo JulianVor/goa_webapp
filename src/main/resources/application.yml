@@ -28,8 +28,13 @@ spring:
       separator: "//"
   servlet:
     multipart:
-      max-file-size: ${APP_MAX_UPLOAD_SIZE:50MB}
-      max-request-size: ${APP_MAX_UPLOAD_REQUEST_SIZE:200MB}
+      # Raised well past the site's own image/logo uploads (those stay small; FileStorageService
+      # downscales them anyway) to fit the fan-upload page's unkomprimierte photos/videos - up
+      # to 1GB per file, several files per submission. If a reverse proxy sits in front of this
+      # app in production, it needs a matching (or higher) body-size limit too, or it will
+      # reject large uploads before they even reach here.
+      max-file-size: ${APP_MAX_UPLOAD_SIZE:1GB}
+      max-request-size: ${APP_MAX_UPLOAD_REQUEST_SIZE:3GB}
   thymeleaf:
     # Re-parsing every template on every request is fine for local dev (hot template edits)
     # but wastes CPU per request in production. Default to cached; set THYMELEAF_CACHE=false
@@ -70,6 +75,9 @@ app:
   # with no reverse proxy in front.
   base-url: ${APP_BASE_URL:}
   upload-dir: uploads
+  # Deliberately a different directory than upload-dir above: that one is served
+  # publicly at /uploads/** (see WebConfig), fan uploads must not be.
+  fan-upload-dir: fan-uploads
   admin:
     username: ${ADMIN_USERNAME:admin}
     password: ${ADMIN_PASSWORD:admin}

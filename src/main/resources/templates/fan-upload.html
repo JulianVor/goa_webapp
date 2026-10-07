@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${edition}, ${pageTitle})}"></head>
+<body>
+<div class="page-bg"></div>
+<div th:replace="~{fragments/nav :: nav(${edition}, ${archivedEditions})}"></div>
+
+<section class="section-band fan-upload-page">
+    <div class="section fan-upload-section">
+        <h1 class="section-title">Fotos &amp; Videos hochladen</h1>
+        <p class="fan-upload-intro">
+            Warst du beim <span th:text="${edition.title}">Grumbrechtstraßen Open Air</span>
+            <span th:text="${edition.year}">2026</span> dabei? Lade hier deine schönsten Fotos und
+            Videos hoch - in voller Qualität, unkomprimiert. Wir freuen uns über jede Erinnerung!
+        </p>
+
+        <p class="newsletter-success fan-upload-flash" th:if="${uploadSuccess}" th:text="${uploadSuccess}"></p>
+        <p class="newsletter-error fan-upload-flash" th:if="${uploadError}" th:text="${uploadError}"></p>
+
+        <form method="post" enctype="multipart/form-data" class="fan-upload-form" th:action="@{${uploadAction}}" id="fan-upload-form">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <label class="fan-upload-dropzone" for="fan-upload-input">
+                <span class="fan-upload-icon">📸</span>
+                <span class="fan-upload-label">Fotos &amp; Videos auswählen</span>
+                <span class="fan-upload-hint">Mehrfachauswahl möglich · max. 1 GB pro Datei</span>
+                <input id="fan-upload-input" type="file" name="files" accept="image/*,video/*" multiple="multiple" required="required"/>
+            </label>
+
+            <ul class="fan-upload-filelist" id="fan-upload-filelist" aria-live="polite"></ul>
+
+            <button type="submit" class="fan-upload-submit">Hochladen</button>
+        </form>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
