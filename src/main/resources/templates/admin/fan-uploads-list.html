@@ -7,6 +7,8 @@
 <main class="admin-main">
     <div class="admin-header-row">
         <h1>Fan-Uploads</h1>
+        <a class="btn btn-primary" th:if="${not uploads.isEmpty()}"
+           th:href="@{/admin/fan-uploads/download-all(editionId=${selectedEditionId})}">⬇ Alle herunterladen (ZIP)</a>
     </div>
     <p class="field-hint">
         Fotos &amp; Videos, die Besucher:innen über die (nicht verlinkte) Upload-Seite eingereicht haben.
