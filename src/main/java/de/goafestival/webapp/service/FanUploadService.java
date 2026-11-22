@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -24,11 +25,24 @@ public class FanUploadService {
     }
 
     public List<FanUpload> findByEdition(Long editionId) {
-        return fanUploadRepository.findByEditionIdOrderByUploadedAtDesc(editionId);
+        return fanUploadRepository.findByEditionIdOrderByUploadedAtDesc(editionId).stream()
+                .filter(this::fileExists)
+                .toList();
     }
 
     public List<FanUpload> findAll() {
-        return fanUploadRepository.findAllByOrderByUploadedAtDesc();
+        return fanUploadRepository.findAllByOrderByUploadedAtDesc().stream()
+                .filter(this::fileExists)
+                .toList();
+    }
+
+    /**
+     * Guards against showing broken previews for rows whose file was lost (e.g. a deploy
+     * without a persistent volume for the fan-upload directory) - the row stays in the
+     * database, but the admin list simply won't surface it until the file is back.
+     */
+    private boolean fileExists(FanUpload upload) {
+        return Files.exists(storageService.resolve(upload.getStoredPath()));
     }
 
     public FanUpload getByIdOrThrow(Long id) {
