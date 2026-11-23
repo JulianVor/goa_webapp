@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var DATA_URL = '/quiz/gta-oder-harburg.json';
     var ROUND_SIZE = 5;
+    var SEEN_KEY = 'gta-oder-harburg-seen';
 
     var clicks = 0;
     var resetTimer = null;
@@ -51,6 +52,23 @@ document.addEventListener('DOMContentLoaded', function () {
         return copy;
     }
 
+    function loadSeenIds() {
+        try {
+            var stored = JSON.parse(window.localStorage.getItem(SEEN_KEY));
+            return Array.isArray(stored) ? stored : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveSeenIds(ids) {
+        try {
+            window.localStorage.setItem(SEEN_KEY, JSON.stringify(ids));
+        } catch (e) {
+            // private browsing / blocked storage - the quiz still works, just without memory
+        }
+    }
+
     function onKeydown(event) {
         if (event.key === 'Escape') closeQuiz();
     }
@@ -75,7 +93,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function startRound() {
-        round = shuffled(allCases).slice(0, ROUND_SIZE);
+        var seen = loadSeenIds();
+        var unseen = allCases.filter(function (c) { return seen.indexOf(c.id) === -1; });
+
+        // Pool exhausted (or too small to begin with) - start a fresh cycle rather than
+        // falling back to repeats while unseen cases still exist elsewhere in the pool.
+        if (unseen.length < ROUND_SIZE) {
+            seen = [];
+            unseen = allCases.slice();
+        }
+
+        round = shuffled(unseen).slice(0, ROUND_SIZE);
+        saveSeenIds(seen.concat(round.map(function (c) { return c.id; })));
+
         index = 0;
         score = 0;
         renderQuestion();
