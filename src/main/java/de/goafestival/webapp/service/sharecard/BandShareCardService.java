@@ -267,7 +267,7 @@ public class BandShareCardService {
             // panel, so they read as a clearly separate surface instead of blending into it -
             // accent-colored text on top keeps the same light-on-dark contrast as the header.
             Color panelBg = withAlpha(secondaryColor, 242);
-            Color textColor = accent;
+            Color textColor = parseColor(edition.getColorText(), new Color(0xf2c14e));
 
             boolean hasGenre = StringUtils.hasText(band.getGenre());
             boolean hasHerkunft = StringUtils.hasText(band.getHerkunft());
