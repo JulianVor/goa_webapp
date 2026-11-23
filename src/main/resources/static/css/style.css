@@ -142,6 +142,7 @@ img { max-width: 100%; display: block; }
     background: var(--color-accent-box);
     color: var(--color-heading);
     text-decoration: none;
+    border: none;
     padding: 0.6rem 1.3rem;
     border-radius: var(--pill-radius);
     font-family: var(--font-display);
@@ -149,6 +150,13 @@ img { max-width: 100%; display: block; }
     font-weight: 600;
     font-size: 1.05rem;
     white-space: nowrap;
+    cursor: pointer;
+}
+
+/* Only the Newsletter pill gets an outline, in 2. Akzentfarbe - the other nav pills
+   (Event-Infos, Line-Up, FAQ, ...) stay borderless. */
+.site-nav .pill-newsletter {
+    border: 2px solid var(--color-secondary);
 }
 
 .nav-socials { display: flex; gap: 0.5rem; align-items: center; }
