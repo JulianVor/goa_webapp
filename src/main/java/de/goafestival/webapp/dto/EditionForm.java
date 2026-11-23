@@ -40,8 +40,6 @@ public class EditionForm {
     private String colorSecondary = "#2f6f68";
     @NotBlank
     private String colorAccent2 = "#e0559a";
-    @NotBlank
-    private String colorAccent = "#f2c14e";
 
     @NotBlank
     private String colorBox = "#2f6f68";
@@ -167,14 +165,6 @@ public class EditionForm {
 
     public void setColorAccent2(String colorAccent2) {
         this.colorAccent2 = colorAccent2;
-    }
-
-    public String getColorAccent() {
-        return colorAccent;
-    }
-
-    public void setColorAccent(String colorAccent) {
-        this.colorAccent = colorAccent;
     }
 
     public String getColorBox() {

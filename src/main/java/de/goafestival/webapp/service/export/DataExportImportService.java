@@ -120,7 +120,6 @@ public class DataExportImportService {
             dto.colorPrimary = edition.getColorPrimary();
             dto.colorSecondary = edition.getColorSecondary();
             dto.colorAccent2 = edition.getColorAccent2();
-            dto.colorAccent = edition.getColorAccent();
             dto.logoImagePath = edition.getLogoImagePath();
             dto.backgroundImagePath = edition.getBackgroundImagePath();
             dto.locationImagePath = edition.getLocationImagePath();
@@ -335,11 +334,11 @@ public class DataExportImportService {
         for (ExportData.EditionDto e : data.editions) {
             jdbcTemplate.update("INSERT INTO editions (id, type, festival_year, display_label, title, start_date, "
                             + "end_date, location_id, about_text, color_primary, color_secondary, color_accent2, "
-                            + "color_accent, logo_image_path, background_image_path, location_image_path, "
+                            + "logo_image_path, background_image_path, location_image_path, "
                             + "show_event_infos, show_lineup, show_faq, show_headliner, is_current) "
-                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     e.id, e.type, e.year, e.displayLabel, e.title, e.startDate, e.endDate, e.locationId, e.aboutText,
-                    e.colorPrimary, e.colorSecondary, e.colorAccent2, e.colorAccent, e.logoImagePath,
+                    e.colorPrimary, e.colorSecondary, e.colorAccent2, e.logoImagePath,
                     e.backgroundImagePath, e.locationImagePath, e.showEventInfos, e.showLineup, e.showFaq,
                     e.showHeadliner, e.current);
         }

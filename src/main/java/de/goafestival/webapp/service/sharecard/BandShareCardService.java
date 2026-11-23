@@ -179,7 +179,7 @@ public class BandShareCardService {
             // had one set yet, so older/archived editions still render a sensible card.
             String primaryHex = StringUtils.hasText(edition.getColorPrimary()) ? edition.getColorPrimary() : edition.getColorSecondary();
             Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
-            Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
+            Color accent = parseColor(edition.getColorAccent2(), new Color(0xf2c14e));
             Color accent2 = parseColor(edition.getColorAccent2(), new Color(0xc0392b));
             Color secondaryColor = parseColor(edition.getColorSecondary(), new Color(0x2f6f68));
 
@@ -336,7 +336,7 @@ public class BandShareCardService {
 
             String primaryHex = StringUtils.hasText(edition.getColorPrimary()) ? edition.getColorPrimary() : edition.getColorSecondary();
             Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
-            Color accent = parseColor(edition.getColorAccent(), new Color(0xf2c14e));
+            Color accent = parseColor(edition.getColorAccent2(), new Color(0xf2c14e));
 
             // Painted once across the whole canvas - stays visible in the window further
             // down, since the frame itself never covers it there.

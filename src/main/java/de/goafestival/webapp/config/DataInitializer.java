@@ -63,7 +63,6 @@ public class DataInitializer implements CommandLineRunner {
                 + "Bands und Sherenernen über Bühnen bolten mobile.");
         edition2026.setColorSecondary("#2f6f68");
         edition2026.setColorAccent2("#e0559a");
-        edition2026.setColorAccent("#f2c14e");
         edition2026.setCurrent(true);
         edition2026 = editionRepository.save(edition2026);
 
@@ -108,7 +107,6 @@ public class DataInitializer implements CommandLineRunner {
         edition2025.setAboutText("Die 60. Ausgabe des Grumbrechtstraßen Open Air – ein Rückblick.");
         edition2025.setColorSecondary("#2e5fa3");
         edition2025.setColorAccent2("#c9701f");
-        edition2025.setColorAccent("#e07f22");
         edition2025.setCurrent(false);
         edition2025 = editionRepository.save(edition2025);
 

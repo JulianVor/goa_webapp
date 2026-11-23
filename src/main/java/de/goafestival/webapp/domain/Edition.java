@@ -65,8 +65,8 @@ public class Edition {
     /** The "true" primary/brand color (e.g. Bordeaux red for 2026) - not yet used anywhere in rendering. */
     private String colorPrimary;
     private String colorSecondary = "#2f6f68";
+    /** "Akzentfarbe" in the admin form - the field name stays colorAccent2 for DB compatibility. */
     private String colorAccent2 = "#e0559a";
-    private String colorAccent = "#f2c14e";
 
     /**
      * Background of content boxes - the panel behind a band's name/genre/herkunft/
@@ -272,14 +272,6 @@ public class Edition {
         this.colorAccent2 = colorAccent2;
     }
 
-    public String getColorAccent() {
-        return colorAccent;
-    }
-
-    public void setColorAccent(String colorAccent) {
-        this.colorAccent = colorAccent;
-    }
-
     /** Falls back to colorSecondary, matching this edition's look before colorBox existed. */
     public String getColorBox() {
         return colorBox != null ? colorBox : colorSecondary;
@@ -298,9 +290,9 @@ public class Edition {
         this.colorAccentBox = colorAccentBox;
     }
 
-    /** Falls back to colorAccent, matching this edition's look before colorHeading existed. */
+    /** Falls back to colorAccent2, matching this edition's look before colorHeading existed. */
     public String getColorHeading() {
-        return colorHeading != null ? colorHeading : colorAccent;
+        return colorHeading != null ? colorHeading : colorAccent2;
     }
 
     public void setColorHeading(String colorHeading) {
@@ -316,9 +308,9 @@ public class Edition {
         this.colorHeadingOutline = colorHeadingOutline;
     }
 
-    /** Falls back to colorAccent, matching this edition's look before colorText existed. */
+    /** Falls back to colorAccent2, matching this edition's look before colorText existed. */
     public String getColorText() {
-        return colorText != null ? colorText : colorAccent;
+        return colorText != null ? colorText : colorAccent2;
     }
 
     public void setColorText(String colorText) {
