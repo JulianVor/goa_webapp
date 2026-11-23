@@ -1665,3 +1665,16 @@ body.egg-open { overflow: hidden; }
     display: block;
     margin: 0 auto;
 }
+
+/* Tighter spacing so a question + both buttons + the reveal fit with less
+   scrolling inside the card on small phone screens. */
+@media (max-width: 480px) {
+    .egg3-overlay { padding: 1rem; }
+    .egg3-card { max-height: 88vh; padding: 1.25rem 1.25rem 1.5rem; }
+    .egg3-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .egg3-clue { font-size: 1.05rem; margin-bottom: 1rem; }
+    .egg3-choices { gap: 0.6rem; margin-bottom: 0.75rem; }
+    .egg3-btn { padding: 0.7rem 1.25rem; }
+    .egg3-verdict { font-size: 1rem; }
+    .egg3-source { margin-bottom: 0.85rem; }
+}

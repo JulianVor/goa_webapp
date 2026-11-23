@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '<button type="button" class="egg3-btn egg3-choice" data-answer="GTA">🎮 GTA</button>' +
             '</div>' +
             '<div class="egg3-reveal"></div>';
+        card.scrollTop = 0;
 
         card.querySelectorAll('.egg3-choice').forEach(function (btn) {
             btn.addEventListener('click', function () {
@@ -120,12 +121,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         card.querySelector('.egg3-reveal').innerHTML =
             '<p class="egg3-verdict ' + (correct ? 'egg3-verdict-ok' : 'egg3-verdict-bad') + '">' +
-            (correct ? 'Richtig!' : 'Leider falsch') + ' Das war ' + escapeHtml(current.answer) + '.' +
+            (correct ? 'Richtig! ' : 'Leider falsch! ') + 'Das war ' + escapeHtml(current.answer) + '.' +
             '</p>' +
             linkHtml +
             '<button type="button" class="egg3-btn egg3-btn-next">' +
             (index + 1 < round.length ? 'Weiter' : 'Ergebnis anzeigen') +
             '</button>';
+
+        // The reveal (verdict + source link + button) can push past the card's visible
+        // height on a phone screen - scroll it into view so "Weiter" is never hidden
+        // below the fold without an obvious way to find it.
+        requestAnimationFrame(function () {
+            card.scrollTop = card.scrollHeight;
+        });
 
         card.querySelector('.egg3-btn-next').addEventListener('click', function () {
             index += 1;
