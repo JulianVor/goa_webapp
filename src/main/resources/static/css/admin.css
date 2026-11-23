@@ -241,6 +241,16 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 .color-legend { margin: 0 0 0.75rem; padding-left: 1.1rem; }
 .color-legend li { margin-bottom: 0.15rem; }
 
+.range-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+.range-row input[type=range] { flex: 1 1 auto; max-width: 320px; }
+.range-row output { font-weight: 700; min-width: 1.5em; text-align: right; }
+
 .checkbox-row { flex-direction: row; align-items: center; gap: 0.5rem; }
 
 .form-actions { display: flex; gap: 1rem; }

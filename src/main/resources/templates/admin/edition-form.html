@@ -91,9 +91,18 @@
             </div>
             <ul class="field-hint color-legend">
                 <li><strong>Box-Hintergrund:</strong> Fläche hinter Inhalten wie Bandname/Genre/Herkunft, "Was/Wann/Wo" oder FAQ.</li>
-                <li><strong>Akzent-Kasten:</strong> Nav-Leiste, Buttons, Headliner-/Teaser-Boxen.</li>
+                <li><strong>Akzent-Kasten:</strong> Buttons, Headliner-/Teaser-Box, Modals, Archiv-Dropdown (die Nav-Leiste selbst nutzt die Sekundärfarbe).</li>
                 <li><strong>Überschriften/Umrandung:</strong> gelten für alle Titel (inkl. Button-Beschriftung); Umrandung auch für den Rahmen der Akzent-Kästen.</li>
             </ul>
+
+            <label for="box-radius-input">Eckenradius der Kästen</label>
+            <div class="range-row">
+                <input type="range" id="box-radius-input" th:field="*{boxRadius}" min="0" max="40" step="1"/>
+                <output id="box-radius-output" for="box-radius-input">20</output> px
+            </div>
+            <p class="field-hint">
+                Gilt für Box-Hintergrund und Akzent-Kasten (nicht für Buttons/Pills - die bleiben voll abgerundet).
+            </p>
 
             <label>Schriftart
                 <select th:field="*{headingFont}">
@@ -159,6 +168,13 @@
 
         typeSelect.addEventListener('change', applyTypeVisibility);
         applyTypeVisibility();
+
+        var boxRadiusInput = document.getElementById('box-radius-input');
+        var boxRadiusOutput = document.getElementById('box-radius-output');
+        boxRadiusOutput.textContent = boxRadiusInput.value;
+        boxRadiusInput.addEventListener('input', function () {
+            boxRadiusOutput.textContent = boxRadiusInput.value;
+        });
     })();
 </script>
 </body>

@@ -92,6 +92,14 @@ public class Edition {
     private String colorText;
 
     /**
+     * Corner rounding (px) for content/accent boxes (band detail card, info panel, FAQ
+     * items, modal, headliner box, Kneipenkonzert teaser/dropdown menu) - not pill-shaped
+     * buttons, which stay fully rounded regardless. Nullable, falls back to 20 (today's
+     * de-facto default) via the getter.
+     */
+    private Integer boxRadius;
+
+    /**
      * Which display font this edition's headings/body text use. Nullable so existing
      * rows (created before this column existed) fall back to "BRUGTY" via
      * {@link #getHeadingFont()} without a data migration, the same approach as the
@@ -305,6 +313,15 @@ public class Edition {
 
     public void setColorText(String colorText) {
         this.colorText = colorText;
+    }
+
+    /** Never null - falls back to 20px, matching the look before this field existed. */
+    public Integer getBoxRadius() {
+        return boxRadius != null ? boxRadius : 20;
+    }
+
+    public void setBoxRadius(Integer boxRadius) {
+        this.boxRadius = boxRadius;
     }
 
     /** "BRUGTY" (default) or "BEBAS_NEUE" - never null, so templates can compare it directly. */

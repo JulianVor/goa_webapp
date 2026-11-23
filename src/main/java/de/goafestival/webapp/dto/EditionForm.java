@@ -54,6 +54,9 @@ public class EditionForm {
     @NotBlank
     private String colorText = "#f2c14e";
 
+    @NotNull
+    private Integer boxRadius = 20;
+
     @NotBlank
     private String headingFont = "BRUGTY";
 
@@ -210,6 +213,14 @@ public class EditionForm {
 
     public void setColorText(String colorText) {
         this.colorText = colorText;
+    }
+
+    public Integer getBoxRadius() {
+        return boxRadius;
+    }
+
+    public void setBoxRadius(Integer boxRadius) {
+        this.boxRadius = boxRadius;
     }
 
     public String getHeadingFont() {
