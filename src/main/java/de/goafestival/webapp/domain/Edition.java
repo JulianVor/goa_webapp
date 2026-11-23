@@ -94,10 +94,20 @@ public class Edition {
     /**
      * Corner rounding (px) for content/accent boxes (band detail card, info panel, FAQ
      * items, modal, headliner box, Kneipenkonzert teaser/dropdown menu) - not pill-shaped
-     * buttons, which stay fully rounded regardless. Nullable, falls back to 20 (today's
-     * de-facto default) via the getter.
+     * buttons, which have their own {@link #pillRadius}. Nullable, falls back to 20
+     * (today's de-facto default) via the getter.
      */
     private Integer boxRadius;
+
+    /**
+     * Corner rounding (px) for CTA buttons/nav pills (nav links, newsletter button,
+     * "Hall of Fame"/"Teilen-Karte"/route buttons, etc.) - separate from
+     * {@link #boxRadius} since these are a different ("pill") shape language. Nullable,
+     * falls back to 50 via the getter - well past half the height of any of these
+     * buttons, so CSS's own radius-clamping keeps them fully rounded exactly like the
+     * fixed 999px they used before this field existed.
+     */
+    private Integer pillRadius;
 
     /**
      * Which display font this edition's headings/body text use. Nullable so existing
@@ -322,6 +332,15 @@ public class Edition {
 
     public void setBoxRadius(Integer boxRadius) {
         this.boxRadius = boxRadius;
+    }
+
+    /** Never null - falls back to 50px, matching the fully-rounded look before this field existed. */
+    public Integer getPillRadius() {
+        return pillRadius != null ? pillRadius : 50;
+    }
+
+    public void setPillRadius(Integer pillRadius) {
+        this.pillRadius = pillRadius;
     }
 
     /** "BRUGTY" (default) or "BEBAS_NEUE" - never null, so templates can compare it directly. */

@@ -100,8 +100,15 @@
                 <input type="range" id="box-radius-input" th:field="*{boxRadius}" min="0" max="40" step="1"/>
                 <output id="box-radius-output" for="box-radius-input">20</output> px
             </div>
+            <p class="field-hint">Gilt für Box-Hintergrund und Akzent-Kasten.</p>
+
+            <label for="pill-radius-input">Eckenradius der Buttons/Pills</label>
+            <div class="range-row">
+                <input type="range" id="pill-radius-input" th:field="*{pillRadius}" min="0" max="50" step="1"/>
+                <output id="pill-radius-output" for="pill-radius-input">50</output> px
+            </div>
             <p class="field-hint">
-                Gilt für Box-Hintergrund und Akzent-Kasten (nicht für Buttons/Pills - die bleiben voll abgerundet).
+                Hohe Werte (ab ca. der halben Button-Höhe) ergeben die volle Pillenform; niedrigere Werte eckiger.
             </p>
 
             <label>Schriftart
@@ -169,12 +176,17 @@
         typeSelect.addEventListener('change', applyTypeVisibility);
         applyTypeVisibility();
 
-        var boxRadiusInput = document.getElementById('box-radius-input');
-        var boxRadiusOutput = document.getElementById('box-radius-output');
-        boxRadiusOutput.textContent = boxRadiusInput.value;
-        boxRadiusInput.addEventListener('input', function () {
-            boxRadiusOutput.textContent = boxRadiusInput.value;
-        });
+        function wireRangeOutput(inputId, outputId) {
+            var input = document.getElementById(inputId);
+            var output = document.getElementById(outputId);
+            output.textContent = input.value;
+            input.addEventListener('input', function () {
+                output.textContent = input.value;
+            });
+        }
+
+        wireRangeOutput('box-radius-input', 'box-radius-output');
+        wireRangeOutput('pill-radius-input', 'pill-radius-output');
     })();
 </script>
 </body>

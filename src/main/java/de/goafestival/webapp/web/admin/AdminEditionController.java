@@ -46,6 +46,7 @@ public class AdminEditionController {
             form.setColorHeadingOutline(current.getColorHeadingOutline());
             form.setColorText(current.getColorText());
             form.setBoxRadius(current.getBoxRadius());
+            form.setPillRadius(current.getPillRadius());
         });
         model.addAttribute("editionForm", form);
         model.addAttribute("locations", locationService.findAllOrdered());
@@ -125,6 +126,7 @@ public class AdminEditionController {
         form.setColorHeadingOutline(edition.getColorHeadingOutline());
         form.setColorText(edition.getColorText());
         form.setBoxRadius(edition.getBoxRadius());
+        form.setPillRadius(edition.getPillRadius());
         form.setHeadingFont(edition.getHeadingFont());
         form.setCurrent(edition.isCurrent());
         form.setShowEventInfos(edition.isShowEventInfos());

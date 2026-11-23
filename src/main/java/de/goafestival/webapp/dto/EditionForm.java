@@ -56,6 +56,8 @@ public class EditionForm {
 
     @NotNull
     private Integer boxRadius = 20;
+    @NotNull
+    private Integer pillRadius = 50;
 
     @NotBlank
     private String headingFont = "BRUGTY";
@@ -221,6 +223,14 @@ public class EditionForm {
 
     public void setBoxRadius(Integer boxRadius) {
         this.boxRadius = boxRadius;
+    }
+
+    public Integer getPillRadius() {
+        return pillRadius;
+    }
+
+    public void setPillRadius(Integer pillRadius) {
+        this.pillRadius = pillRadius;
     }
 
     public String getHeadingFont() {

@@ -26,9 +26,12 @@
     --color-heading: #f2c14e;
     --color-heading-outline: #2f6f68;
     --color-text: #f2c14e;
-    /* Corner rounding for content/accent boxes (Edition.boxRadius) - not pill-shaped
-       buttons, which stay at their own fixed 999px regardless of this value. */
+    /* Corner rounding for content/accent boxes (Edition.boxRadius) and, separately, for
+       CTA buttons/nav pills (Edition.pillRadius) - two different shape languages. The
+       999px default here is well past any of these elements' half-height, so CSS's own
+       clamping keeps them fully rounded exactly as before either field existed. */
     --box-radius: 20px;
+    --pill-radius: 999px;
     --bg-image: none;
     /* Named so fragments/head.html can switch --font-display/--font-body to a whole
        different stack per edition (var(--font-stack-...)) without needing to embed
@@ -140,7 +143,7 @@ img { max-width: 100%; display: block; }
     color: var(--color-heading);
     text-decoration: none;
     padding: 0.6rem 1.3rem;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;
@@ -282,7 +285,7 @@ img { max-width: 100%; display: block; }
 
 .newsletter-form input[type="email"] {
     padding: 0.7rem 1rem;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     border: 2px solid var(--color-primary);
     font-family: var(--font-body);
     font-weight: var(--font-weight-body, normal);
@@ -293,7 +296,7 @@ img { max-width: 100%; display: block; }
     background: var(--color-accent-box);
     color: var(--color-heading);
     border: none;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     padding: 0.7rem 1.4rem;
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
@@ -454,7 +457,7 @@ img { max-width: 100%; display: block; }
     font-weight: 600;
     font-size: clamp(1.1rem, 3vw, 1.4rem);
     text-decoration: none;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -622,7 +625,7 @@ img { max-width: 100%; display: block; }
     font-weight: 700;
     font-size: 1.2rem;
     padding: 0.9rem 1.4rem;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
 }
@@ -964,7 +967,7 @@ img { max-width: 100%; display: block; }
     gap: 0.4rem;
     margin-top: 1.25rem;
     padding: 0.4rem 0.9rem;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     background: var(--color-accent-box);
     color: var(--color-heading);
     font-family: var(--font-display);
@@ -1195,7 +1198,7 @@ img { max-width: 100%; display: block; }
     font-weight: 600;
     font-size: 1.2rem;
     border: none;
-    border-radius: 999px;
+    border-radius: var(--pill-radius);
     cursor: pointer;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
     transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
