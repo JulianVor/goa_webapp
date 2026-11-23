@@ -182,6 +182,7 @@ public class BandShareCardService {
             Color accent = parseColor(edition.getColorAccent2(), new Color(0xf2c14e));
             Color accent2 = parseColor(edition.getColorAccent2(), new Color(0xc0392b));
             Color secondaryColor = parseColor(edition.getColorSecondary(), new Color(0x2f6f68));
+            Color heading = parseColor(edition.getColorHeading(), new Color(0xf2c14e));
 
             paintBorderBackground(g, edition, primary);
 
@@ -207,7 +208,7 @@ public class BandShareCardService {
             int headerY = cardY + pad;
             Font nameFont = fitFont(g, band.getName().toUpperCase(Locale.GERMAN), displayFont, 112, 52, contentW - 170);
             g.setFont(nameFont);
-            g.setColor(accent);
+            g.setColor(heading);
             FontMetrics nameMetrics = g.getFontMetrics();
             int nameBaseline = headerY + nameMetrics.getAscent();
             g.drawString(band.getName().toUpperCase(Locale.GERMAN), contentX, nameBaseline);
@@ -337,6 +338,7 @@ public class BandShareCardService {
             String primaryHex = StringUtils.hasText(edition.getColorPrimary()) ? edition.getColorPrimary() : edition.getColorSecondary();
             Color primary = parseColor(primaryHex, new Color(0x4a1f2b));
             Color accent = parseColor(edition.getColorAccent2(), new Color(0xf2c14e));
+            Color heading = parseColor(edition.getColorHeading(), new Color(0xf2c14e));
 
             // Painted once across the whole canvas - stays visible in the window further
             // down, since the frame itself never covers it there.
@@ -368,7 +370,7 @@ public class BandShareCardService {
                 String title = edition.getTitle().toUpperCase(Locale.GERMAN);
                 Font titleFont = fitFont(g, title, displayFont, 100, 48, windowW - 80);
                 g.setFont(titleFont);
-                g.setColor(accent);
+                g.setColor(heading);
                 FontMetrics fm = g.getFontMetrics();
                 int tw = fm.stringWidth(title);
                 g.drawString(title, windowX + (windowW - tw) / 2, windowY + windowH / 2 + fm.getAscent() / 2 - fm.getDescent() / 2);
