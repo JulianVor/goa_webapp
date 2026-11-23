@@ -97,7 +97,7 @@ img { max-width: 100%; display: block; }
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: var(--color-accent-box);
+    background: var(--color-primary);
     padding: 0.6rem 1.5rem;
     flex-wrap: wrap;
 }
