@@ -2,6 +2,7 @@
   {
     "id": "H001",
     "answer": "Harburg",
+    "title": "38 Zeitschriften",
     "clue": "Ein Mann räumt bei einem Ladendiebstahl gleich 38 Zeitschriften in seinen Rucksack. Wenig später wird er mit seiner gesamten Beute erwischt.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/70254/6244548"
@@ -9,6 +10,7 @@
   {
     "id": "H002",
     "answer": "Harburg",
+    "title": "Gitarre zurückgegeben",
     "clue": "Ein Mann klaut ein Musikinstrument und bestreitet die Tat. Einige Stunden später taucht er freiwillig bei der Polizei auf und bringt es zurück.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/70254/6275691"
@@ -16,6 +18,7 @@
   {
     "id": "H003",
     "answer": "Harburg",
+    "title": "Hosentasche aufgeschnitten",
     "clue": "Während ein Fahrgast schläft, schneidet ihm ein Dieb die Hosentasche auf und nimmt sein Handy mit.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/70254/6300584"
@@ -23,6 +26,7 @@
   {
     "id": "H004",
     "answer": "Harburg",
+    "title": "Diebstahl angezeigt, selbst gesucht",
     "clue": "Eine Frau geht zur Polizei, um ein gestohlenes Handy zu melden. Statt Hilfe bekommt sie selbst Probleme: Die Beamten stellen fest, dass sie gesucht wird.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/70254/5949389"
@@ -30,6 +34,7 @@
   {
     "id": "H011",
     "answer": "Harburg",
+    "title": "Autodiebstahl mit Spritze",
     "clue": "Ein Unbekannter bedroht eine Fahrerin mit einer Spritze und nimmt ihr Auto an sich.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/6038284"
@@ -37,20 +42,23 @@
   {
     "id": "H012",
     "answer": "Harburg",
+    "title": "Juwelier mit Auto gerammt",
     "clue": "Vier Männer versuchen nachts, mit einem Auto in ein Juweliergeschäft einzubrechen.",
     "linkLabel": "Presseportal / Polizei",
-    "linkUrl": "https://www.presseportal.de/blaulicht/r/Hamburg-Harburg"
+    "linkUrl": "https://harburg-aktuell.de/blaulicht/polizei-startet-zeugenaufruf-nach-einbruchsversuch-in-harburger-juweliergeschaeft-45683/"
   },
   {
     "id": "H013",
     "answer": "Harburg",
+    "title": "Mutmaßliches Rennen gegen Hauswand",
     "clue": "Nach einem mutmaßlichen Straßenrennen kracht ein junger Autofahrer nachts mit seinem Wagen gegen eine Hauswand.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/3/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/mutmassliches-autorennen-endet-in-harburg-an-hauswand.html"
   },
   {
     "id": "H014",
     "answer": "Harburg",
+    "title": "Aufregung nach Fahrradstreit",
     "clue": "Ein Streit um ein Fahrrad eskaliert. Am Ende wird ein Mann durch einen Stich verletzt.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/6342896"
@@ -58,6 +66,7 @@
   {
     "id": "H015",
     "answer": "Harburg",
+    "title": "Einbrecher in beleuchteter Wohnung",
     "clue": "Ein Paar kommt nach Hause und bemerkt Licht im Schlafzimmer. Drinnen waren offenbar Einbrecher am Werk.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/6068561"
@@ -65,6 +74,7 @@
   {
     "id": "H016",
     "answer": "Harburg",
+    "title": "Streit im Einkaufszentrum",
     "clue": "Ein Streit in einem Einkaufszentrum endet mit einer tödlichen Messerattacke. Umstehende halten den Verdächtigen bis zum Eintreffen der Polizei fest.",
     "linkLabel": "Presseportal / Polizei",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/6064159"
@@ -72,6 +82,7 @@
   {
     "id": "H017",
     "answer": "Harburg",
+    "title": "Taschen voller Kleidung",
     "clue": "Drei Männer versuchen, mit gestohlener Kleidung aus einem Einkaufszentrum zu verschwinden. Eine Zeugin macht die Polizei auf sie aufmerksam.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/festnahme-nach-diebstahl-in-harburg-drei-maenner-kommen-in-u-haft.html"
@@ -79,6 +90,7 @@
   {
     "id": "H018",
     "answer": "Harburg",
+    "title": "Falscher Notruf und Wohnungsöffnung",
     "clue": "Ein dramatischer Notruf setzt einen Großeinsatz in Gang. Einsatzkräfte brechen eine Wohnung auf – offenbar war die Notlage nur vorgetäuscht.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/grosseinsatz-in-harburg-falscher-notruf-loest-verdacht-auf-swatting-aus.html"
@@ -86,510 +98,127 @@
   {
     "id": "H019",
     "answer": "Harburg",
+    "title": "Trickbetrüger an Tankstelle",
     "clue": "Mehrere Verdächtige, die sich zuvor als Polizisten ausgegeben haben sollen, werden an einer Tankstelle überrascht und festgenommen.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/mutmassliche-trickbetrueger-in-harburg-festgenommen-zugriff-an-der-bremer-strasse.html"
   },
   {
-    "id": "H022",
-    "answer": "Harburg",
-    "clue": "Ein geparktes Auto steht plötzlich in Flammen. Das Feuer droht auf ein benachbartes Hotel überzugreifen.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/"
-  },
-  {
-    "id": "H025",
-    "answer": "Harburg",
-    "clue": "Nach einem Jugendfußballspiel eskaliert der Streit zwischen Beteiligten derart, dass die Polizei von einer regelrechten Jagd spricht.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/"
-  },
-  {
     "id": "H026",
     "answer": "Harburg",
+    "title": "17-Jähriger und beschossener Bus",
     "clue": "Ein Linienbus wird beschossen. Die Ermittler kommen einem erst 17 Jahre alten Verdächtigen auf die Spur.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/schuesse-auf-linienbus-polizei-ermittelt-17-jaehrigen-tatverdaechtigen.html"
   },
   {
     "id": "H027",
     "answer": "Harburg",
+    "title": "Leichtauto überschlägt sich",
     "clue": "Ein 17-Jähriger verliert die Kontrolle über sein kleines Auto – der Wagen überschlägt sich.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/2/"
-  },
-  {
-    "id": "H028",
-    "answer": "Harburg",
-    "clue": "Ein Mann behauptet, auf ihn sei geschossen worden. Im Lauf der Ermittlungen gerät er selbst in Verdacht, den Angriff erfunden zu haben.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/2/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/17-jaehriger-ueberschlaegt-sich-mit-leichtfahrzeug-auf-dem-grossmoordamm.html"
   },
   {
     "id": "H029",
     "answer": "Harburg",
+    "title": "Messerwerfer bedroht Fernsehteam",
     "clue": "Während ein Kamerateam dreht, taucht ein Mann auf, bedroht die Crew und wirft ein Messer.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/3/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/bedrohlicher-zwischenfall-am-schwarzenberg-ndr-team-fluechtet-vor-messerwerfer-polizei-rueckt-an.html"
   },
   {
     "id": "H030",
     "answer": "Harburg",
+    "title": "Golfschläger gegen Verkäufer",
     "clue": "Ein Mann bedroht einen Verkäufer an der Haustür mit einem Golfschläger.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/3/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/grosseinsatz-in-eissendorf-golfschlaeger-drohung-gegen-tuerverkaeufer-sorgt-fuer-alarm.html"
   },
   {
     "id": "H031",
     "answer": "Harburg",
+    "title": "Mann stürzt ins Gleisbett",
     "clue": "Ein Betrunkener stürzt an einem Bahnhof auf die Gleise. Einsatzkräfte müssen eingreifen.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/3/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/bahnhof-harburg-betrunkener-mann-stuerzt-in-den-gleisbereich.html"
   },
   {
     "id": "H032",
     "answer": "Harburg",
+    "title": "Gelber Rauch in Wohnung",
     "clue": "Aus einer Wohnung dringt plötzlich rätselhafter gelber Rauch. Ein Großeinsatz beginnt und Straßen werden gesperrt.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/3/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/gelber-rauch-aus-wohnung-loest-grosseinsatz-aus-stader-strasse-zeitweise-voll-gesperrt.html"
   },
   {
     "id": "H034",
     "answer": "Harburg",
+    "title": "Verfolgungsfahrt mit 18-Jährigem",
     "clue": "Ein 18-Jähriger ignoriert eine Polizeikontrolle und rast mit seinem Auto davon. Eine gefährliche Verfolgung beginnt.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/4/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/gefaehrliche-verfolgungsjagd-durch-harburg-18-jaehriger-fluechtet-vor-der-polizei.html"
   },
   {
     "id": "H035",
     "answer": "Harburg",
+    "title": "Zweimal Polizei wegen Familienstreit",
     "clue": "Ein Familienstreit eskaliert so sehr, dass die Polizei gleich zweimal anrücken muss und mehrere Menschen verletzt werden.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/4/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/familienstreit-im-phoenix-viertel-polizei-rueckt-zweimal-aus-zwei-verletzte.html"
   },
   {
     "id": "H036",
     "answer": "Harburg",
+    "title": "Mann aus Zugtoilette befreit",
     "clue": "Ein Fahrgast sitzt in der Toilette eines Zuges fest und muss von der Feuerwehr befreit werden.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/4/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/mann-in-zugtoilette-eingeschlossen-feuerwehr-befreit-fahrgast-am-harburger-bahnhof.html"
   },
   {
     "id": "H037",
     "answer": "Harburg",
+    "title": "Uriniert im Bahntunnel",
     "clue": "Ein Mann uriniert in einem Tunnel am Bahnhof und provoziert vor den eintreffenden Polizisten mit einer strafbaren Parole.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/4/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/mann-uriniert-im-s-bahntunnel-und-ruft-verfassungswidrige-parole-zu-bundespolizisten.html"
   },
   {
     "id": "H038",
     "answer": "Harburg",
+    "title": "Autos mutwillig beschädigt",
     "clue": "Jemand beschädigt mutwillig mindestens 15 abgestellte Autos. Die Polizei kommt einem Verdächtigen auf die Spur.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/5/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/mindestens-15-autos-beschaedigt-polizei-fasst-gesuchten-autokratzer.html"
   },
   {
     "id": "H041",
     "answer": "Harburg",
+    "title": "Brand im früheren Standesamt",
     "clue": "In einem ehemaligen Amtsgebäude bricht Feuer aus. Die Feuerwehr rückt mit einem größeren Aufgebot an.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/6/"
-  },
-  {
-    "id": "H042",
-    "answer": "Harburg",
-    "clue": "In einem Industriegebiet gerät eine Lagerhalle in Brand. Zahlreiche Feuerwehrleute rücken aus.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/6/"
+    "linkUrl": "https://harburg-aktuell.de/news/police/brand-in-der-kita-am-museumsplatz-grosseinsatz-der-feuerwehr-am-ehemaligen-standesamt.html"
   },
   {
     "id": "H043",
     "answer": "Harburg",
+    "title": "Aggressiver Betrunkener",
     "clue": "Ein stark betrunkener Mann macht am Bahnhof Ärger, bis ihn die Polizei in Gewahrsam nimmt.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/bahnhof-harburg-aggressiver-mann-mit-2-62-promille-kommt-in-gewahrsam.html"
   },
   {
-    "id": "H045",
-    "answer": "Harburg",
-    "clue": "Nach einem Einbruch in eine Lagerhalle nimmt die Polizei sieben Verdächtige fest – auch ein Spürhund hilft bei der Suche.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/7/"
-  },
-  {
-    "id": "H046",
-    "answer": "Harburg",
-    "clue": "Ein Mann versucht auf einem Parkplatz, ein Auto aufzubrechen, und wird auf frischer Tat erwischt.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/news/police/page/7/"
-  },
-  {
     "id": "H048",
     "answer": "Harburg",
+    "title": "Drogen versteckt auf Friedhof",
     "clue": "Ermittler entdecken ein ungewöhnliches Drogenversteck: Die Ware liegt in Löchern im Boden eines alten Friedhofs.",
     "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/category/news/police/?filter_by=popular"
-  },
-  {
-    "id": "H049",
-    "answer": "Harburg",
-    "clue": "Ein Täter bedroht die Angestellten eines Pizzalieferdienstes mit einem Messer.",
-    "linkLabel": "harburg-aktuell.de",
-    "linkUrl": "https://harburg-aktuell.de/category/news/police/?filter_by=popular"
-  },
-  {
-    "id": "G001",
-    "answer": "GTA",
-    "clue": "Zwei Männer ziehen durch ihr Viertel und übermalen die Zeichen einer rivalisierenden Gruppe.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Tagging Up Turf",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G002",
-    "answer": "GTA",
-    "clue": "Zwei Männer räumen in ihrer Nachbarschaft mit Dealern auf und suchen einen einschlägigen Treffpunkt auf.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Cleaning the Hood",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G003",
-    "answer": "GTA",
-    "clue": "Nach einem Besuch in einem Schnellrestaurant geraten mehrere Männer in einen Angriff auf eine rivalisierende Gruppe.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Drive-Thru",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G004",
-    "answer": "GTA",
-    "clue": "Mehrere Männer fahren durch die Straßen und beschießen rivalisierende Gruppen aus einem Auto heraus.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Drive-By",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G005",
-    "answer": "GTA",
-    "clue": "Ein Mann und seine Freundin sind von bewaffneten Gegnern umzingelt; Angehörige eilen zu Hilfe.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Sweet’s Girl",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G006",
-    "answer": "GTA",
-    "clue": "Ein Mann fährt mit einem umgebauten Auto zu einem Treffen, bei dem die Fahrzeuge zu einem kleinen Wettbewerb antreten.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Cesar Vialpando",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G007",
-    "answer": "GTA",
-    "clue": "Zwei Einbrecher schleichen nachts in ein Wohnhaus, um mehrere Kisten mit Waffen zu stehlen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Home Invasion",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G008",
-    "answer": "GTA",
-    "clue": "Eine Gruppe will Ladung aus einem Güterzug stehlen; es kommt zum Konflikt mit Rivalen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Catalyst",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G009",
-    "answer": "GTA",
-    "clue": "Ein Treffen im Zusammenhang mit einem Drogengeschäft eskaliert und ein Mann jagt einen Flüchtenden zu Fuß.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Running Dog",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G010",
-    "answer": "GTA",
-    "clue": "Zwei Männer verfolgen auf einem Motorrad einen Zug, in dem ihre Gegner flüchten.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Wrong Side of the Tracks",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G011",
-    "answer": "GTA",
-    "clue": "Zwei Männer geraten bei einem Geschäftstermin in einen Schusswechsel und müssen auf einem Motorrad entkommen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Just Business",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G012",
-    "answer": "GTA",
-    "clue": "Ein Mann schleust sich auf eine Party, um eine teure Musikanlage zu stehlen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Life’s a Beach",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G013",
-    "answer": "GTA",
-    "clue": "Ein Mann dringt in ein Wohnhaus ein und stiehlt ein Notizbuch mit bisher unveröffentlichten Liedtexten.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Madd Dogg’s Rhymes",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G014",
-    "answer": "GTA",
-    "clue": "Ein aufstrebender Künstler lässt einen Mann ausschalten, der seine Karriere behindert.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Management Issues",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G015",
-    "answer": "GTA",
-    "clue": "Eine Straßenparty wird von einer rivalisierenden Gruppe angegriffen; es kommt zu einem Schusswechsel.",
-    "linkLabel": "GTABase – GTA San Andreas missions – House Party",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G016",
-    "answer": "GTA",
-    "clue": "Ein Mann setzt ein Haus in Brand und muss dann eine im Gebäude eingeschlossene Frau retten.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Burning Desire",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G017",
-    "answer": "GTA",
-    "clue": "Ein Mann stört ein illegales Waffengeschäft in einer Lagerhalle und greift die Beteiligten an.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Gray Imports",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G018",
-    "answer": "GTA",
-    "clue": "In einem Park kommt es zu einem bewaffneten Konflikt zwischen rivalisierenden Gruppen, die um das Viertel kämpfen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Doberman",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G019",
-    "answer": "GTA",
-    "clue": "Eine Gruppe will den Anführer einer rivalisierenden Bande auf einem Friedhof abfangen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Los Sepulcros",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G020",
-    "answer": "GTA",
-    "clue": "Mehrere Fahrer treten mit getunten Wagen zu einem illegalen Straßenrennen gegeneinander an.",
-    "linkLabel": "GTABase – GTA San Andreas missions – High Stakes, Low Rider",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G021",
-    "answer": "GTA",
-    "clue": "Ein Treffen rivalisierender Gruppen in einem Motel wird von der Polizei gestürmt; Beteiligte fliehen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Reuniting the Families",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G022",
-    "answer": "GTA",
-    "clue": "Ein Mann erfährt von einem Verrat und fährt zu einem Schusswechsel, um seinen Bruder zu retten.",
-    "linkLabel": "GTABase – GTA San Andreas missions – The Green Sabre",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G023",
-    "answer": "GTA",
-    "clue": "Ein Mann soll für einen Bekannten ein schweres Arbeitsfahrzeug von einem Betriebsgelände entwenden.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Body Harvest",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G024",
-    "answer": "GTA",
-    "clue": "Zwei Täter überfallen einen Getränkeladen und verfolgen anschließend andere Diebe.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Local Liquor Store",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G025",
-    "answer": "GTA",
-    "clue": "Ein Paar raubt ein Wettbüro aus und sprengt dabei einen Zugang auf.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Against All Odds",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G026",
-    "answer": "GTA",
-    "clue": "Zwei Personen überfallen eine Bank; der Plan scheitert und sie müssen vor der Polizei fliehen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Small Town Bank",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G027",
-    "answer": "GTA",
-    "clue": "Ein Mann platziert heimlich Drogen in einem Auto und sorgt dafür, dass dessen Besitzer von der Polizei angehalten wird.",
-    "linkLabel": "GTABase – GTA San Andreas missions – 555 We Tip",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G028",
-    "answer": "GTA",
-    "clue": "Ein Mann rächt sich an Arbeitern auf einer Baustelle, die eine Bekannte belästigt haben sollen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Deconstruction",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G029",
-    "answer": "GTA",
-    "clue": "Zwei Männer verfolgen Hinweise auf ein geheimes Treffen und fotografieren dort mehrere Verdächtige.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Photo Opportunity",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G030",
-    "answer": "GTA",
-    "clue": "Ein Mann erledigt eine Serie dubioser Aufträge für einen Betreiber des Rotlichtmilieus.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Jizzy",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G031",
-    "answer": "GTA",
-    "clue": "Ein Kurier wird von einer Motorradgruppe überfallen; ein anderer Mann verfolgt die Diebe und holt Pakete zurück.",
-    "linkLabel": "GTABase – GTA San Andreas missions – T-Bone Mendez",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G032",
-    "answer": "GTA",
-    "clue": "Nach der Entführung eines Geschäftspartners ortet eine Gruppe ein Fahrzeug und fährt zur Rettung.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Mike Toreno",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G033",
-    "answer": "GTA",
-    "clue": "Ein Fahrer soll einen Transport mit illegaler Ware sicher durch mehrere Straßenblockaden bringen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Outrider",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G034",
-    "answer": "GTA",
-    "clue": "Ein Mann verfolgt einen Journalisten über mehrere Stationen des Nahverkehrs hinweg.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Snail Trail",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G035",
-    "answer": "GTA",
-    "clue": "Ein Mann verschafft sich Zugang zu einem Nachtclub, um dessen Betreiber zur Rede zu stellen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Ice Cold Killa",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G036",
-    "answer": "GTA",
-    "clue": "Ein illegaler Handel an einem Hafenkai wird von bewaffneten Männern gestürmt.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Pier 69",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G037",
-    "answer": "GTA",
-    "clue": "Ein Mann versucht zu verhindern, dass ein Gegner mit einem Hubschrauber entkommt.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Toreno’s Last Flight",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G038",
-    "answer": "GTA",
-    "clue": "Ein Täter fährt ein mit Sprengstoff beladenes Auto in ein Gebäude, in dem Drogen hergestellt werden.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Yay Ka-Boom-Boom",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G039",
-    "answer": "GTA",
-    "clue": "Ein Mann nutzt ein Ortungssystem, um ein gesuchtes Auto zu finden und zu stehlen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Zeroing In",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G040",
-    "answer": "GTA",
-    "clue": "Zwei Männer stehlen mehrere schnelle Wagen aus einem Autohaus und testen sie bei einer wilden Fahrt.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Test Drive",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G041",
-    "answer": "GTA",
-    "clue": "Ein Mann will einen bestimmten Wagen stehlen, der in einem Frachtcontainer im Hafen angeliefert wird.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Customs Fast Track",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G042",
-    "answer": "GTA",
-    "clue": "Ein Mann legt Nagelbänder aus, um einen bestimmten Wagen zum Anhalten zu bringen und zu stehlen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Puncture Wounds",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G043",
-    "answer": "GTA",
-    "clue": "Zwei Männer bringen auf der Straße einen Lastwagen unter ihre Kontrolle und fahren mit ihm davon.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Highjack",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G044",
-    "answer": "GTA",
-    "clue": "Ein Mann soll einen Gefangenen einschüchtern und fährt dazu mit ihm auf der Motorhaube durch die Stadt.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Fender Ketchup",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G045",
-    "answer": "GTA",
-    "clue": "Ein Mann dringt in ein abgesperrtes Betriebsgelände ein und stiehlt mehrere Sprengladungen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Explosive Situation",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G046",
-    "answer": "GTA",
-    "clue": "Ein Mann zerstört Maschinen, mit denen eine Betrügergruppe gefälschte Spielchips herstellen will.",
-    "linkLabel": "GTABase – GTA San Andreas missions – You’ve Had Your Chips",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G047",
-    "answer": "GTA",
-    "clue": "Ein Mann dringt in ein Gebäude ein und beschafft geheime Baupläne für einen späteren Einbruch.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Architectural Espionage",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G048",
-    "answer": "GTA",
-    "clue": "Ein Mann soll einen Patienten aus einem Krankenwagen befreien, der von Gegnern entführt wurde.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Intensive Care",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G049",
-    "answer": "GTA",
-    "clue": "Bei einem Treffen in einer Fleischfabrik eskaliert ein Konflikt; die Beteiligten müssen aus dem Gebäude fliehen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – The Meat Business",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
-  },
-  {
-    "id": "G050",
-    "answer": "GTA",
-    "clue": "Ein Mann verfolgt einen flüchtenden Musiker durch die Stadt, um gestohlene kreative Arbeit zurückzubekommen.",
-    "linkLabel": "GTABase – GTA San Andreas missions – Cut Throat Business",
-    "linkUrl": "https://www.gtabase.com/gta-san-andreas/story-missions"
+    "linkUrl": "https://harburg-aktuell.de/news/police/drogen-in-erdloechern-grosseinsatz-auf-dem-alten-harburger-friedhof.html"
   },
   {
     "id": "H051",
     "answer": "Harburg",
+    "title": "Kopf an der Tankstelle",
     "clue": "Ein Mann erscheint frühmorgens an einer Tankstelle, legt einen abgetrennten menschlichen Kopf auf die Wiese und fordert die Anwesenden auf, die Polizei zu rufen.",
     "linkLabel": "WELT",
     "linkUrl": "https://www.welt.de/vermischtes/article205125/Mann-bringt-blutigen-Frauenkopf-zur-Tankstelle.html"
@@ -597,6 +226,7 @@
   {
     "id": "H052",
     "answer": "Harburg",
+    "title": "Fluchtversuch aus Polizeizelle",
     "clue": "Ein Festgenommener schüttet einem Polizisten Wasser ins Gesicht, schlägt um sich und versucht aus der Zelle zu fliehen. Mehrere Menschen werden verletzt.",
     "linkLabel": "WELT",
     "linkUrl": "https://www.welt.de/vermischtes/article205125/Mann-bringt-blutigen-Frauenkopf-zur-Tankstelle.html"
@@ -604,6 +234,7 @@
   {
     "id": "H053",
     "answer": "Harburg",
+    "title": "Einbruch in geschlossene Bank",
     "clue": "Einbrecher wollen einen Geldautomaten in einer Bank knacken. Beim Versuch setzen sie das Gebäude in Brand – die Filiale ist längst geschlossen.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/kurios-oder-bloed-bankraeuber-steigen-in-bereits-aufgegebene-filiale-ein.html"
@@ -611,6 +242,7 @@
   {
     "id": "H054",
     "answer": "Harburg",
+    "title": "Abkürzung über Gleise",
     "clue": "Ein Mann läuft quer über die Gleise, obwohl Züge fahren. Der Grund: Er ist zu müde, um die Treppe zu nehmen.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/bahnhof-harburg-zu-erschoepft-fuer-treppe-mann-laeuft-ueber-gleise.html"
@@ -618,6 +250,7 @@
   {
     "id": "H055",
     "answer": "Harburg",
+    "title": "Lieferwagen und Standstreifen",
     "clue": "Ein Mann klaut das Auto eines Lieferdienstes und flieht über die Autobahn. Einen Stau überholt er auf dem Standstreifen; Polizisten müssen ausweichen.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/nach-mehrfachen-verfolgungsfahrten-33-jaehriger-eissendorfer-sitzt-endlich-in-haft.html"
@@ -625,6 +258,7 @@
   {
     "id": "H057",
     "answer": "Harburg",
+    "title": "Extrem hoher Alkoholwert",
     "clue": "Ein Mann ist an einem Bahnhof so betrunken, dass er nicht mehr allein weiterlaufen kann. Die Polizei bringt ihn in Sicherheit und holt medizinische Hilfe.",
     "linkLabel": "Bundespolizei / Presseportal",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/70254/5458855"
@@ -632,6 +266,7 @@
   {
     "id": "H058",
     "answer": "Harburg",
+    "title": "Geisterfahrt mit gestohlenem Familienauto",
     "clue": "Ein Mann nimmt das Auto eines Angehörigen, flieht vor der Polizei über die Autobahn, fährt zeitweise als Geisterfahrer und rammt einen Streifenwagen.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/nach-mehrfachen-verfolgungsfahrten-33-jaehriger-eissendorfer-sitzt-endlich-in-haft.html"
@@ -639,6 +274,7 @@
   {
     "id": "H059",
     "answer": "Harburg",
+    "title": "Fluchtwagen geht in Flammen auf",
     "clue": "Ein Mann flieht in einem schnellen Wagen vor der Polizei. Nach einem Zusammenstoß verliert er die Kontrolle, fliegt aus einer Kurve – sein Auto brennt.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/polizei-sucht-zeugen-nach-dem-spektakulaeren-unfall-am-grossmoordamm.html"
@@ -646,6 +282,7 @@
   {
     "id": "H060",
     "answer": "Harburg",
+    "title": "24 gestohlene Fahrräder",
     "clue": "Zwei Verdächtige verstecken in Schuppen und Gartenlauben insgesamt 24 mutmaßlich gestohlene Fahrräder. Die Polizei entdeckt das Lager nach einem weiteren Diebstahl.",
     "linkLabel": "harburg-aktuell.de",
     "linkUrl": "https://harburg-aktuell.de/news/police/polizei-hebt-versteck-von-fahrraddieben-in-heimfeld-aus.html"
@@ -653,6 +290,7 @@
   {
     "id": "H061",
     "answer": "Harburg",
+    "title": "Schüsse wegen gackernder Hühner",
     "clue": "Ein Mann ist von gackernden Hühnern offenbar so genervt, dass er mit einer Schreckschusspistole in ihre Richtung feuert. Sieben Streifenwagen rücken an.",
     "linkLabel": "harburg-aktuell",
     "linkUrl": "https://harburg-aktuell.de/news/police/schuesse-aus-schreckschusswaffe-loesen-groesseren-polizeieinsatz-aus-2.html"
@@ -660,6 +298,7 @@
   {
     "id": "H062",
     "answer": "Harburg",
+    "title": "Nächtliche Schüsse auf Jugendlichen",
     "clue": "Mitten in der Nacht ertönt ein Schuss. Als Polizisten nachsehen, laufen mehrere Männer davon. Zurück bleibt ein 17-Jähriger mit einer Schussverletzung am Bein.",
     "linkLabel": "harburg-aktuell",
     "linkUrl": "https://harburg-aktuell.de/news/police/mitternaechtliche-schuesse-im-phoenix-viertel-17-jaehriger-verletzt.html"
@@ -667,6 +306,7 @@
   {
     "id": "H063",
     "answer": "Harburg",
+    "title": "Schüsse und Flucht in einen Kiosk",
     "clue": "Nach einem Streit in einem Hinterhof fallen mehrere Schüsse. Ein verletzter Mann flieht in einen Kiosk, doch die Angreifer verfolgen ihn bis hinein und attackieren ihn erneut.",
     "linkLabel": "Polizei Hamburg / Presseportal",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/5665148"
@@ -674,6 +314,7 @@
   {
     "id": "H064",
     "answer": "Harburg",
+    "title": "Schuss nach Streit auf dem Gehweg",
     "clue": "Zwei Männer streiten sich mitten auf dem Gehweg. Einer zieht plötzlich eine Pistole, schießt seinem Gegenüber ins Bein und flüchtet. Rund ein Dutzend Streifenwagen sucht nach ihm.",
     "linkLabel": "Polizei Hamburg / Presseportal",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/5852525"
@@ -681,6 +322,7 @@
   {
     "id": "H065",
     "answer": "Harburg",
+    "title": "Schüsse, Mercedes und Horrormaske",
     "clue": "Nachts feuert ein Mann mehrmals mit einer Schreckschusspistole und flieht dann in einem Mercedes. Am Tatort entdeckt die Polizei Patronenhülsen und eine Horrormaske.",
     "linkLabel": "harburg-aktuell",
     "linkUrl": "https://harburg-aktuell.de/news/police/schuesse-in-der-baererstrasse-loesen-grossen-polizeieinsatz-aus.html"
@@ -688,6 +330,7 @@
   {
     "id": "H066",
     "answer": "Harburg",
+    "title": "Bewaffneter Raub im Parkhaus",
     "clue": "Drei Täter lauern einem Schmuckhändler im Treppenhaus eines Parkhauses auf. Sie bedrohen ihn mit einer Schusswaffe, setzen Pfefferspray ein und fliehen mit Gold und Bargeld.",
     "linkLabel": "Polizei Hamburg / Presseportal",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/6288711"
@@ -695,8 +338,25 @@
   {
     "id": "H067",
     "answer": "Harburg",
-    "clue": "Nachdem Schüsse in einem Park gefallen sind, finden Polizisten einen verletzten Mann. Zwei Personen sind davongelaufen. Mehr als ein Dutzend Streifenwagen und ein Hubschrauber suchen die Umgebung ab.",
+    "title": "Schüsse und Hubschrauberfahndung",
+    "clue": "Nach Schüssen in einem Wohngebiet finden Polizisten einen verletzten Mann. Zwei Personen sind davongelaufen. Mehr als ein Dutzend Streifenwagen und ein Hubschrauber suchen nach ihnen.",
     "linkLabel": "Polizei Hamburg / Presseportal",
     "linkUrl": "https://www.presseportal.de/blaulicht/pm/6337/6294843"
+  },
+  {
+    "id": "H068",
+    "answer": "Harburg",
+    "title": "Gast muss Blut aufwischen",
+    "clue": "Zwei bewaffnete Männer überfallen nachts ein Lokal und schlagen einen Mitarbeiter zusammen. Einen noch anwesenden Gast zwingen sie, das Blut vom Boden aufzuwischen. Der Gast kann schließlich entkommen und die Polizei alarmieren.",
+    "linkLabel": "harburg-aktuell",
+    "linkUrl": "https://harburg-aktuell.de/news/police/raubueberfall-auf-lokal-loest-groesseren-polizeieinsatz-aus.html"
+  },
+  {
+    "id": "H069",
+    "answer": "Harburg",
+    "title": "Polizei erwischt den Falschen",
+    "clue": "Nach einem bewaffneten Überfall umstellt die Polizei ein Lokal. Als sich endlich eine Hintertür öffnet, werfen die Beamten den herauskommenden Mann zu Boden. Kurz darauf stellt sich heraus: Es ist das verletzte Opfer, während die Täter längst geflohen sind.",
+    "linkLabel": "harburg-aktuell",
+    "linkUrl": "https://harburg-aktuell.de/news/police/raubueberfall-auf-lokal-loest-groesseren-polizeieinsatz-aus.html"
   }
 ]

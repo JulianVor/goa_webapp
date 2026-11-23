@@ -117,10 +117,15 @@ document.addEventListener('DOMContentLoaded', function () {
               escapeHtml(current.linkLabel) + '</a>'
             : '';
 
+        var titleHtml = current.title
+            ? '<p class="egg3-case-title">„' + escapeHtml(current.title) + '“</p>'
+            : '';
+
         card.querySelector('.egg3-reveal').innerHTML =
             '<p class="egg3-verdict ' + (correct ? 'egg3-verdict-ok' : 'egg3-verdict-bad') + '">' +
             (correct ? 'Richtig! ' : 'Leider falsch! ') + 'Das war ' + escapeHtml(current.answer) + '.' +
             '</p>' +
+            titleHtml +
             linkHtml +
             '<button type="button" class="egg3-btn egg3-btn-next">' +
             (index + 1 < round.length ? 'Weiter' : 'Ergebnis anzeigen') +
@@ -182,10 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(DATA_URL)
             .then(function (res) { return res.json(); })
             .then(function (data) {
-                // Gag: for now every case really happened in Harburg - "GTA" is never
-                // the right answer, so the "twist" is just how wild Harburg actually is.
-                // Remove this filter to bring the real GTA cases back into the pool.
-                allCases = data.filter(function (c) { return c.answer === 'Harburg'; });
+                allCases = data;
                 if (overlay) renderIntro();
             })
             .catch(function () {

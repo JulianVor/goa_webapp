@@ -1651,6 +1651,14 @@ body.egg-open { overflow: hidden; }
 .egg3-verdict-ok { color: #6be39a; }
 .egg3-verdict-bad { color: #ff9b97; }
 
+.egg3-case-title {
+    color: var(--color-text);
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 0.6rem;
+}
+
 .egg3-source {
     display: inline-block;
     color: var(--color-accent);
