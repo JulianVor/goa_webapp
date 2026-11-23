@@ -213,6 +213,11 @@ public class EditionService {
         edition.setColorSecondary(form.getColorSecondary());
         edition.setColorAccent2(form.getColorAccent2());
         edition.setColorAccent(form.getColorAccent());
+        edition.setColorBox(form.getColorBox());
+        edition.setColorAccentBox(form.getColorAccentBox());
+        edition.setColorHeading(form.getColorHeading());
+        edition.setColorHeadingOutline(form.getColorHeadingOutline());
+        edition.setColorText(form.getColorText());
         edition.setHeadingFont(form.getHeadingFont());
         edition.setShowEventInfos(form.isShowEventInfos());
         edition.setShowLineup(form.isShowLineup());

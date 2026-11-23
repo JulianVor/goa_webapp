@@ -69,6 +69,29 @@ public class Edition {
     private String colorAccent = "#f2c14e";
 
     /**
+     * Background of content boxes - the panel behind a band's name/genre/herkunft/
+     * description, the "Was/Wann/Wo" info panel, FAQ items. Nullable so existing rows
+     * fall back to the pre-this-feature look (same as colorSecondary) via the getter.
+     */
+    private String colorBox;
+
+    /**
+     * Background of "accent" boxes: nav bar, buttons, the headliner box, modals and
+     * similar callouts - visually distinct from {@link #colorBox}'s plainer content
+     * panels. Nullable, falls back like {@link #colorBox}.
+     */
+    private String colorAccentBox;
+
+    /** Fill color for all headings/titles (and the label text on accent boxes/buttons). */
+    private String colorHeading;
+
+    /** Outline/text-stroke color for headings, and the border on accent boxes. */
+    private String colorHeadingOutline;
+
+    /** Default body text color. */
+    private String colorText;
+
+    /**
      * Which display font this edition's headings/body text use. Nullable so existing
      * rows (created before this column existed) fall back to "BRUGTY" via
      * {@link #getHeadingFont()} without a data migration, the same approach as the
@@ -237,6 +260,51 @@ public class Edition {
 
     public void setColorAccent(String colorAccent) {
         this.colorAccent = colorAccent;
+    }
+
+    /** Falls back to colorSecondary, matching this edition's look before colorBox existed. */
+    public String getColorBox() {
+        return colorBox != null ? colorBox : colorSecondary;
+    }
+
+    public void setColorBox(String colorBox) {
+        this.colorBox = colorBox;
+    }
+
+    /** Falls back to colorSecondary, matching this edition's look before colorAccentBox existed. */
+    public String getColorAccentBox() {
+        return colorAccentBox != null ? colorAccentBox : colorSecondary;
+    }
+
+    public void setColorAccentBox(String colorAccentBox) {
+        this.colorAccentBox = colorAccentBox;
+    }
+
+    /** Falls back to colorAccent, matching this edition's look before colorHeading existed. */
+    public String getColorHeading() {
+        return colorHeading != null ? colorHeading : colorAccent;
+    }
+
+    public void setColorHeading(String colorHeading) {
+        this.colorHeading = colorHeading;
+    }
+
+    /** Falls back to colorSecondary, matching this edition's look before colorHeadingOutline existed. */
+    public String getColorHeadingOutline() {
+        return colorHeadingOutline != null ? colorHeadingOutline : colorSecondary;
+    }
+
+    public void setColorHeadingOutline(String colorHeadingOutline) {
+        this.colorHeadingOutline = colorHeadingOutline;
+    }
+
+    /** Falls back to colorAccent, matching this edition's look before colorText existed. */
+    public String getColorText() {
+        return colorText != null ? colorText : colorAccent;
+    }
+
+    public void setColorText(String colorText) {
+        this.colorText = colorText;
     }
 
     /** "BRUGTY" (default) or "BEBAS_NEUE" - never null, so templates can compare it directly. */

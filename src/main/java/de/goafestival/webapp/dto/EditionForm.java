@@ -44,6 +44,17 @@ public class EditionForm {
     private String colorAccent = "#f2c14e";
 
     @NotBlank
+    private String colorBox = "#2f6f68";
+    @NotBlank
+    private String colorAccentBox = "#2f6f68";
+    @NotBlank
+    private String colorHeading = "#f2c14e";
+    @NotBlank
+    private String colorHeadingOutline = "#2f6f68";
+    @NotBlank
+    private String colorText = "#f2c14e";
+
+    @NotBlank
     private String headingFont = "BRUGTY";
 
     private boolean current;
@@ -159,6 +170,46 @@ public class EditionForm {
 
     public void setColorAccent(String colorAccent) {
         this.colorAccent = colorAccent;
+    }
+
+    public String getColorBox() {
+        return colorBox;
+    }
+
+    public void setColorBox(String colorBox) {
+        this.colorBox = colorBox;
+    }
+
+    public String getColorAccentBox() {
+        return colorAccentBox;
+    }
+
+    public void setColorAccentBox(String colorAccentBox) {
+        this.colorAccentBox = colorAccentBox;
+    }
+
+    public String getColorHeading() {
+        return colorHeading;
+    }
+
+    public void setColorHeading(String colorHeading) {
+        this.colorHeading = colorHeading;
+    }
+
+    public String getColorHeadingOutline() {
+        return colorHeadingOutline;
+    }
+
+    public void setColorHeadingOutline(String colorHeadingOutline) {
+        this.colorHeadingOutline = colorHeadingOutline;
+    }
+
+    public String getColorText() {
+        return colorText;
+    }
+
+    public void setColorText(String colorText) {
+        this.colorText = colorText;
     }
 
     public String getHeadingFont() {

@@ -78,6 +78,18 @@
                 <label>Akzentfarbe<input type="color" th:field="*{colorAccent}"/></label>
                 <label>2. Akzentfarbe<input type="color" th:field="*{colorAccent2}"/></label>
             </div>
+            <div class="form-row colors">
+                <label>Box-Hintergrund<input type="color" th:field="*{colorBox}"/></label>
+                <label>Akzent-Kasten (Nav, Buttons, Hervorhebungen)<input type="color" th:field="*{colorAccentBox}"/></label>
+                <label>Überschriften-Farbe<input type="color" th:field="*{colorHeading}"/></label>
+                <label>Umrandungsfarbe Überschriften<input type="color" th:field="*{colorHeadingOutline}"/></label>
+                <label>Text-Farbe<input type="color" th:field="*{colorText}"/></label>
+            </div>
+            <p class="field-hint">
+                Box-Hintergrund: Fläche hinter Inhalten wie Bandname/Genre/Herkunft, "Was/Wann/Wo" oder FAQ.
+                Akzent-Kasten: Nav-Leiste, Buttons, Headliner-/Teaser-Boxen. Überschriften-Farbe/Umrandung gelten
+                für alle Titel (inkl. Button-Beschriftung); Umrandung auch für den Rahmen der Akzent-Kästen.
+            </p>
             <label>Schriftart
                 <select th:field="*{headingFont}">
                     <option value="BRUGTY">Brugty (Standard)</option>
