@@ -68,6 +68,14 @@ public class Edition {
     private String colorAccent2 = "#e0559a";
     private String colorAccent = "#f2c14e";
 
+    /**
+     * Which display font this edition's headings/body text use. Nullable so existing
+     * rows (created before this column existed) fall back to "BRUGTY" via
+     * {@link #getHeadingFont()} without a data migration, the same approach as the
+     * showXyz flags above.
+     */
+    private String headingFont;
+
     private String logoImagePath;
     private String backgroundImagePath;
 
@@ -229,6 +237,15 @@ public class Edition {
 
     public void setColorAccent(String colorAccent) {
         this.colorAccent = colorAccent;
+    }
+
+    /** "BRUGTY" (default) or "BEBAS_NEUE" - never null, so templates can compare it directly. */
+    public String getHeadingFont() {
+        return headingFont == null ? "BRUGTY" : headingFont;
+    }
+
+    public void setHeadingFont(String headingFont) {
+        this.headingFont = headingFont;
     }
 
     public String getLogoImagePath() {

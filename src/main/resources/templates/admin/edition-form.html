@@ -78,6 +78,16 @@
                 <label>Akzentfarbe<input type="color" th:field="*{colorAccent}"/></label>
                 <label>2. Akzentfarbe<input type="color" th:field="*{colorAccent2}"/></label>
             </div>
+            <label>Schriftart
+                <select th:field="*{headingFont}">
+                    <option value="BRUGTY">Brugty (Standard)</option>
+                    <option value="BEBAS_NEUE">Bebas Neue</option>
+                </select>
+            </label>
+            <p class="field-hint">
+                Gilt für Überschriften und Fließtext dieser Ausgabe. Bei Bebas Neue werden Überschriften
+                automatisch fett, Fließtext regulär dargestellt.
+            </p>
         </fieldset>
 
         <fieldset>

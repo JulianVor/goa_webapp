@@ -19,8 +19,19 @@
     --color-accent: #f2c14e;
     --color-text: #f2c14e;
     --bg-image: none;
-    --font-display: 'Brugty', 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
-    --font-body: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    /* Named so fragments/head.html can switch --font-display/--font-body to a whole
+       different stack per edition (var(--font-stack-...)) without needing to embed
+       quoted font-family strings inside a Thymeleaf expression. */
+    --font-stack-brugty: 'Brugty', 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
+    --font-stack-poppins: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    --font-stack-bebas: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+    --font-display: var(--font-stack-brugty);
+    --font-body: var(--font-stack-poppins);
+    /* Brugty/Poppins each only really exist as one weight here, so these default to
+       the browser's normal. An edition on a font with real weight variants (e.g.
+       Bebas Neue) overrides both via fragments/head.html. */
+    --font-weight-display: normal;
+    --font-weight-body: normal;
 }
 
 * { box-sizing: border-box; }
@@ -38,6 +49,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: var(--font-body);
+    font-weight: var(--font-weight-body, normal);
     color: var(--color-text);
     scroll-behavior: smooth;
 }
@@ -60,6 +72,7 @@ img { max-width: 100%; display: block; }
    paint-order keeps the fill on top so the glyph itself stays legible. */
 .bubble-text {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     -webkit-text-stroke: 0.16em var(--color-primary);
     paint-order: stroke fill;
@@ -84,6 +97,7 @@ img { max-width: 100%; display: block; }
 .site-nav .brand {
     text-decoration: none;
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: bold;
     color: var(--color-accent);
     font-size: 1.3rem;
@@ -117,6 +131,7 @@ img { max-width: 100%; display: block; }
     padding: 0.6rem 1.3rem;
     border-radius: 999px;
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     font-size: 1.05rem;
     white-space: nowrap;
@@ -131,6 +146,7 @@ img { max-width: 100%; display: block; }
     text-decoration: none;
     color: var(--color-text);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     opacity: 0.85;
     font-size: 1.05rem;
@@ -178,6 +194,7 @@ img { max-width: 100%; display: block; }
     text-decoration: none;
     color: var(--color-text);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     padding: 0.5rem 0.7rem;
     border-radius: 8px;
@@ -223,6 +240,7 @@ img { max-width: 100%; display: block; }
 
 .modal-box h3 {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-primary);
     font-size: 1.6rem;
     margin: 0 0 0.5rem;
@@ -256,6 +274,7 @@ img { max-width: 100%; display: block; }
     border-radius: 999px;
     border: 2px solid var(--color-primary);
     font-family: var(--font-body);
+    font-weight: var(--font-weight-body, normal);
     font-size: 1rem;
 }
 
@@ -266,6 +285,7 @@ img { max-width: 100%; display: block; }
     border-radius: 999px;
     padding: 0.7rem 1.4rem;
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 700;
     font-size: 1.05rem;
     cursor: pointer;
@@ -364,6 +384,7 @@ img { max-width: 100%; display: block; }
 .hero-title {
     font-size: clamp(2.4rem, 9vw, 4.4rem);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     -webkit-text-stroke: 0.16em var(--color-primary);
     paint-order: stroke fill;
@@ -376,6 +397,7 @@ img { max-width: 100%; display: block; }
 .hero-year {
     font-size: clamp(3.6rem, 16vw, 8.6rem);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-secondary);
     -webkit-text-stroke: 0.16em var(--color-primary);
     paint-order: stroke fill;
@@ -396,6 +418,7 @@ img { max-width: 100%; display: block; }
    contrast well enough for an accent-fill/primary-stroke treatment to carry it. */
 .headliner-name {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-size: clamp(2rem, 7vw, 3.2rem);
     color: var(--color-primary);
     overflow-wrap: break-word;
@@ -403,6 +426,7 @@ img { max-width: 100%; display: block; }
 
 .headliner-date {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-size: clamp(1.6rem, 5.5vw, 2.4rem);
     color: var(--color-primary);
     margin-top: 0.25rem;
@@ -415,6 +439,7 @@ img { max-width: 100%; display: block; }
     background: var(--color-accent);
     color: var(--color-primary);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     font-size: clamp(1.1rem, 3vw, 1.4rem);
     text-decoration: none;
@@ -462,6 +487,7 @@ img { max-width: 100%; display: block; }
 
 .kneipenkonzert-teaser-title {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-primary);
     font-size: clamp(1.7rem, 4.8vw, 2.6rem);
     line-height: 1.15;
@@ -470,6 +496,7 @@ img { max-width: 100%; display: block; }
 
 .kneipenkonzert-teaser-date {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-primary);
     font-size: clamp(1.15rem, 3.2vw, 1.5rem);
 }
@@ -495,6 +522,7 @@ img { max-width: 100%; display: block; }
 
 .section-title {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-size: clamp(2.2rem, 6vw, 3.2rem);
     color: var(--color-secondary);
     -webkit-text-stroke: 0.14em var(--color-primary);
@@ -543,6 +571,7 @@ img { max-width: 100%; display: block; }
 
 .info-label {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-size: clamp(2.2rem, 6vw, 3rem);
     -webkit-text-stroke: 0.16em var(--color-primary);
     paint-order: stroke fill;
@@ -556,6 +585,7 @@ img { max-width: 100%; display: block; }
     line-height: 1.5;
     font-size: 1.15rem;
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: #d9a441;
     align-self: center;
 }
@@ -583,6 +613,7 @@ img { max-width: 100%; display: block; }
     padding: 0.9rem 1.4rem;
     border-radius: 999px;
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
 }
 
 /* --------------------------------- Line-up --------------------------------- */
@@ -593,6 +624,7 @@ img { max-width: 100%; display: block; }
 
 .day-title {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     -webkit-text-stroke: 0.14em var(--color-primary);
     paint-order: stroke fill;
@@ -646,6 +678,7 @@ img { max-width: 100%; display: block; }
 
 .band-card-name {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     font-size: 1.6rem;
 }
@@ -712,6 +745,7 @@ img { max-width: 100%; display: block; }
 
 .show-card-title {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     font-size: 1.5rem;
     margin-top: 0.15rem;
@@ -781,6 +815,7 @@ img { max-width: 100%; display: block; }
     border: none;
     color: var(--color-text);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     padding: 1.15rem 1.5rem;
     cursor: pointer;
@@ -857,6 +892,7 @@ img { max-width: 100%; display: block; }
 
 .band-detail-name {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-size: clamp(2.2rem, 6vw, 3.2rem);
     color: var(--color-accent);
     -webkit-text-stroke: 1.5px var(--color-primary);
@@ -868,6 +904,7 @@ img { max-width: 100%; display: block; }
 .band-detail-datetime {
     color: var(--color-secondary);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     font-size: 1.5rem;
 }
@@ -881,6 +918,7 @@ img { max-width: 100%; display: block; }
 
 .meta-label {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-secondary);
     -webkit-text-stroke: 1px var(--color-primary);
     paint-order: stroke fill;
@@ -916,6 +954,7 @@ img { max-width: 100%; display: block; }
     background: var(--color-accent);
     color: var(--color-primary);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     font-size: 0.85rem;
     text-decoration: none;
@@ -1097,6 +1136,7 @@ img { max-width: 100%; display: block; }
 
 .fan-upload-label {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-size: 1.4rem;
     color: var(--color-accent);
 }
@@ -1137,6 +1177,7 @@ img { max-width: 100%; display: block; }
     background: var(--color-accent);
     color: var(--color-primary);
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     font-weight: 600;
     font-size: 1.2rem;
     border: none;
@@ -1282,6 +1323,7 @@ body.egg-open { overflow: hidden; }
 .egg-name,
 .egg-sub {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     -webkit-text-stroke: 2px var(--color-primary);
     text-shadow:
@@ -1316,6 +1358,7 @@ body.egg-open { overflow: hidden; }
 .egg-time-label,
 .egg-separator {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     -webkit-text-stroke: 2px var(--color-primary);
     text-shadow:
@@ -1471,6 +1514,7 @@ body.egg-open { overflow: hidden; }
     left: 1.25rem;
     z-index: 2;
     font-family: var(--font-body);
+    font-weight: var(--font-weight-body, normal);
     color: var(--color-accent);
     background: rgba(0,0,0,0.5);
     border: 1px solid var(--color-primary);
@@ -1567,6 +1611,7 @@ body.egg-open { overflow: hidden; }
 
 .egg3-title {
     font-family: var(--font-display);
+    font-weight: var(--font-weight-display, normal);
     color: var(--color-accent);
     font-size: clamp(1.6rem, 5vw, 2.4rem);
     letter-spacing: 1px;
@@ -1607,6 +1652,7 @@ body.egg-open { overflow: hidden; }
 
 .egg3-btn {
     font-family: var(--font-body);
+    font-weight: var(--font-weight-body, normal);
     font-weight: 700;
     font-size: 1rem;
     padding: 0.85rem 1.5rem;

@@ -13,6 +13,8 @@
          without its own background falls back to the current Festival edition's. -->
     <link rel="preload" as="image" th:if="${effectiveBackground != null}"
           th:href="${effectiveBackground}"/>
+    <link rel="stylesheet" th:if="${edition != null and edition.headingFont == 'BEBAS_NEUE'}"
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"/>
     <style th:if="${edition != null}" th:utext="|
         :root {
             --color-primary: ${edition.colorSecondary};
@@ -20,6 +22,10 @@
             --color-accent: ${edition.colorAccent};
             --color-text: ${edition.colorAccent};
             --bg-image: url('${effectiveBackground ?: ''}');
+            --font-display: ${edition.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-bebas)' : 'var(--font-stack-brugty)'};
+            --font-body: ${edition.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-bebas)' : 'var(--font-stack-poppins)'};
+            --font-weight-display: ${edition.headingFont == 'BEBAS_NEUE' ? 'bold' : 'normal'};
+            --font-weight-body: normal;
         }
     |"></style>
 </head>

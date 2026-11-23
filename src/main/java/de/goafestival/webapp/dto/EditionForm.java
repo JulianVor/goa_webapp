@@ -43,6 +43,9 @@ public class EditionForm {
     @NotBlank
     private String colorAccent = "#f2c14e";
 
+    @NotBlank
+    private String headingFont = "BRUGTY";
+
     private boolean current;
 
     private boolean showEventInfos = true;
@@ -156,6 +159,14 @@ public class EditionForm {
 
     public void setColorAccent(String colorAccent) {
         this.colorAccent = colorAccent;
+    }
+
+    public String getHeadingFont() {
+        return headingFont;
+    }
+
+    public void setHeadingFont(String headingFont) {
+        this.headingFont = headingFont;
     }
 
     public boolean isCurrent() {

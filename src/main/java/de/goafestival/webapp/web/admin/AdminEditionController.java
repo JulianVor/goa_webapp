@@ -113,6 +113,7 @@ public class AdminEditionController {
         form.setColorSecondary(edition.getColorSecondary());
         form.setColorAccent2(edition.getColorAccent2());
         form.setColorAccent(edition.getColorAccent());
+        form.setHeadingFont(edition.getHeadingFont());
         form.setCurrent(edition.isCurrent());
         form.setShowEventInfos(edition.isShowEventInfos());
         form.setShowLineup(edition.isShowLineup());
