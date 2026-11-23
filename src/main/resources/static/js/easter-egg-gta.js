@@ -184,7 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(DATA_URL)
             .then(function (res) { return res.json(); })
             .then(function (data) {
-                allCases = data;
+                // Gag: for now every case really happened in Harburg - "GTA" is never
+                // the right answer, so the "twist" is just how wild Harburg actually is.
+                // Remove this filter to bring the real GTA cases back into the pool.
+                allCases = data.filter(function (c) { return c.answer === 'Harburg'; });
                 if (overlay) renderIntro();
             })
             .catch(function () {
