@@ -1,12 +1,12 @@
-/* Hidden "GTA oder Harburg?" quiz: 5x schneller Klick auf das Logo auf der
-   Hauptseite ("/") startet ein Rate-Quiz aus echten Harburger Polizeimeldungen
-   und GTA: San-Andreas-Missionen - beide bewusst so neutral formuliert, dass
-   man nur raten kann, welche Welt gemeint ist. */
+/* Hidden "GTA oder Harburg?" quiz: 5x schneller Klick auf das große Hero-Logo
+   auf der Hauptseite ("/") startet ein Rate-Quiz aus echten Harburger
+   Polizeimeldungen und GTA: San-Andreas-Missionen - beide bewusst so neutral
+   formuliert, dass man nur raten kann, welche Welt gemeint ist. */
 document.addEventListener('DOMContentLoaded', function () {
     if (window.location.pathname !== '/') return;
 
-    var brand = document.querySelector('.brand');
-    if (!brand) return;
+    var heroLogo = document.querySelector('.hero-logo') || document.querySelector('.hero-title');
+    if (!heroLogo) return;
 
     var DATA_URL = '/quiz/gta-oder-harburg.json';
     var ROUND_SIZE = 5;
@@ -19,8 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var index = 0;
     var score = 0;
 
-    brand.addEventListener('click', function (event) {
-        event.preventDefault();
+    heroLogo.addEventListener('click', function () {
         clicks += 1;
         clearTimeout(resetTimer);
 
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         resetTimer = setTimeout(function () {
             clicks = 0;
-            window.location.href = brand.getAttribute('href') || '/';
         }, 550);
     });
 
