@@ -82,8 +82,16 @@ public class Edition {
      */
     private String colorAccentBox;
 
-    /** Fill color for all headings/titles (and the label text on accent boxes/buttons). */
+    /** Fill color for all headings/titles. */
     private String colorHeading;
+
+    /**
+     * Fill color for text sitting on an Akzent-Kasten background (nav pills, CTA button
+     * labels, modal title/body/close, headliner/teaser/no-image-show-card text, Archiv
+     * dropdown items) - separate from {@link #colorHeading} since it only applies where
+     * that background is actually underneath. Nullable, falls back to colorHeading.
+     */
+    private String colorButton;
 
     /** Outline/text-stroke color for headings, and the border on accent boxes. */
     private String colorHeadingOutline;
@@ -297,6 +305,15 @@ public class Edition {
 
     public void setColorHeading(String colorHeading) {
         this.colorHeading = colorHeading;
+    }
+
+    /** Falls back to colorHeading, matching this edition's look before colorButton existed. */
+    public String getColorButton() {
+        return colorButton != null ? colorButton : getColorHeading();
+    }
+
+    public void setColorButton(String colorButton) {
+        this.colorButton = colorButton;
     }
 
     /** Falls back to colorSecondary, matching this edition's look before colorHeadingOutline existed. */

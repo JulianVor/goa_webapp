@@ -48,6 +48,8 @@ public class EditionForm {
     @NotBlank
     private String colorHeading = "#f2c14e";
     @NotBlank
+    private String colorButton = "#f2c14e";
+    @NotBlank
     private String colorHeadingOutline = "#2f6f68";
     @NotBlank
     private String colorText = "#f2c14e";
@@ -189,6 +191,14 @@ public class EditionForm {
 
     public void setColorHeading(String colorHeading) {
         this.colorHeading = colorHeading;
+    }
+
+    public String getColorButton() {
+        return colorButton;
+    }
+
+    public void setColorButton(String colorButton) {
+        this.colorButton = colorButton;
     }
 
     public String getColorHeadingOutline() {

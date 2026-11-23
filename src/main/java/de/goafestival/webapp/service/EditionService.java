@@ -215,6 +215,7 @@ public class EditionService {
         edition.setColorBox(form.getColorBox());
         edition.setColorAccentBox(form.getColorAccentBox());
         edition.setColorHeading(form.getColorHeading());
+        edition.setColorButton(form.getColorButton());
         edition.setColorHeadingOutline(form.getColorHeadingOutline());
         edition.setColorText(form.getColorText());
         edition.setBoxRadius(form.getBoxRadius());

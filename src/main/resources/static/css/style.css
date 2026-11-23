@@ -24,6 +24,9 @@
     --color-box: #2f6f68;
     --color-accent-box: #2f6f68;
     --color-heading: #f2c14e;
+    /* Text sitting on an Akzent-Kasten background (buttons, modal text, headliner/teaser
+       box, Archiv dropdown) - defaults to the same value as --color-heading. */
+    --color-button: #f2c14e;
     --color-heading-outline: #2f6f68;
     --color-text: #f2c14e;
     /* Corner rounding for content/accent boxes (Edition.boxRadius) and, separately, for
@@ -140,7 +143,7 @@ img { max-width: 100%; display: block; }
 
 .site-nav .pill {
     background: var(--color-accent-box);
-    color: var(--color-heading);
+    color: var(--color-button);
     text-decoration: none;
     border: none;
     padding: 0.6rem 1.3rem;
@@ -214,7 +217,7 @@ img { max-width: 100%; display: block; }
 
 .nav-history-dropdown .dropdown-menu a {
     text-decoration: none;
-    color: var(--color-heading);
+    color: var(--color-button);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;
@@ -263,13 +266,13 @@ img { max-width: 100%; display: block; }
 .modal-box h3 {
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
-    color: var(--color-heading);
+    color: var(--color-button);
     font-size: 1.6rem;
     margin: 0 0 0.5rem;
 }
 
 .modal-box p {
-    color: var(--color-heading);
+    color: var(--color-button);
     margin: 0 0 1.25rem;
 }
 
@@ -281,7 +284,7 @@ img { max-width: 100%; display: block; }
     border: none;
     font-size: 1.6rem;
     line-height: 1;
-    color: var(--color-heading);
+    color: var(--color-button);
     cursor: pointer;
 }
 
@@ -302,7 +305,7 @@ img { max-width: 100%; display: block; }
 
 .newsletter-submit {
     background: var(--color-accent-box);
-    color: var(--color-heading);
+    color: var(--color-button);
     border: none;
     border-radius: var(--pill-radius);
     padding: 0.7rem 1.4rem;
@@ -442,7 +445,7 @@ img { max-width: 100%; display: block; }
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-size: clamp(2rem, 7vw, 3.2rem);
-    color: var(--color-heading);
+    color: var(--color-button);
     overflow-wrap: break-word;
 }
 
@@ -450,7 +453,7 @@ img { max-width: 100%; display: block; }
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-size: clamp(1.6rem, 5.5vw, 2.4rem);
-    color: var(--color-heading);
+    color: var(--color-button);
     margin-top: 0.25rem;
 }
 
@@ -459,7 +462,7 @@ img { max-width: 100%; display: block; }
     margin-top: 2rem;
     padding: 0.9rem 2.2rem;
     background: var(--color-accent-box);
-    color: var(--color-heading);
+    color: var(--color-button);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;
@@ -510,7 +513,7 @@ img { max-width: 100%; display: block; }
 .kneipenkonzert-teaser-title {
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
-    color: var(--color-heading);
+    color: var(--color-button);
     font-size: clamp(1.7rem, 4.8vw, 2.6rem);
     line-height: 1.15;
     text-align: center;
@@ -519,7 +522,7 @@ img { max-width: 100%; display: block; }
 .kneipenkonzert-teaser-date {
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
-    color: var(--color-heading);
+    color: var(--color-button);
     font-size: clamp(1.15rem, 3.2vw, 1.5rem);
 }
 
@@ -628,7 +631,7 @@ img { max-width: 100%; display: block; }
     box-sizing: border-box;
     text-align: center;
     background: var(--color-accent-box);
-    color: var(--color-heading);
+    color: var(--color-button);
     text-decoration: none;
     font-weight: 700;
     font-size: 1.2rem;
@@ -804,14 +807,14 @@ img { max-width: 100%; display: block; }
 }
 
 .show-card-noimage .show-card-title {
-    color: var(--color-heading);
+    color: var(--color-button);
     font-size: clamp(1.3rem, 5vw, 1.7rem);
     overflow-wrap: break-word;
 }
 
 .show-card-noimage .show-card-date,
 .show-card-noimage .show-card-headliner {
-    color: var(--color-heading);
+    color: var(--color-button);
     opacity: 1;
 }
 
@@ -977,7 +980,7 @@ img { max-width: 100%; display: block; }
     padding: 0.4rem 0.9rem;
     border-radius: var(--pill-radius);
     background: var(--color-accent-box);
-    color: var(--color-heading);
+    color: var(--color-button);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;
@@ -1200,7 +1203,7 @@ img { max-width: 100%; display: block; }
 .fan-upload-submit {
     padding: 0.9rem 2.6rem;
     background: var(--color-accent-box);
-    color: var(--color-heading);
+    color: var(--color-button);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;

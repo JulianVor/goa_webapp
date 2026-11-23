@@ -42,6 +42,7 @@ public class AdminEditionController {
             form.setColorBox(current.getColorBox());
             form.setColorAccentBox(current.getColorAccentBox());
             form.setColorHeading(current.getColorHeading());
+            form.setColorButton(current.getColorButton());
             form.setColorHeadingOutline(current.getColorHeadingOutline());
             form.setColorText(current.getColorText());
             form.setBoxRadius(current.getBoxRadius());
@@ -121,6 +122,7 @@ public class AdminEditionController {
         form.setColorBox(edition.getColorBox());
         form.setColorAccentBox(edition.getColorAccentBox());
         form.setColorHeading(edition.getColorHeading());
+        form.setColorButton(edition.getColorButton());
         form.setColorHeadingOutline(edition.getColorHeadingOutline());
         form.setColorText(edition.getColorText());
         form.setBoxRadius(edition.getBoxRadius());

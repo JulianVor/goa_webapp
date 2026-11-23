@@ -85,13 +85,16 @@
                 <label>Box-Hintergrund<input type="color" th:field="*{colorBox}"/></label>
                 <label>Akzent-Kasten<input type="color" th:field="*{colorAccentBox}"/></label>
                 <label>Überschriften<input type="color" th:field="*{colorHeading}"/></label>
+                <label>Button-Farbe<input type="color" th:field="*{colorButton}"/></label>
                 <label>Umrandung<input type="color" th:field="*{colorHeadingOutline}"/></label>
                 <label>Text<input type="color" th:field="*{colorText}"/></label>
             </div>
             <ul class="field-hint color-legend">
                 <li><strong>Box-Hintergrund:</strong> Fläche hinter Inhalten wie Bandname/Genre/Herkunft, "Was/Wann/Wo" oder FAQ.</li>
                 <li><strong>Akzent-Kasten:</strong> Buttons, Headliner-/Teaser-Box, Modals, Archiv-Dropdown (die Nav-Leiste selbst nutzt die Sekundärfarbe).</li>
-                <li><strong>Überschriften/Umrandung:</strong> gelten für alle Titel (inkl. Button-Beschriftung); Umrandung auch für den Rahmen der Akzent-Kästen.</li>
+                <li><strong>Überschriften:</strong> gilt für alle Titel ohne Akzent-Kasten darunter.</li>
+                <li><strong>Button-Farbe:</strong> Text/Beschriftung dort, wo ein Akzent-Kasten als Hintergrund liegt (Buttons, Modal-Text, Headliner-/Teaser-Box, Archiv-Dropdown).</li>
+                <li><strong>Umrandung:</strong> gilt für die Textumrandung der Überschriften sowie den Rahmen der Akzent-Kästen.</li>
             </ul>
 
             <label for="box-radius-input">Eckenradius der Kästen</label>
