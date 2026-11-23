@@ -215,7 +215,31 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
 .form-row { display: flex; gap: 1.25rem; flex-wrap: wrap; }
 .form-row label { min-width: 220px; }
-.form-row.colors label { min-width: 130px; }
+
+/* Grid instead of flex-wrap: color swatches land on one aligned baseline (align-items:
+   end) no matter how many lines a label wraps to, instead of the ragged row flex-wrap
+   produces when labels are different lengths. */
+.form-row.colors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 1rem 1.25rem;
+    align-items: end;
+    margin-bottom: 0.75rem;
+}
+.form-row.colors label { min-width: 0; }
+.form-row.colors input[type=color] { width: 100%; }
+
+.color-group-title {
+    margin: 1.1rem 0 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #5a6472;
+}
+.color-group-title:first-of-type { margin-top: 0; }
+
+.color-legend { margin: 0 0 0.75rem; padding-left: 1.1rem; }
+.color-legend li { margin-bottom: 0.15rem; }
 
 .checkbox-row { flex-direction: row; align-items: center; gap: 0.5rem; }
 
@@ -540,11 +564,12 @@ h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
 
     .admin-table { min-width: 480px; }
 
-    .form-row label,
-    .form-row.colors label {
+    .form-row label {
         min-width: 0;
         flex: 1 1 100%;
     }
+
+    .form-row.colors { grid-template-columns: repeat(2, 1fr); }
 
     .copy-from-form {
         flex-direction: column;
