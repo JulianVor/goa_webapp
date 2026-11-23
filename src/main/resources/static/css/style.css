@@ -166,7 +166,7 @@ img { max-width: 100%; display: block; }
 
 .nav-history {
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--color-heading);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;
@@ -214,7 +214,7 @@ img { max-width: 100%; display: block; }
 
 .nav-history-dropdown .dropdown-menu a {
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--color-heading);
     font-family: var(--font-display);
     font-weight: var(--font-weight-display, normal);
     font-weight: 600;
@@ -874,7 +874,7 @@ img { max-width: 100%; display: block; }
     background: #0000004f;
 }
 
-.site-footer a { text-decoration: none; font-size: 0.85rem; font-weight: 700; color: var(--color-text); }
+.site-footer a { text-decoration: none; font-size: 0.85rem; font-weight: 700; color: var(--color-heading); }
 
 /* -------------------------------- Band detail -------------------------------- */
 
