@@ -50,7 +50,8 @@
             <button type="button" class="nav-history dropdown-toggle">Archiv <span class="caret">▾</span></button>
             <div class="dropdown-menu">
                 <a class="dropdown-hof-link" th:href="@{/hall-of-fame}">Hall of Fame</a>
-                <a th:each="e : ${archivedEditions}" th:href="@{'/goa/' + ${e.year}}" th:text="'GOA ' + ${e.year}">GOA 2025</a>
+                <a th:each="e : ${archivedEditions}" th:href="@{'/goa/' + ${e.year}}" th:text="'GOA ' + ${e.year}"
+                   th:style="|font-family: ${e.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-bebas)' : 'var(--font-stack-brugty)'}; font-weight: ${e.headingFont == 'BEBAS_NEUE' ? 'bold' : 'normal'};|">GOA 2025</a>
             </div>
         </div>
     </div>
