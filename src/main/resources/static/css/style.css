@@ -1687,7 +1687,7 @@ body.egg-open { overflow: hidden; }
     border-radius: 999px;
     border: 2px solid var(--color-accent);
     background: var(--color-accent);
-    color: var(--color-heading);
+    color: var(--color-button);
     cursor: pointer;
     transition: transform 0.15s ease, opacity 0.15s ease;
 }
