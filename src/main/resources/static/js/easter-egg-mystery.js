@@ -1,415 +1,465 @@
-/* Hidden "GRUMBRECHTSTRASSE ODER AUSGEDACHT?" mystery quiz: 7x schneller Klick auf
-   das große Hero-Logo auf der Hauptseite ("/") startet eine kleine, in sich
-   geschlossene Mystery-Show im Stil alter TV-Rätselsendungen. 4 Episoden a 5
-   Geschichten, jede Episode mit eigener Eröffnung und eigener, in sich
-   abgeschlossener Auflösung - keine Episode darf etwas über eine andere verraten. */
+/* The home-page logo dispatches goa:open-mystery on its seventh tap. */
 document.addEventListener('DOMContentLoaded', function () {
     if (window.location.pathname !== '/') return;
+    const logo = document.querySelector('.hero-logo, .hero-title');
+    if (!logo) return;
 
-    var heroLogo = document.querySelector('.hero-logo') || document.querySelector('.hero-title');
-    if (!heroLogo) return;
+    const storageKey = 'grumbrechtstrasse-oder-ausgedacht-progress';
+    const labels = { grumbrechtstrasse: 'Grumbrechtstraße', ausgedacht: 'Ausgedacht' };
+    const synth = window.speechSynthesis;
+    let archive, dialog, stage, episode, storyIndex, opener;
+    let sessionProgress = { version: 2, episodes: {} };
+    let storageAvailable = true;
+    let readAloud = false;
+    let spokenText = '';
+    let transitionTimer;
+    let music;
+    let musicEnabled = false;
+    let silentScene = false;
+    let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    var DATA_URL = '/mystery/grumbrechtstrasse-episoden.json';
-    var STORAGE_KEY = 'grumbrechtstrasse-oder-ausgedacht-progress';
-    var FONT_HREF = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap';
+    logo.addEventListener('goa:open-mystery', openShow);
+    const keyboardEntry = document.createElement('button');
+    keyboardEntry.type = 'button';
+    keyboardEntry.className = 'myst-key-entry';
+    keyboardEntry.textContent = 'Grumbrechtstraße oder ausgedacht? öffnen';
+    keyboardEntry.addEventListener('click', openShow);
+    logo.after(keyboardEntry);
 
-    var clicks = 0;
-    var resetTimer = null;
-    var overlay = null;
-    var data = null;
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Counts by click position rather than event.target/a listener on heroLogo itself:
-    // the GTA quiz (easter-egg-gta.js) already opens a full-screen overlay on the 5th
-    // click of this same element, which would otherwise swallow clicks 6 and 7 before
-    // they ever reach heroLogo. A capture-phase listener on document always sees every
-    // click regardless of what overlay is on top, so counting still reaches 7.
-    document.addEventListener('click', function (event) {
-        var rect = heroLogo.getBoundingClientRect();
-        if (event.clientX < rect.left || event.clientX > rect.right
-            || event.clientY < rect.top || event.clientY > rect.bottom) {
-            return;
-        }
-
-        clicks += 1;
-        clearTimeout(resetTimer);
-
-        if (clicks >= 7) {
-            clicks = 0;
-            openShow();
-            return;
-        }
-
-        resetTimer = setTimeout(function () {
-            clicks = 0;
-        }, 650);
-    }, true);
-
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.textContent = str == null ? '' : str;
-        return div.innerHTML;
+    function escapeHtml(text) {
+        const el = document.createElement('span');
+        el.textContent = text;
+        return el.innerHTML;
     }
 
-    function ensureFont() {
-        if (document.querySelector('link[data-myst-font]')) return;
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = FONT_HREF;
-        link.setAttribute('data-myst-font', '1');
-        document.head.appendChild(link);
+    // The first edition used the same story IDs in different episodes. Look up
+    // unchanged questions by ID; an old result never completes a new finale.
+    function migrate(legacy) {
+        const revised = new Set(['story-02', 'story-15', 'story-18', 'story-21']);
+        const oldAnswers = Object.assign({}, ...Object.values(legacy).map(p => p?.answers));
+        const episodes = {};
+        for (const ep of archive.episodes) {
+            const answers = {};
+            for (const story of ep.stories) {
+                const choice = oldAnswers[story.id];
+                if (!revised.has(story.id) && Object.hasOwn(labels, choice)) answers[story.id] = choice;
+            }
+            if (Object.keys(answers).length) episodes[ep.id] = { answers };
+        }
+        return { version: 2, episodes, migrationNotice: true };
     }
 
-    // ---- progress persistence -------------------------------------------------
+    function persist() {
+        if (!storageAvailable) return;
+        try { localStorage.setItem(storageKey, JSON.stringify(sessionProgress)); }
+        catch { storageAvailable = false; }
+    }
 
-    function loadProgress() {
+    function readProgress() {
+        if (!storageAvailable) return sessionProgress;
         try {
-            var raw = JSON.parse(window.localStorage.getItem(STORAGE_KEY));
-            return raw && typeof raw === 'object' ? raw : {};
-        } catch (e) {
-            return {};
-        }
+            const raw = JSON.parse(localStorage.getItem(storageKey));
+            if (raw?.version === 2 && raw.episodes) sessionProgress = raw;
+            else if (raw && archive && Object.keys(raw).some(key => key.startsWith('episode-'))) {
+                sessionProgress = migrate(raw);
+                persist();
+            }
+        } catch { /* Keep the current record if storage is unavailable or unreadable. */ }
+        return sessionProgress;
     }
 
-    function saveProgress(progress) {
-        try {
-            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-        } catch (e) {
-            // private browsing / blocked storage - the show still works, just without memory
-        }
+    function record(ep = episode) {
+        const saved = readProgress().episodes[ep.id];
+        return saved && saved.answers && typeof saved.answers === 'object'
+            ? saved : { answers: {}, completedAt: null };
     }
 
-    function episodeProgress(progress, episodeId) {
-        return progress[episodeId] || { answers: {}, completedAt: null };
+    function save(p) {
+        sessionProgress.episodes[episode.id] = p;
+        persist();
     }
 
-    function episodeStatus(ep, progress) {
-        var p = episodeProgress(progress, ep.id);
-        var answered = Object.keys(p.answers).length;
-        if (p.completedAt) return 'completed';
-        if (answered > 0) return 'started';
-        return 'new';
+    function checkpoint(phase, index = 0) {
+        const p = record();
+        p.phase = phase;
+        p.index = index;
+        save(p);
     }
 
-    function episodeScore(ep, p) {
-        var score = 0;
-        ep.stories.forEach(function (s) {
-            if (p.answers[s.id] === s.correct_answer) score += 1;
+    function unlocked(ep) {
+        return archive.episodes.slice(0, archive.episodes.indexOf(ep)).every(previous => {
+            const answers = record(previous).finishedAnswers;
+            return answers && firstUnanswered(previous, { answers }) === -1;
         });
-        return score;
     }
 
-    // ---- show state -------------------------------------------------------
-
-    var current = null; // { episode, storyIndex, progress }
-
-    function onKeydown(event) {
-        if (event.key === 'Escape') closeShow();
+    function firstUnanswered(ep, p) {
+        return ep.stories.findIndex(story => !Object.hasOwn(labels, p.answers[story.id]));
     }
 
-    function closeShow() {
-        if (!overlay) return;
-        document.removeEventListener('keydown', onKeydown);
-        document.body.classList.remove('egg-open');
-        overlay.remove();
-        overlay = null;
-        current = null;
+    function score(ep, p) {
+        return ep.stories.filter(story => p.answers[story.id] === story.correct_answer).length;
     }
 
-    function stage() {
-        return overlay.querySelector('.myst-stage');
+    function number(value) {
+        return String(value).padStart(2, '0');
     }
 
-    function setStage(html) {
-        var el = stage();
-        el.innerHTML = html;
-        el.scrollTop = 0;
-        if (!reduceMotion) {
-            el.classList.remove('myst-pop');
-            void el.offsetWidth;
-            el.classList.add('myst-pop');
+    function button(label, action, secondary = false) {
+        return `<button type="button" class="myst-btn${secondary ? ' myst-secondary' : ''}" data-action="${action}">${label}</button>`;
+    }
+
+    function speak() {
+        if (!readAloud || !synth || !spokenText) return;
+        const line = new SpeechSynthesisUtterance(spokenText);
+        line.lang = 'de-DE';
+        line.rate = 0.94;
+        synth.speak(line);
+    }
+
+    function updateMusic() {
+        if (!dialog?.open || !musicEnabled || silentScene || document.hidden) {
+            music?.pause();
+            return;
         }
+        if (!music) {
+            music = new Audio('/mystery/nachtprogramm.mp3');
+            music.loop = true;
+            music.volume = .45;
+        }
+        if (music.paused) music.play().catch(() => {});
     }
 
-    // ---- episode select -----------------------------------------------------
+    function setStage(html, narration = '', silent = false) {
+        clearTimeout(transitionTimer);
+        silentScene = silent;
+        updateMusic();
+        if (readAloud) synth.cancel();
+        spokenText = narration;
+        stage.innerHTML = html;
+        stage.scrollTop = 0;
+        stage.querySelector('h1, h2')?.focus({ preventScroll: true });
+        dialog.querySelector('[data-action="archive"]').hidden = !episode;
+        speak();
+    }
 
-    function renderEpisodeSelect() {
-        var progress = loadProgress();
-        var cards = data.episodes.map(function (ep) {
-            var status = episodeStatus(ep, progress);
-            var p = episodeProgress(progress, ep.id);
-            var statusLabel = status === 'completed' ? 'ABGESCHLOSSEN' : (status === 'started' ? 'BEGONNEN' : 'NOCH NICHT GESPIELT');
-            var scoreLine = status === 'completed'
-                ? '<div class="myst-card-score">' + episodeScore(ep, p) + ' / ' + ep.stories.length + ' richtig erkannt</div>'
-                : '';
-            var actions = status === 'completed'
-                ? '<div class="myst-card-actions">' +
-                  '<button type="button" class="myst-btn myst-btn-small" data-action="results" data-episode="' + ep.id + '">Ergebnis ansehen</button>' +
-                  '<button type="button" class="myst-btn myst-btn-small myst-btn-ghost" data-action="restart" data-episode="' + ep.id + '">Erneut spielen</button>' +
-                  '</div>'
-                : '<button type="button" class="myst-btn myst-btn-small" data-action="play" data-episode="' + ep.id + '">' +
-                  (status === 'started' ? 'Fortsetzen' : 'Episode starten') + '</button>';
-            return '<div class="myst-ep-card myst-status-' + status + '">' +
-                '<div class="myst-ep-number">EPISODE ' + ep.number + '</div>' +
-                '<div class="myst-ep-title">' + escapeHtml(ep.title) + '</div>' +
-                '<div class="myst-ep-subtitle">' + escapeHtml(ep.subtitle) + '</div>' +
-                '<div class="myst-ep-status">' + statusLabel + '</div>' +
-                scoreLine +
-                actions +
-                '</div>';
+    function renderArchive() {
+        episode = null;
+        const entries = archive.episodes.map((ep, index) => {
+            const p = record(ep);
+            const next = firstUnanswered(ep, p);
+            let status = `${ep.stories.length} Geschichten`;
+            let action = 'Folge starten';
+            const locked = !unlocked(ep);
+            if (locked) {
+                status = `Nach Abschluss von Folge ${number(ep.number - 1)}`;
+                action = 'Gesperrt';
+            } else if (p.finishedAnswers) {
+                status = `${score(ep, { answers: p.finishedAnswers })} von ${ep.stories.length} richtig`;
+                action = 'Bilanz ansehen';
+                if (p.phase !== 'results' && p.phase !== 'series') action = 'Wiederholung fortsetzen';
+            } else if (p.phase || Object.keys(p.answers).length > 0) {
+                status = next === -1 ? 'Im Finale' : `Bei Fall ${next + 1} von ${ep.stories.length}`;
+                action = 'Fortsetzen';
+            }
+            return `<li><button type="button" class="myst-episode" data-episode="${index}" ${locked ? 'disabled' : ''}>
+                <span class="myst-thumb myst-art-${ep.number}" aria-hidden="true"></span>
+                <span class="myst-episode-copy"><span class="myst-kicker">Folge ${number(ep.number)}</span>
+                <strong>${escapeHtml(ep.title)}</strong><span class="myst-meta">${status}</span>
+                <span class="myst-link">${action}</span></span></button></li>`;
         }).join('');
+        const title = escapeHtml(archive.project.title).replace(/ (oder .+)$/, '<br><em>$1</em>');
+        setStage(`<div class="myst-archive">
+            <div class="myst-opening"><div class="myst-opening-copy">
+                <p class="myst-kicker">Mystery aus Hamburg</p>
+                <h1 tabindex="-1">${title}</h1>
+                <p>${escapeHtml(archive.project.subtitle)}</p>
+            </div></div>
+            <section class="myst-program"><div class="myst-program-heading"><h2>Folgenübersicht</h2>
+            <p>Ihr Tipp nach jedem Fall. Die Auflösung am Ende der Folge.</p></div>
+            ${readProgress().migrationNotice ? '<div class="myst-notice"><p>Neue Serienfassung: Tipps zu unveränderten Fällen wurden übernommen. Überarbeitete Fälle spielen Sie neu. Die Freischaltung richtet sich nach den neuen Folgenauflösungen.</p>' + button('Verstanden', 'dismiss', true) + '</div>' : ''}
+            <ul class="myst-episodes">${entries}</ul></section></div>`);
+    }
 
-        setStage(
-            '<div class="myst-select">' +
-            '<div class="myst-logo-title">' + escapeHtml(data.project.title) + '</div>' +
-            '<div class="myst-logo-subtitle">' + escapeHtml(data.project.subtitle) + '</div>' +
-            '<p class="myst-tagline">Fünf Geschichten. Zwei Möglichkeiten. Eine Entscheidung.</p>' +
-            '<div class="myst-ep-grid">' + cards + '</div>' +
-            '</div>'
-        );
+    function cutaway({ studio = false, caption, kicker, title, copy, controls, narration = '' }) {
+        const art = studio ? 'myst-studio' : `myst-art-${episode.number}`;
+        setStage(`<section class="myst-scene">
+            <div class="myst-still ${art}"><span>${studio ? 'Jonathan Frakes · KI-Inszenierung' : escapeHtml(caption) + ' · Szenenbild'}</span></div>
+            <div class="myst-script"><p class="myst-kicker">Folge ${number(episode.number)} · ${escapeHtml(kicker)}</p>
+            <h2 tabindex="-1">${escapeHtml(title)}</h2>${copy}
+            <div class="myst-actions">${controls}</div></div></section>`, narration);
+    }
 
-        stage().querySelectorAll('[data-action]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var episodeId = btn.getAttribute('data-episode');
-                var ep = data.episodes.filter(function (e) { return e.id === episodeId; })[0];
-                var action = btn.getAttribute('data-action');
-                if (action === 'results') openResults(ep);
-                else if (action === 'restart') startEpisode(ep, true);
-                else startEpisode(ep, false);
-            });
+    function openEpisode(ep, restart = false) {
+        if (!ep || !unlocked(ep)) return;
+        episode = ep;
+        if (restart) {
+            save({ answers: {}, finishedAnswers: record().finishedAnswers });
+        }
+        const p = record();
+        storyIndex = firstUnanswered(ep, p);
+        if (p.finishedAnswers && p.phase === 'series') return renderSeriesEnd();
+        if (p.finishedAnswers && p.phase === 'results') return renderResults();
+        if (p.phase && storyIndex === -1) {
+            if (p.phase === 'verdict') return renderVerdict(p.index);
+            if (p.phase === 'finale' && ep.number === 4) return renderFinale(p.index);
+            return renderFinaleIntro();
+        }
+        if (p.phase === 'decision') return renderDecision();
+        if (p.phase === 'story') return renderStory();
+        cutaway({
+            studio: true, caption: 'Im Studio', kicker: 'Anmoderation', title: ep.title,
+            copy: `<p class="myst-lede">${escapeHtml(ep.subtitle)}</p><p>${escapeHtml(ep.intro)}</p>`,
+            controls: button(storyIndex > 0 ? 'Zum nächsten offenen Fall' : storyIndex === -1 ? 'Zur Auflösung' : 'Zum ersten Fall', 'story'),
+            narration: ep.intro
         });
     }
 
-    // ---- episode intro ------------------------------------------------------
-
-    function startEpisode(ep, forceRestart) {
-        var progress = loadProgress();
-        if (forceRestart) {
-            delete progress[ep.id];
-            saveProgress(progress);
-        }
-        var p = episodeProgress(progress, ep.id);
-        var answeredCount = Object.keys(p.answers).length;
-
-        current = { episode: ep, storyIndex: answeredCount };
-
-        if (answeredCount === 0) {
-            renderIntro(ep);
-        } else if (answeredCount < ep.stories.length) {
-            renderStory();
-        } else {
-            runReveal(ep, 0);
-        }
+    function caseLabel(index) {
+        return `Fall ${number(index + 1)} von ${number(episode.stories.length)}`;
     }
-
-    function renderIntro(ep) {
-        setStage(
-            '<div class="myst-intro">' +
-            '<div class="myst-ep-number">EPISODE ' + ep.number + '</div>' +
-            '<div class="myst-ep-title myst-ep-title-big">' + escapeHtml(ep.title) + '</div>' +
-            '<div class="myst-ep-subtitle">' + escapeHtml(ep.subtitle) + '</div>' +
-            '<p class="myst-narration">' + escapeHtml(ep.intro) + '</p>' +
-            '<button type="button" class="myst-btn" data-next>Episode starten</button>' +
-            '</div>'
-        );
-        stage().querySelector('[data-next]').addEventListener('click', renderStory);
-    }
-
-    // ---- story playback -------------------------------------------------------
 
     function renderStory() {
-        var ep = current.episode;
-        var story = ep.stories[current.storyIndex];
-
-        setStage(
-            '<div class="myst-story">' +
-            '<div class="myst-progress">GESCHICHTE ' + (current.storyIndex + 1) + ' VON ' + ep.stories.length + '</div>' +
-            '<div class="myst-story-title">' + escapeHtml(story.title) + '</div>' +
-            '<p class="myst-narration">' + escapeHtml(story.narration) + '</p>' +
-            '<button type="button" class="myst-btn" data-next>Weiter</button>' +
-            '</div>'
-        );
-        stage().querySelector('[data-next]').addEventListener('click', function () {
-            renderDecision(story);
+        if (storyIndex === -1) return renderFinaleIntro();
+        checkpoint('story');
+        const story = episode.stories[storyIndex];
+        cutaway({
+            caption: episode.title, kicker: caseLabel(storyIndex), title: story.title,
+            copy: `<p class="myst-lede">${escapeHtml(story.teaser)}</p><p>${escapeHtml(story.narration)}</p>`, controls: button('Mein Urteil abgeben', 'decision'),
+            narration: `${story.title}. ${story.narration}`
         });
     }
 
-    function renderDecision(story) {
-        var ep = current.episode;
-        setStage(
-            '<div class="myst-story">' +
-            '<div class="myst-progress">GESCHICHTE ' + (current.storyIndex + 1) + ' VON ' + ep.stories.length + '</div>' +
-            '<p class="myst-decision-prompt">' + escapeHtml(story.decision_prompt) + '</p>' +
-            '<div class="myst-choices">' +
-            '<button type="button" class="myst-choice" data-answer="grumbrechtstrasse">GRUMBRECHTSTRASSE</button>' +
-            '<button type="button" class="myst-choice" data-answer="ausgedacht">AUSGEDACHT</button>' +
-            '</div>' +
-            '</div>'
-        );
-        stage().querySelectorAll('.myst-choice').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                answerStory(story, btn.getAttribute('data-answer'));
-            });
+    function renderDecision() {
+        checkpoint('decision');
+        const story = episode.stories[storyIndex];
+        cutaway({
+            studio: true, caption: 'Zurück im Studio', kicker: caseLabel(storyIndex), title: 'Ihr Urteil?',
+            copy: `<p class="myst-lede">${escapeHtml(story.decision_prompt)}</p>`,
+            controls: button(labels.grumbrechtstrasse, 'grumbrechtstrasse') + button(labels.ausgedacht, 'ausgedacht', true)
+                + '<button type="button" class="myst-reread" data-action="story">Fall noch einmal lesen</button>',
+            narration: story.decision_prompt
         });
     }
 
-    function answerStory(story, choice) {
-        var ep = current.episode;
-        var progress = loadProgress();
-        var p = episodeProgress(progress, ep.id);
-        p.answers[story.id] = choice;
-        progress[ep.id] = p;
-        saveProgress(progress);
+    function answer(choice) {
+        const p = record();
+        const story = episode.stories[storyIndex];
+        if (!story || p.phase !== 'decision') return;
+        if (!Object.hasOwn(labels, p.answers[story.id])) p.answers[story.id] = choice;
+        p.phase = 'story';
+        save(p);
+        storyIndex = firstUnanswered(episode, p);
+        setStage('<div class="myst-intertitle"><h2 tabindex="-1">IHRE ENTSCHEIDUNG WURDE GESPEICHERT.</h2></div>');
+        transitionTimer = setTimeout(renderStory, reducedMotion ? 750 : 1350);
+    }
 
-        setStage('<div class="myst-saved">IHRE ENTSCHEIDUNG WURDE GESPEICHERT.</div>');
+    function renderFinaleIntro() {
+        if (firstUnanswered(episode, record()) !== -1) return;
+        checkpoint('closing');
+        cutaway({
+            studio: true, caption: 'Zurück im Studio', kicker: 'Das Finale', title: 'Was ist wirklich geschehen?',
+            copy: `<p>${escapeHtml(episode.reveal_intro)}</p>`,
+            controls: episode.number === 4 ? button('Weiter', 'finale') : button('Den ersten Fall auflösen', 'verdict'),
+            narration: episode.reveal_intro
+        });
+    }
 
-        setTimeout(function () {
-            if (!overlay) return;
-            current.storyIndex += 1;
-            if (current.storyIndex < ep.stories.length) {
-                renderStory();
-            } else {
-                runReveal(ep, 0);
+    // The final broadcast intercuts two studio passages with blackouts and
+    // individual title cards. Store the cut so a reload resumes the same shot.
+    function renderFinale(index) {
+        if (episode.number !== 4 || firstUnanswered(episode, record()) !== -1 || !unlocked(episode)) return;
+        const finale = archive.series_finale;
+        const shots = [
+            { pause: 1200 },
+            { speech: finale.recap, heading: 'Erinnern Sie sich?' },
+            { pause: 2600 },
+            ...finale.cards.map(title => ({ title, duration: 1900 })),
+            { speech: finale.signoff, heading: 'Ein einziges Haus' },
+            { title: finale.title }
+        ];
+        const shot = shots[index];
+        if (!shot) return renderVerdict(0);
+        checkpoint('finale', index);
+        const next = button(index === shots.length - 1 ? 'Den ersten Fall auflösen' : 'Weiter', 'next-shot');
+        const controls = next + (index < shots.length - 1 ? button('Inszenierung überspringen', 'skip-finale', true) : '');
+        if (shot.speech) {
+            cutaway({ studio: true, kicker: 'Serienfinale', title: shot.heading, copy: `<p>${escapeHtml(shot.speech)}</p>`, controls, narration: shot.speech });
+        } else {
+            const heading = shot.title || 'Schwarzblende';
+            setStage(`<div class="myst-intertitle myst-final-card"><h2 tabindex="-1" ${shot.pause ? 'class="myst-visually-hidden"' : ''}>${escapeHtml(heading)}</h2>
+                <div class="myst-actions">${controls}</div></div>`, shot.pause ? '' : heading, Boolean(shot.pause));
+            const delay = shot.pause || shot.duration;
+            if (delay && (!reducedMotion || shot.pause)) {
+                transitionTimer = setTimeout(() => renderFinale(index + 1), reducedMotion ? 0 : delay);
             }
-        }, reduceMotion ? 300 : 1100);
+        }
     }
 
-    // ---- reveal sequence ------------------------------------------------------
-
-    function runReveal(ep, stepIndex) {
-        var steps = ep.reveal_steps;
-        if (stepIndex >= steps.length) {
-            renderRevealBreakdown(ep);
-            return;
-        }
-        var step = steps[stepIndex];
-
-        if (step.type === 'dramatic_pause') {
-            setStage('<div class="myst-pause"></div>');
-            var delay = reduceMotion ? 200 : (step.duration_ms || 1200);
-            setTimeout(function () {
-                if (overlay) runReveal(ep, stepIndex + 1);
-            }, delay);
-            return;
-        }
-
-        var cls = step.type === 'title_card' ? 'myst-title-card' : 'myst-monologue';
-        setStage(
-            '<div class="myst-reveal">' +
-            '<div class="' + cls + '">' + escapeHtml(step.text) + '</div>' +
-            '<button type="button" class="myst-btn" data-next>Weiter</button>' +
-            '</div>'
-        );
-        stage().querySelector('[data-next]').addEventListener('click', function () {
-            runReveal(ep, stepIndex + 1);
+    function renderVerdict(index) {
+        const p = record();
+        if (firstUnanswered(episode, p) !== -1) return;
+        const stories = episode.stories;
+        storyIndex = Math.max(0, Math.min(index, stories.length - 1));
+        const story = stories[storyIndex];
+        checkpoint('verdict', storyIndex);
+        const right = p.answers[story.id] === story.correct_answer;
+        const verdict = story.correct_answer === 'grumbrechtstrasse' ? 'TATSÄCHLICH GESCHEHEN' : 'FREI ERFUNDEN';
+        cutaway({
+            caption: story.title, kicker: `Auflösung · ${caseLabel(storyIndex)}`, title: verdict,
+            copy: `<p class="myst-case-name">${escapeHtml(story.title)}</p><p>${escapeHtml(story.answer_explanation)}</p>
+                <p class="myst-meta">Laut persönlichem Erfahrungsbericht des ehemaligen Bewohners. Eine unabhängige Überprüfung liegt nicht vor.</p>
+                <p class="myst-pick"><strong>${right ? 'Richtig getippt' : 'Danebengetippt'}</strong> · Ihr Tipp war „${labels[p.answers[story.id]]}“.</p>`,
+            controls: storyIndex + 1 < stories.length ? button('Nächsten Fall auflösen', 'next-verdict') : button('Zur Bilanz', 'finish'),
+            narration: `${story.title}. ${verdict} ${story.answer_explanation}`
         });
     }
 
-    function renderRevealBreakdown(ep) {
-        var progress = loadProgress();
-        var p = episodeProgress(progress, ep.id);
+    function renderResults() {
+        const p = record();
+        const answers = p.finishedAnswers;
+        if (!answers) return;
+        const hits = score(episode, { answers });
+        const total = episode.stories.length;
+        const comment = archive.ui.results_comments_by_score[hits] || '';
+        const rows = episode.stories.map(s => `<li><strong>${escapeHtml(s.title)}</strong>
+            <span>Ihr Tipp: ${labels[answers[s.id]]} · Auflösung: ${labels[s.correct_answer]}</span></li>`).join('');
+        const next = episode.number < archive.episodes.length
+            ? button('Weiter zu Folge ' + number(episode.number + 1), 'next-episode')
+            : button('Zur Serienbilanz', 'series');
+        cutaway({
+            studio: true, caption: 'Abspann', kicker: 'Ihre Bilanz', title: `${hits} von ${total} richtig`,
+            copy: `<ol class="myst-breakdown">${rows}</ol><p class="myst-signoff">${escapeHtml(comment)}</p>`,
+            controls: next + button('Erneut spielen', 'restart', true),
+            narration: `${hits} von ${total} richtig. ${comment}`
+        });
+    }
 
-        var rows = ep.stories.map(function (s) {
-            var picked = p.answers[s.id];
-            var pickedLabel = picked === 'ausgedacht' ? 'AUSGEDACHT' : 'GRUMBRECHTSTRASSE';
-            var correct = picked === s.correct_answer;
-            return '<div class="myst-reveal-row">' +
-                '<div class="myst-reveal-row-title">' + escapeHtml(s.title) + '</div>' +
-                '<div class="myst-reveal-row-answer">Ihre Antwort: ' + pickedLabel +
-                (correct ? ' <span class="myst-correct">✓</span>' : ' <span class="myst-wrong">✕</span>') + '</div>' +
-                '<div class="myst-reveal-row-truth">' + escapeHtml(ep.story_result_label) + '</div>' +
-                '<p class="myst-reveal-row-explanation">' + escapeHtml(s.answer_explanation) + '</p>' +
-                '</div>';
-        }).join('');
+    function renderSeriesEnd() {
+        if (episode.number !== 4 || !unlocked(episode) || !record().finishedAnswers) return;
+        checkpoint('series');
+        const scores = archive.episodes.map(ep => score(ep, { answers: record(ep).finishedAnswers }));
+        const total = scores.reduce((sum, value) => sum + value, 0);
+        const rows = archive.episodes.map((ep, i) => `<li><strong>${number(ep.number)} · ${escapeHtml(ep.title)}</strong>
+            <span>${scores[i]} von ${ep.stories.length} richtig</span></li>`).join('');
+        cutaway({ studio: true, kicker: 'Serienabschluss', title: `${total} von 20 richtig`,
+            copy: `<p class="myst-lede">${escapeHtml(archive.series_finale.title)}</p><ol class="myst-breakdown">${rows}</ol>
+                <p class="myst-meta">${escapeHtml(archive.series_finale.source_note)}</p>`,
+            controls: button('Zur Folgenübersicht', 'archive') + button('Folgenbilanz ansehen', 'results', true),
+            narration: `${total} von 20 richtig. ${archive.series_finale.source_note}` });
+    }
 
-        setStage(
-            '<div class="myst-reveal-breakdown">' +
-            rows +
-            '<button type="button" class="myst-btn" data-next>Zur Auswertung</button>' +
-            '</div>'
-        );
-        stage().querySelector('[data-next]').addEventListener('click', function () {
-            if (!p.completedAt) {
-                p.completedAt = Date.now();
-                progress[ep.id] = p;
-                saveProgress(progress);
+    function onAction(event) {
+        const target = event.target.closest('button');
+        if (!target) return;
+        dialog.querySelector('details').open = false;
+        if (target.hasAttribute('data-episode')) return openEpisode(archive.episodes[Number(target.dataset.episode)]);
+        switch (target.dataset.action) {
+            case 'close': dialog.close(); break;
+            case 'archive': renderArchive(); break;
+            case 'reload': loadArchive(); break;
+            case 'dismiss':
+                delete readProgress().migrationNotice;
+                persist();
+                renderArchive();
+                break;
+            case 'story': renderStory(); break;
+            case 'decision': renderDecision(); break;
+            case 'grumbrechtstrasse':
+            case 'ausgedacht': answer(target.dataset.action); break;
+            case 'verdict': renderVerdict(0); break;
+            case 'finale': renderFinale(0); break;
+            case 'next-shot': renderFinale(record().index + 1); break;
+            case 'skip-finale': renderVerdict(0); break;
+            case 'next-verdict': renderVerdict(storyIndex + 1); break;
+            case 'finish': {
+                const p = record();
+                if (p.phase !== 'verdict' || p.index !== episode.stories.length - 1 || firstUnanswered(episode, p) !== -1) return;
+                p.finishedAnswers = { ...p.answers };
+                p.phase = 'results';
+                save(p);
+                renderResults();
+                break;
             }
-            openResults(ep);
-        });
+            case 'restart': openEpisode(episode, true); break;
+            case 'next-episode': openEpisode(archive.episodes[archive.episodes.indexOf(episode) + 1]); break;
+            case 'series': renderSeriesEnd(); break;
+            case 'results': checkpoint('results'); renderResults(); break;
+        }
     }
 
-    // ---- results ---------------------------------------------------------------
-
-    function openResults(ep) {
-        var progress = loadProgress();
-        var p = episodeProgress(progress, ep.id);
-        var score = episodeScore(ep, p);
-        var grumbrechtCount = 0, ausgedachtCount = 0;
-        ep.stories.forEach(function (s) {
-            if (p.answers[s.id] === 'ausgedacht') ausgedachtCount += 1;
-            else grumbrechtCount += 1;
-        });
-        var comment = (data.ui.results_comments_by_score || {})[String(score)] || '';
-
-        setStage(
-            '<div class="myst-results">' +
-            '<div class="myst-ep-number">EPISODE ' + ep.number + ' ABGESCHLOSSEN</div>' +
-            '<div class="myst-results-score">' + score + ' VON ' + ep.stories.length + ' RICHTIG ERKANNT</div>' +
-            '<p class="myst-results-stats">' + ep.stories.length + ' Geschichten gehört · ' +
-            grumbrechtCount + '× Grumbrechtstraße gewählt · ' + ausgedachtCount + '× Ausgedacht gewählt</p>' +
-            '<p class="myst-results-comment">' + escapeHtml(comment) + '</p>' +
-            '<div class="myst-card-actions myst-results-actions">' +
-            '<button type="button" class="myst-btn" data-action="select">Zur Episodenauswahl</button>' +
-            '<button type="button" class="myst-btn myst-btn-ghost" data-action="replay">Episode erneut spielen</button>' +
-            '</div>' +
-            '</div>'
-        );
-        stage().querySelector('[data-action="select"]').addEventListener('click', renderEpisodeSelect);
-        stage().querySelector('[data-action="replay"]').addEventListener('click', function () {
-            startEpisode(ep, true);
-        });
+    function changePlayback(event) {
+        const input = event.target;
+        switch (input.name) {
+            case 'music':
+                musicEnabled = input.checked;
+                updateMusic();
+                break;
+            case 'motion':
+                reducedMotion = input.checked;
+                dialog.classList.toggle('myst-reduced', reducedMotion);
+                break;
+            case 'voice':
+                readAloud = input.checked;
+                if (readAloud) speak();
+                else synth.cancel();
+                break;
+        }
     }
 
-    // ---- bootstrapping -------------------------------------------------------
+    async function loadArchive() {
+        const owner = dialog;
+        setStage('<h2 class="myst-message" tabindex="-1">Das Folgenarchiv wird geöffnet …</h2>');
+        try {
+            const response = await fetch('/mystery/grumbrechtstrasse-episoden.json');
+            if (!response.ok) throw new Error('Archive unavailable');
+            const content = await response.json();
+            if (dialog !== owner || !owner.open) return;
+            archive = content;
+            renderArchive();
+        } catch {
+            if (dialog === owner && owner.open) setStage(`<div class="myst-message"><h2 tabindex="-1">Das Archiv ist gerade nicht erreichbar.</h2>${button('Erneut versuchen', 'reload')}</div>`);
+        }
+    }
 
-    function openShow() {
-        if (overlay) return;
-        ensureFont();
-
-        // Reaching 7 clicks always passes through 5 first, which opens the GTA quiz
-        // (easter-egg-gta.js, class egg3-overlay) - close it so it doesn't linger
-        // stacked underneath, half-finished, once this overlay is closed again.
-        document.querySelectorAll('.egg-overlay, .egg2-overlay, .egg3-overlay').forEach(function (el) {
-            el.remove();
-        });
-        document.body.classList.remove('egg-open');
-
-        overlay = document.createElement('div');
-        overlay.className = 'myst-overlay';
-        overlay.innerHTML =
-            '<div class="myst-grain"></div>' +
-            '<div class="myst-vignette"></div>' +
-            '<button type="button" class="myst-close" aria-label="Schließen">&times;</button>' +
-            '<div class="myst-frame"><div class="myst-stage">Lade Archiv…</div></div>';
-        document.body.appendChild(overlay);
+    function openShow(event) {
+        if (dialog) return;
+        opener = event.currentTarget;
+        episode = null;
+        dialog = document.createElement('dialog');
+        dialog.className = 'myst-overlay';
+        dialog.classList.toggle('myst-reduced', reducedMotion);
+        dialog.setAttribute('aria-label', 'Grumbrechtstraße oder ausgedacht?');
+        dialog.innerHTML = `<div class="myst-bar"><div class="myst-channel"><b>GOA</b><span>Nachtprogramm</span></div>
+            <div class="myst-tools"><button type="button" data-action="archive" aria-label="Zur Folgenübersicht" hidden>Folgen</button>
+            <details class="myst-settings"><summary>Wiedergabe</summary><div>
+                <label><input type="checkbox" name="music" ${musicEnabled ? 'checked' : ''}>Atmosphärenmusik</label>
+                ${synth && window.SpeechSynthesisUtterance ? '<label><input type="checkbox" name="voice">Mit Browserstimme vorlesen</label>' : ''}
+                <label><input type="checkbox" name="motion" ${reducedMotion ? 'checked' : ''}>Bewegung reduzieren</label>
+            </div></details>
+            <button type="button" data-action="close" class="myst-close" aria-label="Sendung schließen">×</button></div></div>
+            <div class="myst-stage"></div>`;
+        stage = dialog.querySelector('.myst-stage');
+        dialog.addEventListener('click', onAction);
+        dialog.addEventListener('change', changePlayback);
+        document.addEventListener('visibilitychange', updateMusic);
+        dialog.addEventListener('close', () => {
+            clearTimeout(transitionTimer);
+            document.removeEventListener('visibilitychange', updateMusic);
+            music?.pause();
+            if (readAloud) synth.cancel();
+            readAloud = false;
+            spokenText = '';
+            document.body.classList.remove('egg-open');
+            dialog.remove();
+            dialog = null;
+            if (opener === logo && !logo.hasAttribute('tabindex')) logo.tabIndex = -1;
+            opener.focus({ preventScroll: true });
+        }, { once: true });
+        document.body.append(dialog);
         document.body.classList.add('egg-open');
-
-        overlay.querySelector('.myst-close').addEventListener('click', closeShow);
-        document.addEventListener('keydown', onKeydown);
-
-        if (data) {
-            renderEpisodeSelect();
-            return;
-        }
-
-        fetch(DATA_URL)
-            .then(function (res) { return res.json(); })
-            .then(function (json) {
-                data = json;
-                if (overlay) renderEpisodeSelect();
-            })
-            .catch(function () {
-                if (overlay) setStage('<p class="myst-narration">Das Archiv konnte nicht geladen werden.</p>');
-            });
+        dialog.showModal();
+        if (archive) renderArchive();
+        else loadArchive();
     }
 });

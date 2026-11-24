@@ -24,15 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
         clicks += 1;
         clearTimeout(resetTimer);
 
-        if (clicks >= 5) {
+        // The same logo opens the mystery show at seven. Wait for the end
+        // of a shorter sequence before putting a modal over the click target.
+        if (clicks === 7) {
             clicks = 0;
-            openQuiz();
+            heroLogo.dispatchEvent(new Event('goa:open-mystery'));
             return;
         }
 
         resetTimer = setTimeout(function () {
+            if (clicks >= 5) openQuiz();
             clicks = 0;
-        }, 550);
+        }, 650);
     });
 
     function escapeHtml(str) {
