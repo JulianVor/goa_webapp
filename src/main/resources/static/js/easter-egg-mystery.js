@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const storageKey = 'grumbrechtstrasse-oder-ausgedacht-progress';
     const labels = { grumbrechtstrasse: 'Grumbrechtstraße', ausgedacht: 'Ausgedacht' };
     let archive, dialog, stage, episode, storyIndex, opener;
-    let sessionProgress = { version: 2, episodes: {} };
+    let sessionProgress = { version: 3, episodes: {} };
     let storageAvailable = true;
     let transitionTimer;
     let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,21 +26,41 @@ document.addEventListener('DOMContentLoaded', function () {
         return el.innerHTML;
     }
 
-    // The first edition used the same story IDs in different episodes. Look up
-    // unchanged questions by ID; an old result never completes a new finale.
+    // The original quiz assigned stories to different episodes. Its tips can
+    // be shown again, but they do not advance the new series.
     function migrate(legacy) {
         const revised = new Set(['story-02', 'story-15', 'story-18', 'story-21']);
         const oldAnswers = Object.assign({}, ...Object.values(legacy).map(p => p?.answers));
         const episodes = {};
         for (const ep of archive.episodes) {
-            const answers = {};
+            const earlierTips = {};
             for (const story of ep.stories) {
                 const choice = oldAnswers[story.id];
-                if (!revised.has(story.id) && Object.hasOwn(labels, choice)) answers[story.id] = choice;
+                if (!revised.has(story.id) && Object.hasOwn(labels, choice)) earlierTips[story.id] = choice;
             }
-            if (Object.keys(answers).length) episodes[ep.id] = { answers };
+            if (Object.keys(earlierTips).length) episodes[ep.id] = { answers: {}, earlierTips };
         }
-        return { version: 2, episodes };
+        return { version: 3, episodes };
+    }
+
+    function upgradeSeriesProgress(episodes) {
+        for (const ep of archive.episodes) {
+            const p = episodes[ep.id];
+            if (!p?.answers) continue;
+            // V2 imports had answers but no phase until the first case was opened.
+            // In a started run, anything beyond the first unanswered case must
+            // also have been imported: the player could only answer in order.
+            const next = p.phase ? firstUnanswered(ep, p) : 0;
+            if (next === -1) continue;
+            for (const story of ep.stories.slice(next)) {
+                const choice = p.answers[story.id];
+                if (!Object.hasOwn(labels, choice)) continue;
+                p.earlierTips ??= {};
+                p.earlierTips[story.id] = choice;
+                delete p.answers[story.id];
+            }
+        }
+        return { version: 3, episodes };
     }
 
     function persist() {
@@ -53,8 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!storageAvailable) return sessionProgress;
         try {
             const raw = JSON.parse(localStorage.getItem(storageKey));
-            if (raw?.version === 2 && raw.episodes) sessionProgress = raw;
-            else if (raw && archive && Object.keys(raw).some(key => key.startsWith('episode-'))) {
+            if (raw?.version === 3 && raw.episodes) sessionProgress = raw;
+            else if (raw?.version === 2 && raw.episodes && archive) {
+                sessionProgress = upgradeSeriesProgress(raw.episodes);
+                persist();
+            } else if (raw && archive && Object.keys(raw).some(key => key.startsWith('episode-'))) {
                 sessionProgress = migrate(raw);
                 persist();
             }
@@ -78,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
         p.phase = phase;
         p.index = index;
         save(p);
+        return p;
     }
 
     function unlocked(ep) {
@@ -116,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const entries = archive.episodes.map((ep, index) => {
             const p = record(ep);
             const next = firstUnanswered(ep, p);
+            const inProgress = Boolean(p.phase && p.phase !== 'results' && p.phase !== 'series');
             let status = `${ep.stories.length} Geschichten`;
             let action = 'Folge starten';
             const locked = !unlocked(ep);
@@ -126,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 status = `${score(ep, { answers: p.finishedAnswers })} von ${ep.stories.length} richtig`;
                 action = 'Bilanz ansehen';
                 if (p.phase !== 'results' && p.phase !== 'series') action = 'Wiederholung fortsetzen';
-            } else if (p.phase || Object.keys(p.answers).length > 0) {
+            } else if (inProgress) {
                 status = next === -1 ? 'Im Finale' : `Bei Fall ${next + 1} von ${ep.stories.length}`;
                 action = 'Fortsetzen';
             }
@@ -134,7 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="myst-thumb myst-art-${ep.number}" aria-hidden="true"></span>
                 <span class="myst-episode-copy"><span class="myst-kicker">Folge ${number(ep.number)}</span>
                 <strong>${escapeHtml(ep.title)}</strong><span class="myst-meta">${status}</span>
-                <span class="myst-link">${action}</span></span></button></li>`;
+                <span class="myst-link">${action}</span></span></button>
+                ${!locked && inProgress ? `<button type="button" class="myst-restart" data-restart-episode="${index}" aria-label="Folge ${number(ep.number)} von vorn beginnen">Von vorn beginnen</button>` : ''}</li>`;
         }).join('');
         const title = escapeHtml(archive.project.title).replace(/ (oder .+)$/, '<br><em>$1</em>');
         setStage(`<div class="myst-archive">
@@ -166,11 +192,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function openEpisode(ep, restart = false) {
         if (!ep || !unlocked(ep)) return;
         episode = ep;
+        let p = record();
         if (restart) {
-            save({ answers: {}, finishedAnswers: record().finishedAnswers });
+            const earlierTips = p.phase === 'results' || p.phase === 'series'
+                ? {} : { ...p.earlierTips, ...p.answers };
+            p = { answers: {}, finishedAnswers: p.finishedAnswers, earlierTips };
+            save(p);
         }
-        const p = record();
-        storyIndex = firstUnanswered(ep, p);
+        storyIndex = p.phase ? firstUnanswered(ep, p) : 0;
         if (p.finishedAnswers && p.phase === 'series') return renderSeriesEnd();
         if (p.finishedAnswers && p.phase === 'results') return renderResults();
         if (p.phase && storyIndex === -1) {
@@ -183,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cutaway({
             studio: true, caption: 'Im Studio', kicker: 'Anmoderation', title: ep.title,
             copy: `<p class="myst-lede">${escapeHtml(ep.subtitle)}</p><p>${escapeHtml(ep.intro)}</p>`,
-            controls: button(storyIndex > 0 ? 'Zum nächsten offenen Fall' : storyIndex === -1 ? 'Zur Auflösung' : 'Zum ersten Fall', 'story')
+            controls: button('Zum ersten Fall', 'story')
         });
     }
 
@@ -203,11 +232,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderDecision() {
-        checkpoint('decision');
+        const p = checkpoint('decision');
         const story = episode.stories[storyIndex];
+        const earlierTip = p.earlierTips?.[story.id];
         cutaway({
             studio: true, caption: 'Zurück im Studio', kicker: caseLabel(storyIndex), title: 'Ihr Urteil?',
-            copy: `<p class="myst-lede">${escapeHtml(story.decision_prompt)}</p>`,
+            copy: `<p class="myst-lede">${escapeHtml(story.decision_prompt)}</p>`
+                + (Object.hasOwn(labels, earlierTip) ? `<p class="myst-meta">Ihr früherer Tipp war „${labels[earlierTip]}“.</p>` : ''),
             controls: button(labels.grumbrechtstrasse, 'grumbrechtstrasse') + button(labels.ausgedacht, 'ausgedacht', true)
                 + '<button type="button" class="myst-reread" data-action="story">Fall noch einmal lesen</button>'
         });
@@ -319,6 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function onAction(event) {
         const target = event.target.closest('button');
         if (!target) return;
+        if (target.hasAttribute('data-restart-episode')) return openEpisode(archive.episodes[Number(target.dataset.restartEpisode)], true);
         if (target.hasAttribute('data-episode')) return openEpisode(archive.episodes[Number(target.dataset.episode)]);
         switch (target.dataset.action) {
             case 'close': dialog.close(); break;

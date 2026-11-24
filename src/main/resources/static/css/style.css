@@ -1879,6 +1879,18 @@ body.egg-open { overflow: hidden; }
     padding: 0;
     margin: 0;
 }
+.myst-episodes > li { display: grid; grid-template-rows: 1fr auto; }
+.myst-restart {
+    min-height: 44px;
+    padding: .4rem .85rem;
+    border: 1px solid var(--myst-line);
+    border-top: 0;
+    background: transparent;
+    color: var(--myst-muted);
+    font-size: .8rem;
+    text-align: left;
+}
+.myst-restart:hover { color: var(--myst-ink); text-decoration: underline; }
 .myst-art-1 { --still: url('../mystery/fassade.webp'); }
 .myst-art-2 { --still: url('../mystery/haustuer.webp'); }
 .myst-art-3 { --still: url('../mystery/sessel.webp'); }
