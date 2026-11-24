@@ -1,0 +1,336 @@
+{
+  "project": {
+    "title": "GRUMBRECHTSTRASSE ODER AUSGEDACHT?",
+    "subtitle": "Das Unfassbare aus einem Hamburger Mietshaus"
+  },
+  "ui": {
+    "start_button": "EPISODE STARTEN",
+    "continue_button": "WEITERE GESCHICHTE",
+    "answer_saved": "Ihre Entscheidung wurde gespeichert.",
+    "question_counter_template": "Geschichte {current} von {total}",
+    "reveal_intro": "FÜNF GESCHICHTEN. FÜNF ENTSCHEIDUNGEN.",
+    "results_title": "IHRE BILANZ",
+    "results_score_template": "{score} VON 5 RICHTIG ERKANNT.",
+    "back_to_episodes": "ZUR EPISODENAUSWAHL",
+    "replay_episode": "EPISODE ERNEUT SPIELEN",
+    "completed_status": "ABGESCHLOSSEN",
+    "results_comments_by_score": {
+      "0": "Sie haben offenbar noch Vertrauen in die Welt. Bewahren Sie es sich.",
+      "1": "Die Wirklichkeit scheint Sie gern zu überraschen.",
+      "2": "Sie waren skeptisch. Nur an den falschen Stellen.",
+      "3": "Ihre Menschenkenntnis ist gut. Ihr Vertrauen in Hausverwaltungen vielleicht geringer.",
+      "4": "Sie halten erstaunlich viel für möglich. Offenbar aus gutem Grund.",
+      "5": "Entweder sind Sie Hellseher. Oder Sie haben selbst einmal dort gewohnt."
+    }
+  },
+  "episodes": [
+    {
+      "id": "episode-01",
+      "number": 1,
+      "title": "Hinter der Fassade",
+      "subtitle": "Was sieht man – und was bleibt verborgen?",
+      "intro": "Ein altes Mietshaus. Ein paar kleine Auffälligkeiten, könnte man meinen. Doch hinter einer gewöhnlichen Fassade können Geschichten warten, die das Gewöhnliche weit hinter sich lassen. Fünf davon hören Sie jetzt. Welche sind geschehen – und welche haben wir nur erfunden?",
+      "stories": [
+        {
+          "id": "story-01",
+          "title": "Die schwarze Wand",
+          "narration": "In einer Wohnung eines alten Hamburger Mehrfamilienhauses gibt es eine Wand, die nicht zur Ruhe kommt. Sie grenzt an die Außenluft, und auf ihrer Innenseite zeigen sich großflächig schwarze Flecken. Nicht bloß in einer Ecke. Nach Schilderung des Bewohners ist praktisch die ganze Wand betroffen. Die Tapete löst sich stellenweise. Von außen könnte das Haus ganz gewöhnlich wirken; im Zimmer selbst sieht die Sache anders aus. Was die Verfärbungen genau verursacht, ist damit noch nicht geklärt. Doch die sichtbaren Spuren lassen sich nicht einfach übersehen. Es ist eine Geschichte, bei der schon ein Blick an die Wand genügt, um Fragen aufzuwerfen.",
+          "decision_prompt": "Würden Sie diesen Bericht in der Grumbrechtstraße vermuten – oder ist er ausgedacht?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der ehemalige Bewohner berichtete von schwarzen Flecken und sich lösender Tapete an einer ganzen Außenwand. Die genaue Schadensursache ist nicht unabhängig geklärt."
+        },
+        {
+          "id": "story-13",
+          "title": "Der Weihnachtsdieb",
+          "narration": "Aus einem Kellerabteil verschwinden zwei Dinge, die auf den ersten Blick wenig miteinander zu tun haben: ein Nintendo DS und Weihnachtsbaumschmuck. Der Schmuck ist gerade erst gekauft und nur einmal verwendet worden. Der Verlust der Konsole ärgert den Besitzer, doch der fehlende Weihnachtsbaumschmuck trifft ihn noch stärker. In der Zeit danach erinnert ihn der Anblick geschmückter Weihnachtsbäume immer wieder an den Einbruch. Die Beute wirkt beinahe komisch – eine Spielekonsole und Dekoration für einen Feiertag. Für den Betroffenen ist es jedoch ein ganz realer Verlust, verbunden mit einer Umgebung, in der er sich längst nicht mehr sicher fühlt.",
+          "decision_prompt": "Ist die Beute dieses Einbruchs wirklich so ungewöhnlich – oder ausgedacht?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner berichtete vom Diebstahl eines Nintendo DS und neuen, erst einmal benutzten Weihnachtsbaumschmucks aus seinem Kellerabteil."
+        },
+        {
+          "id": "story-15",
+          "title": "Die Zukunftstür",
+          "narration": "In einem Mehrfamilienhaus funktioniert das Schloss der Haustür über längere Zeit nicht. Der Austausch scheint zunächst eine naheliegende Lösung zu sein. Doch dem Bewohner wird eine andere Begründung genannt: Man werde das Schloss nicht mehr ersetzen, weil die ganze Tür im Zuge einer Modernisierung ohnehin ausgetauscht werden solle. Bis zu diesem zukünftigen Termin bleibt die Frage nach der Sicherheit des aktuellen Eingangs bestehen. Der Satz klingt wie eine Pointe aus einer Bürokratensatire: Ein angekündigter Fortschritt wird zur Begründung, ein bestehendes Problem vorerst nicht zu beheben. Wann genau die neue Tür kommen sollte, gehört nicht zu den gesicherten Details dieser Geschichte.",
+          "decision_prompt": "Ist diese Begründung für ein defektes Schloss wahr – oder frei erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Nach Aussage des Bewohners wurde das Schloss nicht ersetzt, weil die Tür im Rahmen der Modernisierung ohnehin ausgetauscht werden sollte."
+        },
+        {
+          "id": "story-06",
+          "title": "Der Abfluss des Grauens",
+          "narration": "Ein Bewohner möchte seine Dusche benutzen. Doch statt dass Wasser nur in den Abfluss läuft, tritt dort nach seiner Schilderung wiederholt fäkalienbelastetes Abwasser aus. Kein einmaliger kleiner Defekt, der sofort vergessen wäre, sondern ein Problem, das mehrfach zurückkehrt. Der eigentlich alltägliche Gang ins Badezimmer wird damit zu einer Situation, in der man sich fragt, was als Nächstes passiert. Die genaue technische Ursache – Verstopfung, Rückstau oder etwas anderes – kennt der Bewohner nicht. Sicher ist nach seinem Bericht nur, dass die Dusche wiederholt zum Ausgang für etwas wurde, das niemand in seiner Wohnung haben möchte.",
+          "decision_prompt": "Eine Dusche als Abwasserausgang: Grumbrechtstraße oder ausgedacht?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Laut Bewohner trat mehrfach fäkalienbelastetes Abwasser aus dem Duschabfluss aus. Die technische Ursache wurde im Gespräch nicht geklärt."
+        },
+        {
+          "id": "story-16",
+          "title": "Zwei Stockwerke tiefer",
+          "narration": "Als ein ehemaliger Bewohner zur Übergabe oder zum Auszug noch einmal in seine Wohnung kommt, entdeckt er in der Küche einen großen Wasserfleck. Er hat dort zu diesem Zeitpunkt bereits mehrere Wochen nicht mehr gewohnt. Auf seine Nachfrage erhält er eine knappe Erklärung: Im dritten Stock habe es ein Problem gegeben, und das Wasser sei durchgelaufen. Seine Wohnung liegt im ersten Stock. Was genau im dritten Stock geschehen ist, welche Bauteile betroffen waren und wie der Schaden anschließend behandelt wurde, erfährt er nicht. Zurück bleibt eine sichtbare Spur und eine erstaunlich kurze Erklärung für einen Wasserschaden über mehrere Etagen hinweg.",
+          "decision_prompt": "Kann ein Schaden vom dritten bis in den ersten Stock reichen – oder ist diese Geschichte erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner sah beim Auszug einen großen Wasserfleck in seiner Küche. Ihm wurde gesagt, ein Problem im dritten Stock habe Wasser bis in seine Wohnung im ersten Stock gelangen lassen."
+        }
+      ],
+      "reveal_steps": [
+        {
+          "type": "monologue",
+          "text": "Sie haben eine schwarze Wand gesehen, von einem seltsamen Diebstahl gehört und einen Hauseingang kennengelernt, dessen Zukunft wichtiger zu sein schien als seine Gegenwart. Fünf Geschichten. Fünf Entscheidungen."
+        },
+        {
+          "type": "dramatic_pause",
+          "duration_ms": 1800,
+          "text": null
+        },
+        {
+          "type": "monologue",
+          "text": "Aber was, wenn wir Ihnen sagen würden, dass keine einzige dieser fünf Geschichten erfunden war?"
+        },
+        {
+          "type": "title_card",
+          "text": "KEINE DIESER FÜNF GESCHICHTEN WAR ERFUNDEN."
+        },
+        {
+          "type": "monologue",
+          "text": "Tatsächlich beruhen alle fünf Erzählungen dieser Episode auf dem Erfahrungsbericht eines ehemaligen Bewohners der Grumbrechtstraße."
+        },
+        {
+          "type": "monologue",
+          "text": "Nicht jede merkwürdige Geschichte braucht eine Erklärung aus dem Jenseits. Manchmal reicht ein Mietshaus."
+        }
+      ],
+      "story_result_label": "TATSÄCHLICH GESCHEHEN – LAUT ERFAHRUNGSBERICHT"
+    },
+    {
+      "id": "episode-02",
+      "number": 2,
+      "title": "Das war schon so",
+      "subtitle": "Manche Dinge werden repariert. Andere erklärt.",
+      "intro": "Eine Reparatur kann vieles verändern. Eine Begründung manchmal überhaupt nichts. In diesem Haus begegnen wir einem Dach, einem Schloss und einigen Entscheidungen, die bemerkenswert klingen. Fünf Fälle liegen vor Ihnen. Welche gehören in die Wirklichkeit?",
+      "stories": [
+        {
+          "id": "story-05",
+          "title": "Das undichte Dach",
+          "narration": "Ein altes Mietshaus bekommt neue Dachziegel. Auf Nachfrage erfährt ein Bewohner, das Dach sei schon seit einiger Zeit undicht gewesen. Wie lange genau, bleibt offen. Er selbst beschreibt die Maßnahme als Neueindeckung, nicht als vollständigen Austausch des Dachstuhls. Zugleich entstehen im Dachgeschoss zusätzliche Wohnungen, die anschließend vermietet werden können. Von der Straße aus sieht man Bauarbeiten, neue Materialien und eine erkennbare Aufwertung. Doch der beiläufige Hinweis auf ein länger undichtes Dach wirft eine andere Frage auf: Was war in der Zeit davor mit dem Wasser geschehen? Ob es Folgeschäden gab oder wie diese geprüft wurden, weiß der Bewohner nicht.",
+          "decision_prompt": "Hat dieses Dach eine wahre Vorgeschichte – oder ist sie frei erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner berichtete von einer Neueindeckung mit Dachziegeln, einer Aussage über ein länger undichtes Dach und zusätzlichen Dachgeschosswohnungen. Über den Zustand der Unterkonstruktion liegen keine gesicherten Angaben vor."
+        },
+        {
+          "id": "story-11",
+          "title": "Tag der offenen Tür",
+          "narration": "Über mehrere Monate fehlt einem Mehrfamilienhaus nach Schilderung eines Mieters ein funktionierendes Haustürschloss. Die Tür schützt den Eingang damit nicht so, wie Bewohner es erwarten würden. Fremde können ins Gebäude gelangen, ohne von einem Bewohner hereingelassen zu werden. Das ist zunächst eine recht nüchterne Beschreibung eines defekten Bauteils. Doch je länger der Zustand anhält, desto weniger wirkt er wie ein kleiner Schönheitsfehler. Ein Hauseingang ist schließlich nicht nur ein architektonisches Detail, sondern die Grenze zwischen öffentlichem Raum und dem privaten Wohnumfeld. In diesem Haus ist diese Grenze zeitweise erstaunlich durchlässig.",
+          "decision_prompt": "Ist ein monatelang ungesicherter Eingang wirklich Teil dieser Hausgeschichte?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der ehemalige Bewohner berichtete, dass das Haustürschloss mehrere Monate nicht funktionierte und Fremde ungehindert ins Haus gelangen konnten."
+        },
+        {
+          "id": "story-14",
+          "title": "Die Schuldfrage",
+          "narration": "Nach Einbrüchen in Kellerabteile eines Mietshauses erhebt sich eine naheliegende Frage: Wie konnten Unbefugte ins Gebäude gelangen? Ein Bewohner erinnert daran, dass die Haustür längere Zeit nicht zuverlässig verschlossen werden konnte. Die Reaktion der Hausverwaltung habe jedoch anders gelautet: Die Mieter seien verantwortlich, weil sie angeblich die Kellertür nicht geschlossen hätten. Ob eine bestimmte Person tatsächlich eine Tür offen ließ, ist damit nicht bewiesen. Sicher ist nur, wie der Bewohner die Schuldzuweisung erlebt hat. In seiner Erinnerung wurde aus einer Frage der Gebäudesicherheit erstaunlich schnell eine Frage des Verhaltens der Bewohner.",
+          "decision_prompt": "Wurde nach Einbrüchen wirklich zuerst den Mietern die Schuld gegeben?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner berichtete, die Hausverwaltung habe den Mietern vorgeworfen, die Kellertür nicht geschlossen zu haben. Ob das zutraf, ist nicht geklärt."
+        },
+        {
+          "id": "story-09",
+          "title": "Einmal durchwischen",
+          "narration": "Nach einer Überschwemmung mit fäkalienbelastetem Abwasser muss eine Wohnung gereinigt werden. Auf dem Boden liegen alte Holzdielen mit Fugen. Der Bewohner erinnert sich an einen Nasssauger oder ein ähnliches Gerät, mit dem der Boden abgesaugt wurde. Anschließend kommt eine Reinigungsfirma und wischt die Wohnung durch. Einen Bautrockner sieht er nicht; der Dielenboden wird nach seiner Erinnerung auch nicht geöffnet. Ob im Hintergrund Messungen oder weitere Untersuchungen stattfanden, ist ihm nicht bekannt. Die sichtbaren Arbeiten sind jedenfalls überschaubar – und stehen in einem bemerkenswerten Kontrast zu der Menge an Abwasser, die zuvor ausgetreten war.",
+          "decision_prompt": "War das wirklich die sichtbare Reinigung nach einem solchen Schaden – oder ist es erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner schilderte Absaugen und Oberflächenreinigung, aber weder Bautrockner noch ein Öffnen der Dielen. Ob weitere Prüfungen vorgenommen wurden, ist unbekannt."
+        },
+        {
+          "id": "story-17",
+          "title": "Drei Minuten vor der Besichtigung",
+          "narration": "Ein Mieter steht kurz vor dem Auszug. Wohnungsinteressenten sind angekündigt; in wenigen Minuten soll die Besichtigung beginnen. Doch ungefähr drei Minuten vorher tritt erneut fäkalienbelastetes Abwasser aus der Dusche aus. Schließlich läuft auch die Toilette wieder über. Das ist nicht der erste Vorfall dieser Art in der Wohnung. Während man normalerweise vor einer Besichtigung noch schnell lüftet oder aufräumt, sieht sich der Bewohner mit einem Problem konfrontiert, das sich weder übersehen noch wegerklären lässt. Die Geschichte wirkt wie perfekt getimte Situationskomik. Nur dass niemand, der gerade in diesem Bad steht, die Situation freiwillig inszeniert hätte.",
+          "decision_prompt": "Wurde diese Besichtigung wirklich von einer überlaufenden Toilette eingeleitet?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner erzählte, dass etwa drei Minuten vor einer Besichtigung erneut Fäkalienabwasser aus der Dusche austrat und die Toilette überlief."
+        }
+      ],
+      "reveal_steps": [
+        {
+          "type": "monologue",
+          "text": "Ein Dach, dessen Undichtigkeit beiläufig erwähnt wird. Eine Haustür, die lange offen bleibt. Und eine Wohnungsbesichtigung mit denkbar schlechtem Timing. Sicher haben Sie unseren Autoren wenigstens eine Übertreibung zugetraut."
+        },
+        {
+          "type": "dramatic_pause",
+          "duration_ms": 1800,
+          "text": null
+        },
+        {
+          "type": "monologue",
+          "text": "Die erstaunliche Antwort lautet: Keine dieser fünf Geschichten wurde für das Spiel erfunden."
+        },
+        {
+          "type": "title_card",
+          "text": "KEINE DIESER FÜNF GESCHICHTEN WAR ERFUNDEN."
+        },
+        {
+          "type": "monologue",
+          "text": "Alle fünf beruhen auf den Schilderungen eines ehemaligen Mieters aus der Grumbrechtstraße."
+        },
+        {
+          "type": "monologue",
+          "text": "Man könnte darüber lachen. Wenn man nicht wüsste, dass jemand darin wohnen musste."
+        }
+      ],
+      "story_result_label": "TATSÄCHLICH GESCHEHEN – LAUT ERFAHRUNGSBERICHT"
+    },
+    {
+      "id": "episode-03",
+      "number": 3,
+      "title": "Mieter schuld",
+      "subtitle": "Die Antwort steht fest. Die Frage noch nicht.",
+      "intro": "Wenn etwas Ungewöhnliches geschieht, sucht man nach einer Erklärung. Manchmal ist sie kompliziert. Manchmal steht sie angeblich schon vorher fest. Wir präsentieren Ihnen fünf Geschichten von Wohnungen, Verlusten und überraschenden Antworten. Was davon ist wahr?",
+      "stories": [
+        {
+          "id": "story-02",
+          "title": "Unterschreiben Sie hier",
+          "narration": "Beim Einzug in seine Wohnung soll ein Mieter eine bemerkenswerte Erklärung unterschreiben. Die auffälligen Stellen an einer Außenwand seien kein Schimmel, heißt es, sondern Putz, der durch die Wand komme. Der Bewohner sieht schwarze Verfärbungen und eine Tapete, die sich löst. Eine fachliche Untersuchung, die diese Erklärung bestätigt, ist ihm nicht bekannt. Nun soll ausgerechnet er mit seiner Unterschrift festhalten, was die Flecken angeblich nicht sind. Er entscheidet sich dagegen. Was die Wand tatsächlich belastet, ist damit noch nicht beantwortet. Aber ein Satz auf Papier hätte die Sache offenbar schon vor dem Einzug erledigen sollen.",
+          "decision_prompt": "Ist diese merkwürdige Unterschriftengeschichte wahr – oder wurde sie erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner schilderte, dass er beim Einzug bestätigen sollte, die Flecken seien kein Schimmel. Er unterschrieb nicht. Ob es sich tatsächlich um Schimmel handelte, wurde hier nicht fachlich festgestellt."
+        },
+        {
+          "id": "story-12",
+          "title": "Das öffentliche WC",
+          "narration": "In einem alten Mehrfamilienhaus kommen nach Aussage eines Bewohners immer wieder unbefugte Personen ins Gebäude. Der Hauseingang ist längere Zeit nicht zuverlässig gesichert. Irgendwann bleibt es nicht beim bloßen Durchqueren der Flure. In gemeinsam genutzten Bereichen wird uriniert, an anderer Stelle wird sogar Kot hinterlassen. Der Bewohner dokumentiert einen Urinfleck später in einem Bild, das er für ein fiktives Punkalbum verwendet. Die Szene klingt wie eine überzogene Satire über vernachlässigte Wohnhäuser. Tatsächlich geht es aber um die ganz einfache Erwartung, dass ein Treppenhaus kein öffentliches WC sein sollte.",
+          "decision_prompt": "Eine Szene aus einer schwarzen Komödie – oder ein Erlebnis aus der Grumbrechtstraße?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner schilderte Urin und Kot in Gemeinschaftsbereichen und erklärte, dass ein als Albumcover verwendeter Fleck tatsächlich Urin gewesen sei."
+        },
+        {
+          "id": "story-20",
+          "title": "Die Geschichte geht weiter",
+          "narration": "Ein Bewohner hat ein Mietshaus nach anderthalb Jahren verlassen. Er hat Einbrüche erlebt und die Diskussion darüber, wer dafür verantwortlich sein soll. Man könnte meinen, damit sei dieses Kapitel abgeschlossen. Doch nach seinem Auszug hört er von zwei weiteren Einbrüchen in dem Gebäude. Nach seiner Schilderung werden erneut die Mieter verantwortlich gemacht. Er wohnt längst woanders, die Erklärungen kommen ihm aber bekannt vor. Welche Umstände die späteren Einbrüche jeweils hatten, ist nicht im Detail bekannt. Gerade das macht diese Geschichte so eigentümlich: Der Bewohner ist fort, aber das Motiv von Einbruch und Schuldzuweisung scheint geblieben zu sein.",
+          "decision_prompt": "Setzte sich dieses Muster auch nach dem Auszug fort – oder ist es erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der ehemalige Bewohner erzählte von zwei weiteren Einbrüchen nach seinem Auszug und erneuten Schuldzuweisungen an die Mieter."
+        },
+        {
+          "id": "story-10",
+          "title": "Erinnerungen im Abwasser",
+          "narration": "Nach einer Überschwemmung bleiben nicht nur nasse Böden zurück. Ein Bewohner muss sich von einem etwa dreißig Jahre alten Kleiderschrank trennen, den er seit seiner Kindheit besitzt. Auch ein Schachspiel seines Vaters wird durch das fäkalienbelastete Wasser unbrauchbar und muss weg. Ein Schrank und ein Spielbrett mögen auf dem Gebrauchtmarkt wenig kosten. Für ihren Besitzer hängen daran jedoch Erinnerungen, die sich nicht einfach neu bestellen lassen. Er macht keinen Ersatzanspruch dafür geltend. Die Geschichte handelt also nicht nur von einem technischen Defekt, sondern auch von einem Verlust, der durch Geld kaum angemessen beschrieben wäre.",
+          "decision_prompt": "Sind diese beiden Erinnerungsstücke tatsächlich verloren gegangen – oder ist das erfunden?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der ehemalige Bewohner berichtete, dass er seinen Kindheitskleiderschrank und ein Schachspiel seines Vaters nach dem Abwasserschaden entsorgen musste. Eine Entschädigung verlangte er nicht."
+        },
+        {
+          "id": "story-07",
+          "title": "Die Urlaubsüberraschung",
+          "narration": "Ein Mieter ist im Urlaub, als in seiner Wohnung etwas passiert, das man niemandem wünscht. Die Toilette läuft über, und fäkalienbelastetes Abwasser verteilt sich über die Wohnung. Er ist zu diesem Zeitpunkt nicht zu Hause und kann nicht eingreifen. Wie lange das Wasser bereits ausgetreten ist, bevor jemand den Schaden entdeckt, weiß er nicht. Als das Ausmaß klar wird, geht es nicht mehr um einen verstopften Abfluss oder eine unangenehme Geruchsbelästigung. Eine ganze Wohnung ist betroffen, einschließlich persönlicher Gegenstände. Aus der Rückkehr in den Alltag wird die Auseinandersetzung mit einem massiven Schaden.",
+          "decision_prompt": "Ist diese Urlaubsüberraschung wirklich geschehen – oder reine Fiktion?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der Bewohner schilderte, dass während seines Urlaubs die Toilette überlief und seine Wohnung mit Fäkalienabwasser überschwemmt wurde."
+        }
+      ],
+      "reveal_steps": [
+        {
+          "type": "monologue",
+          "text": "Eine Unterschrift, die ein Problem verschwinden lassen soll. Ein Hausflur, der zweckentfremdet wird. Erinnerungsstücke, die verloren gehen. Vielleicht erschien Ihnen besonders eine dieser Geschichten unmöglich."
+        },
+        {
+          "type": "dramatic_pause",
+          "duration_ms": 1800,
+          "text": null
+        },
+        {
+          "type": "monologue",
+          "text": "Doch keine einzige Geschichte aus dieser Episode haben wir hinzuerfunden."
+        },
+        {
+          "type": "title_card",
+          "text": "KEINE DIESER FÜNF GESCHICHTEN WAR ERFUNDEN."
+        },
+        {
+          "type": "monologue",
+          "text": "Alle fünf Ereignisse wurden von einem ehemaligen Bewohner der Grumbrechtstraße so geschildert."
+        },
+        {
+          "type": "monologue",
+          "text": "Ob Sie den Erklärungen geglaubt haben, wissen nur Sie. Die Antworten auf die Quizfrage sehen Sie gleich."
+        }
+      ],
+      "story_result_label": "TATSÄCHLICH GESCHEHEN – LAUT ERFAHRUNGSBERICHT"
+    },
+    {
+      "id": "episode-04",
+      "number": 4,
+      "title": "So schlimm ist das gar nicht",
+      "subtitle": "Fünf Geschichten. Fünfmal Grund zum Zweifeln.",
+      "intro": "Manche Geschichten sind schon in ihrer kleinsten Einzelheit seltsam. Eine Wand, ein Fensterbrett oder eine gewöhnliche Besichtigung genügt, um die Dinge ins Unwirkliche kippen zu lassen. Aber ist das Unwirkliche immer erfunden? Entscheiden Sie in fünf Fällen.",
+      "stories": [
+        {
+          "id": "story-03",
+          "title": "Die Rückkehr",
+          "narration": "Eine auffällige Außenwand bekommt eine Behandlung: Die Oberfläche wird abgeschliffen, anschließend wird neu tapeziert. Auf den ersten Blick scheint damit eine unschöne Sache erledigt. Der Bewohner lebt insgesamt etwa anderthalb Jahre in dieser Wohnung. Als er auszieht, sieht er an der Wand erneut schwarze Flecken. Die neue Tapete hat das Erscheinungsbild offenbar nur zeitweise verändert. Welche Ursache dahintersteckt und ob weitere Arbeiten vorgenommen wurden, weiß er nicht. Die Erfahrung bleibt trotzdem irritierend: Ein Problem, das schon beim Einzug zur Sprache kam, ist beim Auszug sichtbar wieder da. Ein Kreis, der sich auf erstaunlich unspektakuläre Weise schließt.",
+          "decision_prompt": "Hat sich die Wand wirklich so zurückgemeldet – oder ist das eine erfundene Pointe?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Laut Bewohner wurde die Wand abgeschliffen und neu tapeziert; beim Auszug nach ungefähr anderthalb Jahren sah er wieder schwarze Flecken."
+        },
+        {
+          "id": "story-04",
+          "title": "Der Pilzgarten",
+          "narration": "In einem Mehrfamilienhaus erzählt ein Bewohner von einer ungewöhnlichen Entdeckung in der Nachbarwohnung. Dort sollen im Badezimmer Pilze aus einer Fensterbank gewachsen sein. Nicht bloß dunkle Stellen auf einer Fuge, sondern sichtbares Pilzwachstum an einem Ort, an dem eigentlich nur ein Fenster sitzen sollte. Welche Pilzart es war, wie weit die Feuchtigkeit reichte und ob Bauteile geschädigt waren, ist nicht bekannt. Gerade deshalb bleibt das Bild im Kopf: ein gewöhnliches Badezimmer, eine Fensterbank – und etwas, das dort sicher niemand gepflanzt hat. Der Bericht klingt wie die Ausstattung eines überdrehten Horrorfilms. Doch vielleicht war er nur Wohnalltag.",
+          "decision_prompt": "Gehört dieser Pilzgarten in ein Drehbuch – oder in die Grumbrechtstraße?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der ehemalige Bewohner berichtete, dass bei einem Nachbarn Pilze aus der Badezimmerfensterbank wuchsen. Art, Ursache und Schadensumfang sind nicht belegt."
+        },
+        {
+          "id": "story-08",
+          "title": "Durch die Decke",
+          "narration": "In einer Wohnung läuft fäkalienbelastetes Abwasser aus. Der Bewohner selbst ist verreist. Bemerkt wird der Vorfall erst, als es in die darunterliegende Wohnung tropft. Dort bleibt es nicht bei einem kaum sichtbaren Wasserfleck: Auf später gezeigten Fotos hängt ein großer Teil der Deckenverkleidung herab, und auf dem Boden ist Nässe erkennbar. Nach Aussage des Bewohners war diese Decke vor dem Ereignis vollständig intakt. Welchen Weg das Wasser durch oder entlang der Bauteile genommen hat, lässt sich aus Bildern allein nicht rekonstruieren. Der Titel dieser Geschichte klingt wie eine Metapher. Doch er könnte wörtlicher kaum sein.",
+          "decision_prompt": "Klingt das nach einem erfundenen Katastrophenszenario – oder nach Grumbrechtstraße?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Laut Bericht wurde der Schaden durch Tropfwasser in der unteren Wohnung bemerkt. Fotos zeigten abgelöste Deckenverkleidung und Nässe; der Bewohner sagte, die Decke sei zuvor intakt gewesen."
+        },
+        {
+          "id": "story-18",
+          "title": "Die letzte Reinigung",
+          "narration": "Eine Wohnungsbesichtigung läuft, aber im Badezimmer ist zuvor die Toilette übergelaufen. Die Hausverwalterin kümmert sich selbst um die Reinigung. Während Interessenten durch die Wohnung gehen, sitzt der ausziehende Bewohner in seinem Sessel. Er beschreibt sich als regungslos und völlig bedient. Nach vielen Problemen in der Wohnung fehlt ihm die Energie, die Situation noch irgendwie zu retten oder schönzureden. Für die Besucher ist es ein Termin zur Wohnungssuche. Für ihn ist es der beinahe surreale Schlussakt einer anderthalbjährigen Mietzeit. Kein Autor müsste hier zusätzliche Dialoge erfinden: Die bloße Gleichzeitigkeit von Besichtigung und Toilettenreinigung trägt die ganze Szene.",
+          "decision_prompt": "Hat sich diese groteske Besichtigungsszene wirklich so abgespielt?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Laut Bewohner reinigte die Hausverwalterin die Toilette während einer Besichtigung, während er entnervt im Sessel saß."
+        },
+        {
+          "id": "story-19",
+          "title": "Der Nachfolger",
+          "narration": "Unmittelbar vor einer Besichtigung tritt aus der Dusche erneut fäkalienbelastetes Abwasser aus; auch die Toilette läuft über. Die Situation ist also nicht bloß eine alte Anekdote, die der ausziehende Mieter irgendwann einmal erlebt hat. Sie spielt sich ausgerechnet ab, als andere Menschen die Wohnung kennenlernen sollen. Und dann folgt die Wendung: Trotz dieses Vorfalls wird die Wohnung wieder vermietet. Der ehemalige Bewohner weiß, dass sich tatsächlich jemand dafür entschieden hat. Warum diese Person die Wohnung nahm, kann er nicht sagen. Die Geschichte lässt eine unbequeme Frage zurück: Wie viel muss man bei der Wohnungssuche offenbar bereit sein hinzunehmen?",
+          "decision_prompt": "Klingt eine erfolgreiche Vermietung unter diesen Umständen glaubwürdig – oder ausgedacht?",
+          "correct_answer": "grumbrechtstrasse",
+          "answer_explanation": "Der frühere Bewohner berichtete, dass trotz des Abwasserproblems während der Besichtigung jemand die Wohnung nahm. Über die Motive des Nachmieters ist nichts bekannt."
+        }
+      ],
+      "reveal_steps": [
+        {
+          "type": "monologue",
+          "text": "Eine Wand zeigt erneut Flecken. Eine Fensterbank entwickelt ungeahnte Fähigkeiten. Und eine Wohnungsbesichtigung nimmt einen Verlauf, den sich niemand wünschen würde. Es wäre leicht, mindestens eine dieser Szenen für Satire zu halten."
+        },
+        {
+          "type": "dramatic_pause",
+          "duration_ms": 1800,
+          "text": null
+        },
+        {
+          "type": "monologue",
+          "text": "Aber was, wenn wir Ihnen sagen würden: Diese fünf Geschichten sind keine erfundenen Szenen?"
+        },
+        {
+          "type": "title_card",
+          "text": "KEINE DIESER FÜNF GESCHICHTEN WAR ERFUNDEN."
+        },
+        {
+          "type": "monologue",
+          "text": "Sie alle beruhen auf dem Erfahrungsbericht eines ehemaligen Bewohners aus der Grumbrechtstraße."
+        },
+        {
+          "type": "monologue",
+          "text": "Manchmal ist die Wahrheit nicht übernatürlich. Nur schwer zu glauben."
+        }
+      ],
+      "story_result_label": "TATSÄCHLICH GESCHEHEN – LAUT ERFAHRUNGSBERICHT"
+    }
+  ]
+}
