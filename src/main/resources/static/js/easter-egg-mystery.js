@@ -6,16 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const storageKey = 'grumbrechtstrasse-oder-ausgedacht-progress';
     const labels = { grumbrechtstrasse: 'Grumbrechtstraße', ausgedacht: 'Ausgedacht' };
-    const synth = window.speechSynthesis;
     let archive, dialog, stage, episode, storyIndex, opener;
     let sessionProgress = { version: 2, episodes: {} };
     let storageAvailable = true;
-    let readAloud = false;
-    let spokenText = '';
     let transitionTimer;
-    let music;
-    let musicEnabled = false;
-    let silentScene = false;
     let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     logo.addEventListener('goa:open-mystery', openShow);
@@ -46,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (Object.keys(answers).length) episodes[ep.id] = { answers };
         }
-        return { version: 2, episodes, migrationNotice: true };
+        return { version: 2, episodes };
     }
 
     function persist() {
@@ -109,38 +103,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return `<button type="button" class="myst-btn${secondary ? ' myst-secondary' : ''}" data-action="${action}">${label}</button>`;
     }
 
-    function speak() {
-        if (!readAloud || !synth || !spokenText) return;
-        const line = new SpeechSynthesisUtterance(spokenText);
-        line.lang = 'de-DE';
-        line.rate = 0.94;
-        synth.speak(line);
-    }
-
-    function updateMusic() {
-        if (!dialog?.open || !musicEnabled || silentScene || document.hidden) {
-            music?.pause();
-            return;
-        }
-        if (!music) {
-            music = new Audio('/mystery/nachtprogramm.mp3');
-            music.loop = true;
-            music.volume = .45;
-        }
-        if (music.paused) music.play().catch(() => {});
-    }
-
-    function setStage(html, narration = '', silent = false) {
+    function setStage(html) {
         clearTimeout(transitionTimer);
-        silentScene = silent;
-        updateMusic();
-        if (readAloud) synth.cancel();
-        spokenText = narration;
         stage.innerHTML = html;
         stage.scrollTop = 0;
         stage.querySelector('h1, h2')?.focus({ preventScroll: true });
         dialog.querySelector('[data-action="archive"]').hidden = !episode;
-        speak();
     }
 
     function renderArchive() {
@@ -177,17 +145,22 @@ document.addEventListener('DOMContentLoaded', function () {
             </div></div>
             <section class="myst-program"><div class="myst-program-heading"><h2>Folgenübersicht</h2>
             <p>Ihr Tipp nach jedem Fall. Die Auflösung am Ende der Folge.</p></div>
-            ${readProgress().migrationNotice ? '<div class="myst-notice"><p>Neue Serienfassung: Tipps zu unveränderten Fällen wurden übernommen. Überarbeitete Fälle spielen Sie neu. Die Freischaltung richtet sich nach den neuen Folgenauflösungen.</p>' + button('Verstanden', 'dismiss', true) + '</div>' : ''}
-            <ul class="myst-episodes">${entries}</ul></section></div>`);
+            <ul class="myst-episodes">${entries}</ul>
+            <label class="myst-motion"><input type="checkbox" name="motion" ${reducedMotion ? 'checked' : ''}>Bewegung reduzieren</label>
+            </section></div>`);
+        stage.querySelector('[name="motion"]').addEventListener('change', event => {
+            reducedMotion = event.target.checked;
+            dialog.classList.toggle('myst-reduced', reducedMotion);
+        });
     }
 
-    function cutaway({ studio = false, caption, kicker, title, copy, controls, narration = '' }) {
+    function cutaway({ studio = false, caption, kicker, title, copy, controls }) {
         const art = studio ? 'myst-studio' : `myst-art-${episode.number}`;
         setStage(`<section class="myst-scene">
-            <div class="myst-still ${art}"><span>${studio ? 'Jonathan Frakes · KI-Inszenierung' : escapeHtml(caption) + ' · Szenenbild'}</span></div>
+            <div class="myst-still ${art}"><span>${studio ? 'Jonathan Frakes' : escapeHtml(caption) + ' · Szenenbild'}</span></div>
             <div class="myst-script"><p class="myst-kicker">Folge ${number(episode.number)} · ${escapeHtml(kicker)}</p>
             <h2 tabindex="-1">${escapeHtml(title)}</h2>${copy}
-            <div class="myst-actions">${controls}</div></div></section>`, narration);
+            <div class="myst-actions">${controls}</div></div></section>`);
     }
 
     function openEpisode(ep, restart = false) {
@@ -210,8 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cutaway({
             studio: true, caption: 'Im Studio', kicker: 'Anmoderation', title: ep.title,
             copy: `<p class="myst-lede">${escapeHtml(ep.subtitle)}</p><p>${escapeHtml(ep.intro)}</p>`,
-            controls: button(storyIndex > 0 ? 'Zum nächsten offenen Fall' : storyIndex === -1 ? 'Zur Auflösung' : 'Zum ersten Fall', 'story'),
-            narration: ep.intro
+            controls: button(storyIndex > 0 ? 'Zum nächsten offenen Fall' : storyIndex === -1 ? 'Zur Auflösung' : 'Zum ersten Fall', 'story')
         });
     }
 
@@ -225,8 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const story = episode.stories[storyIndex];
         cutaway({
             caption: episode.title, kicker: caseLabel(storyIndex), title: story.title,
-            copy: `<p class="myst-lede">${escapeHtml(story.teaser)}</p><p>${escapeHtml(story.narration)}</p>`, controls: button('Mein Urteil abgeben', 'decision'),
-            narration: `${story.title}. ${story.narration}`
+            copy: `<p class="myst-lede">${escapeHtml(story.teaser)}</p><p>${escapeHtml(story.narration)}</p>`,
+            controls: button('Mein Urteil abgeben', 'decision')
         });
     }
 
@@ -237,8 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
             studio: true, caption: 'Zurück im Studio', kicker: caseLabel(storyIndex), title: 'Ihr Urteil?',
             copy: `<p class="myst-lede">${escapeHtml(story.decision_prompt)}</p>`,
             controls: button(labels.grumbrechtstrasse, 'grumbrechtstrasse') + button(labels.ausgedacht, 'ausgedacht', true)
-                + '<button type="button" class="myst-reread" data-action="story">Fall noch einmal lesen</button>',
-            narration: story.decision_prompt
+                + '<button type="button" class="myst-reread" data-action="story">Fall noch einmal lesen</button>'
         });
     }
 
@@ -260,8 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cutaway({
             studio: true, caption: 'Zurück im Studio', kicker: 'Das Finale', title: 'Was ist wirklich geschehen?',
             copy: `<p>${escapeHtml(episode.reveal_intro)}</p>`,
-            controls: episode.number === 4 ? button('Weiter', 'finale') : button('Den ersten Fall auflösen', 'verdict'),
-            narration: episode.reveal_intro
+            controls: episode.number === 4 ? button('Weiter', 'finale') : button('Den ersten Fall auflösen', 'verdict')
         });
     }
 
@@ -284,11 +254,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const next = button(index === shots.length - 1 ? 'Den ersten Fall auflösen' : 'Weiter', 'next-shot');
         const controls = next + (index < shots.length - 1 ? button('Inszenierung überspringen', 'skip-finale', true) : '');
         if (shot.speech) {
-            cutaway({ studio: true, kicker: 'Serienfinale', title: shot.heading, copy: `<p>${escapeHtml(shot.speech)}</p>`, controls, narration: shot.speech });
+            cutaway({ studio: true, kicker: 'Serienfinale', title: shot.heading, copy: `<p>${escapeHtml(shot.speech)}</p>`, controls });
         } else {
             const heading = shot.title || 'Schwarzblende';
             setStage(`<div class="myst-intertitle myst-final-card"><h2 tabindex="-1" ${shot.pause ? 'class="myst-visually-hidden"' : ''}>${escapeHtml(heading)}</h2>
-                <div class="myst-actions">${controls}</div></div>`, shot.pause ? '' : heading, Boolean(shot.pause));
+                <div class="myst-actions">${controls}</div></div>`);
             const delay = shot.pause || shot.duration;
             if (delay && (!reducedMotion || shot.pause)) {
                 transitionTimer = setTimeout(() => renderFinale(index + 1), reducedMotion ? 0 : delay);
@@ -310,8 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
             copy: `<p class="myst-case-name">${escapeHtml(story.title)}</p><p>${escapeHtml(story.answer_explanation)}</p>
                 <p class="myst-meta">Laut persönlichem Erfahrungsbericht des ehemaligen Bewohners. Eine unabhängige Überprüfung liegt nicht vor.</p>
                 <p class="myst-pick"><strong>${right ? 'Richtig getippt' : 'Danebengetippt'}</strong> · Ihr Tipp war „${labels[p.answers[story.id]]}“.</p>`,
-            controls: storyIndex + 1 < stories.length ? button('Nächsten Fall auflösen', 'next-verdict') : button('Zur Bilanz', 'finish'),
-            narration: `${story.title}. ${verdict} ${story.answer_explanation}`
+            controls: storyIndex + 1 < stories.length ? button('Nächsten Fall auflösen', 'next-verdict') : button('Zur Bilanz', 'finish')
         });
     }
 
@@ -330,8 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cutaway({
             studio: true, caption: 'Abspann', kicker: 'Ihre Bilanz', title: `${hits} von ${total} richtig`,
             copy: `<ol class="myst-breakdown">${rows}</ol><p class="myst-signoff">${escapeHtml(comment)}</p>`,
-            controls: next + button('Erneut spielen', 'restart', true),
-            narration: `${hits} von ${total} richtig. ${comment}`
+            controls: next + button('Erneut spielen', 'restart', true)
         });
     }
 
@@ -345,24 +313,17 @@ document.addEventListener('DOMContentLoaded', function () {
         cutaway({ studio: true, kicker: 'Serienabschluss', title: `${total} von 20 richtig`,
             copy: `<p class="myst-lede">${escapeHtml(archive.series_finale.title)}</p><ol class="myst-breakdown">${rows}</ol>
                 <p class="myst-meta">${escapeHtml(archive.series_finale.source_note)}</p>`,
-            controls: button('Zur Folgenübersicht', 'archive') + button('Folgenbilanz ansehen', 'results', true),
-            narration: `${total} von 20 richtig. ${archive.series_finale.source_note}` });
+            controls: button('Zur Folgenübersicht', 'archive') + button('Folgenbilanz ansehen', 'results', true) });
     }
 
     function onAction(event) {
         const target = event.target.closest('button');
         if (!target) return;
-        dialog.querySelector('details').open = false;
         if (target.hasAttribute('data-episode')) return openEpisode(archive.episodes[Number(target.dataset.episode)]);
         switch (target.dataset.action) {
             case 'close': dialog.close(); break;
             case 'archive': renderArchive(); break;
             case 'reload': loadArchive(); break;
-            case 'dismiss':
-                delete readProgress().migrationNotice;
-                persist();
-                renderArchive();
-                break;
             case 'story': renderStory(); break;
             case 'decision': renderDecision(); break;
             case 'grumbrechtstrasse':
@@ -385,25 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'next-episode': openEpisode(archive.episodes[archive.episodes.indexOf(episode) + 1]); break;
             case 'series': renderSeriesEnd(); break;
             case 'results': checkpoint('results'); renderResults(); break;
-        }
-    }
-
-    function changePlayback(event) {
-        const input = event.target;
-        switch (input.name) {
-            case 'music':
-                musicEnabled = input.checked;
-                updateMusic();
-                break;
-            case 'motion':
-                reducedMotion = input.checked;
-                dialog.classList.toggle('myst-reduced', reducedMotion);
-                break;
-            case 'voice':
-                readAloud = input.checked;
-                if (readAloud) speak();
-                else synth.cancel();
-                break;
         }
     }
 
@@ -432,24 +374,12 @@ document.addEventListener('DOMContentLoaded', function () {
         dialog.setAttribute('aria-label', 'Grumbrechtstraße oder ausgedacht?');
         dialog.innerHTML = `<div class="myst-bar"><div class="myst-channel"><b>GOA</b><span>Nachtprogramm</span></div>
             <div class="myst-tools"><button type="button" data-action="archive" aria-label="Zur Folgenübersicht" hidden>Folgen</button>
-            <details class="myst-settings"><summary>Wiedergabe</summary><div>
-                <label><input type="checkbox" name="music" ${musicEnabled ? 'checked' : ''}>Atmosphärenmusik</label>
-                ${synth && window.SpeechSynthesisUtterance ? '<label><input type="checkbox" name="voice">Mit Browserstimme vorlesen</label>' : ''}
-                <label><input type="checkbox" name="motion" ${reducedMotion ? 'checked' : ''}>Bewegung reduzieren</label>
-            </div></details>
             <button type="button" data-action="close" class="myst-close" aria-label="Sendung schließen">×</button></div></div>
             <div class="myst-stage"></div>`;
         stage = dialog.querySelector('.myst-stage');
         dialog.addEventListener('click', onAction);
-        dialog.addEventListener('change', changePlayback);
-        document.addEventListener('visibilitychange', updateMusic);
         dialog.addEventListener('close', () => {
             clearTimeout(transitionTimer);
-            document.removeEventListener('visibilitychange', updateMusic);
-            music?.pause();
-            if (readAloud) synth.cancel();
-            readAloud = false;
-            spokenText = '';
             document.body.classList.remove('egg-open');
             dialog.remove();
             dialog = null;

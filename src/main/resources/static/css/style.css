@@ -1843,7 +1843,6 @@ body.egg-open { overflow: hidden; }
     font-size: .82rem;
 }
 .myst-tools button:hover, .myst-reread:hover { color: white; text-decoration: underline; }
-.myst-tools button[aria-pressed="true"] { color: var(--myst-copper); box-shadow: inset 0 -2px var(--myst-copper); }
 .myst-tools .myst-close { min-width: 44px; padding: 0; font: 1.6rem/1 Arial, sans-serif; }
 
 .myst-stage { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
@@ -1977,22 +1976,8 @@ body.egg-open { overflow: hidden; }
 }
 .myst-episode:disabled .myst-thumb { filter: grayscale(.8) brightness(.58); }
 .myst-episode:disabled .myst-link { color: var(--myst-muted); text-decoration: none; }
-.myst-notice { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin-bottom: 1rem; padding: .8rem; border: 1px solid var(--myst-line); }
-.myst-settings { position: relative; z-index: 2; }
-.myst-settings summary { cursor: pointer; padding: .6rem .35rem; color: var(--myst-muted); font-size: .82rem; }
-.myst-settings summary:focus-visible { outline: 2px solid var(--myst-copper); }
-.myst-settings > div {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: min(15rem, 76vw);
-    padding: .45rem .75rem;
-    background: #152326;
-    border: 1px solid var(--myst-line);
-    box-shadow: 0 .5rem 1.5rem #0008;
-}
-.myst-settings label { display: flex; align-items: center; gap: .55rem; min-height: 44px; font-size: .83rem; cursor: pointer; }
-.myst-settings input { accent-color: var(--myst-copper); }
+.myst-motion { display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; margin-top: .6rem; color: var(--myst-muted); font-size: .83rem; cursor: pointer; }
+.myst-motion input { accent-color: var(--myst-copper); }
 .myst-breakdown { list-style: none; margin: .8rem 0; padding: 0; }
 .myst-breakdown li { padding: .4rem 0; border-top: 1px solid var(--myst-line); }
 .myst-breakdown span { display: block; color: var(--myst-muted); font-size: .82rem; }
