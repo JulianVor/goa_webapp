@@ -120,20 +120,6 @@ BEGIN
     END IF;
 END $$//
 
--- Added when "Textfarbe" was dropped from the color scheme: it always matched
--- "Akzentfarbe" in practice, so the Farbkonzept form now only asks for
--- Primär-/Sekundär-/Akzentfarbe, and text color is just the accent color
--- wherever it's used (see fragments/head.html).
-DO $$
-BEGIN
-    IF EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_name = 'editions' AND column_name = 'color_text'
-    ) THEN
-        ALTER TABLE editions DROP COLUMN color_text;
-    END IF;
-END $$//
-
 -- Added when "Anzeige-Label (Hero)" was dropped for Kneipenkonzerte (the year isn't
 -- relevant there): clears it for any that already have one, so the label box under
 -- the title stops showing without needing every one to be re-saved through the form.
