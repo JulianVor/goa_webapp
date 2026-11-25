@@ -55,6 +55,15 @@
         </p>
 
         <fieldset>
+            <legend>Hall of Fame</legend>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{showHallOfFame}"/> Hall-of-Fame-Button/Link für diese Ausgabe anzeigen</label>
+            <p class="field-hint">
+                Gilt nur für diese Ausgabe/dieses Jahr - Nav-Link bzw. Archiv-Dropdown-Eintrag und, falls alle
+                anderen Bereiche oben ausgeblendet sind, der Hero-Button.
+            </p>
+        </fieldset>
+
+        <fieldset>
             <legend>Event-Infos (Was / Wo)</legend>
             <label>Beschreibung ("Was?")<textarea th:field="*{aboutText}" rows="4"></textarea></label>
             <label>Location

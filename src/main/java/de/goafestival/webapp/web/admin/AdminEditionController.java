@@ -133,6 +133,7 @@ public class AdminEditionController {
         form.setShowLineup(edition.isShowLineup());
         form.setShowFaq(edition.isShowFaq());
         form.setShowHeadliner(edition.isShowHeadliner());
+        form.setShowHallOfFame(edition.isShowHallOfFame());
         return form;
     }
 }

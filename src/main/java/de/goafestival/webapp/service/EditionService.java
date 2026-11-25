@@ -225,6 +225,7 @@ public class EditionService {
         edition.setShowLineup(form.isShowLineup());
         edition.setShowFaq(form.isShowFaq());
         edition.setShowHeadliner(form.isShowHeadliner());
+        edition.setShowHallOfFame(form.isShowHallOfFame());
 
         if (form.getLogoImage() != null && !form.getLogoImage().isEmpty()) {
             fileStorageService.delete(edition.getLogoImagePath());

@@ -18,7 +18,7 @@
         <!-- With every section hidden, the hero would otherwise be the whole page -
              give visitors somewhere to go besides a bare logo. Only on the current
              edition's own page, not an archived year's or a Kneipenkonzert's. -->
-        <a class="hero-hall-of-fame-link" th:if="${allSectionsHidden and isCurrentView and siteSettings.showHallOfFame}" th:href="@{/hall-of-fame}">Hall of Fame</a>
+        <a class="hero-hall-of-fame-link" th:if="${allSectionsHidden and isCurrentView and edition.isShowHallOfFame()}" th:href="@{/hall-of-fame}">Hall of Fame</a>
 
         <a class="kneipenkonzert-teaser" th:if="${nextKneipenkonzert != null}"
            th:href="@{'/kneipenkonzerte/' + ${nextKneipenkonzert.id}}">

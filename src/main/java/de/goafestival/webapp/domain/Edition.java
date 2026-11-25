@@ -144,6 +144,7 @@ public class Edition {
     private Boolean showLineup;
     private Boolean showFaq;
     private Boolean showHeadliner;
+    private Boolean showHallOfFame;
 
     /** Only one edition may be "current" (shown at "/"); others are reachable as history. */
     @Column(name = "is_current", nullable = false)
@@ -432,6 +433,14 @@ public class Edition {
 
     public void setShowHeadliner(Boolean showHeadliner) {
         this.showHeadliner = showHeadliner;
+    }
+
+    public boolean isShowHallOfFame() {
+        return showHallOfFame == null || showHallOfFame;
+    }
+
+    public void setShowHallOfFame(Boolean showHallOfFame) {
+        this.showHallOfFame = showHallOfFame;
     }
 
     public boolean isCurrent() {

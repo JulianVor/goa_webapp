@@ -68,6 +68,7 @@ public class EditionForm {
     private boolean showLineup = true;
     private boolean showFaq = true;
     private boolean showHeadliner = true;
+    private boolean showHallOfFame = true;
 
     private MultipartFile logoImage;
     private MultipartFile backgroundImage;
@@ -279,6 +280,14 @@ public class EditionForm {
 
     public void setShowHeadliner(boolean showHeadliner) {
         this.showHeadliner = showHeadliner;
+    }
+
+    public boolean isShowHallOfFame() {
+        return showHallOfFame;
+    }
+
+    public void setShowHallOfFame(boolean showHallOfFame) {
+        this.showHallOfFame = showHallOfFame;
     }
 
     public MultipartFile getLogoImage() {

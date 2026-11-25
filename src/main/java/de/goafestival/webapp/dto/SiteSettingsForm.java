@@ -13,7 +13,6 @@ public class SiteSettingsForm {
     private String contactEmail;
     private String impressumText;
     private boolean testAccessEnabled;
-    private boolean showHallOfFame = true;
 
     public MultipartFile getLogoImage() {
         return logoImage;
@@ -69,13 +68,5 @@ public class SiteSettingsForm {
 
     public void setTestAccessEnabled(boolean testAccessEnabled) {
         this.testAccessEnabled = testAccessEnabled;
-    }
-
-    public boolean isShowHallOfFame() {
-        return showHallOfFame;
-    }
-
-    public void setShowHallOfFame(boolean showHallOfFame) {
-        this.showHallOfFame = showHallOfFame;
     }
 }

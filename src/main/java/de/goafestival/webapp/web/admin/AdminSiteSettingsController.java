@@ -71,7 +71,6 @@ public class AdminSiteSettingsController {
         form.setContactEmail(settings.getContactEmail());
         form.setImpressumText(settings.getImpressumText());
         form.setTestAccessEnabled(settings.isTestAccessEnabled());
-        form.setShowHallOfFame(settings.isShowHallOfFame());
         return form;
     }
 }
