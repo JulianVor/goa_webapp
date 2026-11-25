@@ -125,10 +125,11 @@ public class DataExportImportService {
             dto.locationImagePath = edition.getLocationImagePath();
             data.editions.add(dto);
         }
-        // The show* getters apply archived-edition fallback logic on top of the stored
-        // value - re-derive the *stored* flags from scratch instead of trusting the loop
-        // above (kept intentionally simple - see fillStoredToggles).
-        fillStoredToggles(data);
+        // The show*/colorX/boxRadius/pillRadius/headingFont getters apply fallback logic
+        // (archived-edition rules, or falling back to another color field) on top of the
+        // stored value - re-derive the *stored* values from scratch instead of trusting
+        // the loop above (kept intentionally simple - see fillStoredNullableValues).
+        fillStoredNullableValues(data);
 
         for (Band band : bandRepository.findAllWithGallery()) {
             ExportData.BandDto dto = new ExportData.BandDto();
@@ -179,6 +180,7 @@ public class DataExportImportService {
             dto.impressumText = settings.getImpressumText();
             dto.newsletterConfirmationSubject = settings.getNewsletterConfirmationSubject();
             dto.newsletterConfirmationBody = settings.getNewsletterConfirmationBody();
+            dto.testAccessEnabled = settings.isTestAccessEnabled();
             data.siteSettings = dto;
         });
 
@@ -186,26 +188,55 @@ public class DataExportImportService {
     }
 
     /**
-     * The show* getters on Edition apply "always shown on an archived edition"
-     * fallback logic that only makes sense for rendering - export needs the raw
-     * stored column values instead, straight from the DB, so re-reads them here
-     * rather than adding raw-value getters to the entity just for this.
+     * The show*, colorX, boxRadius, pillRadius and headingFont getters on Edition
+     * apply fallback logic (archived-edition rules, or falling back to another
+     * color field) that only makes sense for rendering - export needs the raw stored
+     * column values instead, straight from the DB, so re-reads them here rather
+     * than adding raw-value getters to the entity just for this. Without this, a
+     * field left unset (relying on its fallback) would be exported as that
+     * fallback's *current* value, baked in as an explicit override forever -
+     * breaking the "inherits from X" behavior on the very next import.
      */
-    private void fillStoredToggles(ExportData data) {
-        record Toggles(Boolean showEventInfos, Boolean showLineup, Boolean showFaq, Boolean showHeadliner) {
+    private void fillStoredNullableValues(ExportData data) {
+        record StoredValues(
+                Boolean showEventInfos, Boolean showLineup, Boolean showFaq, Boolean showHeadliner, Boolean showHallOfFame,
+                String colorBox, String colorAccentBox, String colorHeading, String colorButton,
+                String colorHeadingOutline, String colorText, Integer boxRadius, Integer pillRadius, String headingFont) {
         }
-        jdbcTemplate.query("SELECT id, show_event_infos, show_lineup, show_faq, show_headliner FROM editions", rs -> {
+        jdbcTemplate.query("SELECT id, show_event_infos, show_lineup, show_faq, show_headliner, show_hall_of_fame, "
+                + "color_box, color_accent_box, color_heading, color_button, color_heading_outline, color_text, "
+                + "box_radius, pill_radius, heading_font FROM editions", rs -> {
             long id = rs.getLong("id");
-            Toggles toggles = new Toggles(
+            StoredValues values = new StoredValues(
                     (Boolean) rs.getObject("show_event_infos"),
                     (Boolean) rs.getObject("show_lineup"),
                     (Boolean) rs.getObject("show_faq"),
-                    (Boolean) rs.getObject("show_headliner"));
+                    (Boolean) rs.getObject("show_headliner"),
+                    (Boolean) rs.getObject("show_hall_of_fame"),
+                    rs.getString("color_box"),
+                    rs.getString("color_accent_box"),
+                    rs.getString("color_heading"),
+                    rs.getString("color_button"),
+                    rs.getString("color_heading_outline"),
+                    rs.getString("color_text"),
+                    (Integer) rs.getObject("box_radius"),
+                    (Integer) rs.getObject("pill_radius"),
+                    rs.getString("heading_font"));
             data.editions.stream().filter(e -> e.id == id).findFirst().ifPresent(dto -> {
-                dto.showEventInfos = toggles.showEventInfos();
-                dto.showLineup = toggles.showLineup();
-                dto.showFaq = toggles.showFaq();
-                dto.showHeadliner = toggles.showHeadliner();
+                dto.showEventInfos = values.showEventInfos();
+                dto.showLineup = values.showLineup();
+                dto.showFaq = values.showFaq();
+                dto.showHeadliner = values.showHeadliner();
+                dto.showHallOfFame = values.showHallOfFame();
+                dto.colorBox = values.colorBox();
+                dto.colorAccentBox = values.colorAccentBox();
+                dto.colorHeading = values.colorHeading();
+                dto.colorButton = values.colorButton();
+                dto.colorHeadingOutline = values.colorHeadingOutline();
+                dto.colorText = values.colorText();
+                dto.boxRadius = values.boxRadius();
+                dto.pillRadius = values.pillRadius();
+                dto.headingFont = values.headingFont();
             });
         });
         jdbcTemplate.query("SELECT id, is_current FROM editions", rs -> {
@@ -334,13 +365,17 @@ public class DataExportImportService {
         for (ExportData.EditionDto e : data.editions) {
             jdbcTemplate.update("INSERT INTO editions (id, type, festival_year, display_label, title, start_date, "
                             + "end_date, location_id, about_text, color_primary, color_secondary, color_accent2, "
+                            + "color_box, color_accent_box, color_heading, color_button, color_heading_outline, "
+                            + "color_text, box_radius, pill_radius, heading_font, "
                             + "logo_image_path, background_image_path, location_image_path, "
-                            + "show_event_infos, show_lineup, show_faq, show_headliner, is_current) "
-                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            + "show_event_infos, show_lineup, show_faq, show_headliner, show_hall_of_fame, is_current) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     e.id, e.type, e.year, e.displayLabel, e.title, e.startDate, e.endDate, e.locationId, e.aboutText,
-                    e.colorPrimary, e.colorSecondary, e.colorAccent2, e.logoImagePath,
-                    e.backgroundImagePath, e.locationImagePath, e.showEventInfos, e.showLineup, e.showFaq,
-                    e.showHeadliner, e.current);
+                    e.colorPrimary, e.colorSecondary, e.colorAccent2,
+                    e.colorBox, e.colorAccentBox, e.colorHeading, e.colorButton, e.colorHeadingOutline,
+                    e.colorText, e.boxRadius, e.pillRadius, e.headingFont,
+                    e.logoImagePath, e.backgroundImagePath, e.locationImagePath,
+                    e.showEventInfos, e.showLineup, e.showFaq, e.showHeadliner, e.showHallOfFame, e.current);
         }
         for (ExportData.BandDto b : data.bands) {
             jdbcTemplate.update("INSERT INTO bands (id, edition_id, name, genre, herkunft, description, "
@@ -366,9 +401,10 @@ public class DataExportImportService {
             ExportData.SiteSettingsDto s = data.siteSettings;
             jdbcTemplate.update("INSERT INTO site_settings (id, logo_image_path, favicon_image_path, instagram_url, "
                             + "facebook_url, contact_email, impressum_text, newsletter_confirmation_subject, "
-                            + "newsletter_confirmation_body) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            + "newsletter_confirmation_body, test_access_enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     SiteSettings.SINGLETON_ID, s.logoImagePath, s.faviconImagePath, s.instagramUrl, s.facebookUrl,
-                    s.contactEmail, s.impressumText, s.newsletterConfirmationSubject, s.newsletterConfirmationBody);
+                    s.contactEmail, s.impressumText, s.newsletterConfirmationSubject, s.newsletterConfirmationBody,
+                    s.testAccessEnabled);
         }
 
         resetIdentitySequence("locations");

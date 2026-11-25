@@ -41,6 +41,15 @@ public class ExportData {
         public String colorPrimary;
         public String colorSecondary;
         public String colorAccent2;
+        public String colorBox;
+        public String colorAccentBox;
+        public String colorHeading;
+        public String colorButton;
+        public String colorHeadingOutline;
+        public String colorText;
+        public Integer boxRadius;
+        public Integer pillRadius;
+        public String headingFont;
         public String logoImagePath;
         public String backgroundImagePath;
         public String locationImagePath;
@@ -48,6 +57,7 @@ public class ExportData {
         public Boolean showLineup;
         public Boolean showFaq;
         public Boolean showHeadliner;
+        public Boolean showHallOfFame;
         public boolean current;
     }
 
@@ -93,5 +103,6 @@ public class ExportData {
         public String impressumText;
         public String newsletterConfirmationSubject;
         public String newsletterConfirmationBody;
+        public boolean testAccessEnabled;
     }
 }
