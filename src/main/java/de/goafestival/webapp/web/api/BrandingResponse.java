@@ -10,6 +10,7 @@ package de.goafestival.webapp.web.api;
 public record BrandingResponse(
         String siteTitle,
         String logoImageUrl,
+        String faviconImageUrl,
         String backgroundImageUrl,
         String colorPrimary,
         String colorSecondary,

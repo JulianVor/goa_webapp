@@ -43,6 +43,7 @@ public class BrandingApiController {
         return new BrandingResponse(
                 edition != null ? edition.getTitle() : "GOA Festival",
                 toAbsoluteUrl(baseUrl, siteSettings.getLogoImagePath()),
+                toAbsoluteUrl(baseUrl, siteSettings.getFaviconImagePath()),
                 edition != null ? toAbsoluteUrl(baseUrl, edition.getBackgroundImagePath()) : null,
                 edition != null ? edition.getColorSecondary() : null,
                 edition != null ? edition.getColorAccent2() : null,
