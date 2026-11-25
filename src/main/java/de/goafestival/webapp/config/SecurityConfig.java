@@ -1,5 +1,6 @@
 package de.goafestival.webapp.config;
 
+import de.goafestival.webapp.service.SiteSettingsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Protects the admin area behind a single configurable login (see
  * {@code app.admin.username} / {@code app.admin.password}). Everything else -
  * the public festival pages, static assets and uploaded images - stays open,
- * unless {@code app.test-mode.enabled} adds a whole-site password gate in
- * front of all of it (see {@link SiteLockFilter}).
+ * unless an admin turns on the whole-site password gate from the settings
+ * panel (see {@link SiteLockFilter}), which reuses this very same login.
  */
 @Configuration
 @EnableWebSecurity
@@ -43,13 +44,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-            @Value("${app.test-mode.enabled:false}") boolean testModeEnabled,
-            @Value("${app.test-mode.username:}") String testModeUsername,
-            @Value("${app.test-mode.password:}") String testModePassword) throws Exception {
-        if (testModeEnabled) {
-            http.addFilterBefore(new SiteLockFilter(testModeUsername, testModePassword),
-                    UsernamePasswordAuthenticationFilter.class);
-        }
+            @Value("${app.admin.username:admin}") String adminUsername,
+            @Value("${app.admin.password:admin}") String adminPassword,
+            SiteSettingsService siteSettingsService) throws Exception {
+        http.addFilterBefore(new SiteLockFilter(adminUsername, adminPassword, siteSettingsService),
+                UsernamePasswordAuthenticationFilter.class);
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")

@@ -43,13 +43,13 @@
              collected/past" in the same spirit, and folding them together keeps the nav
              from getting crowded. With no archived editions, there's nothing to pair it
              with, so it's just a plain link like a single archived year would be. -->
-        <a class="nav-history" th:if="${archivedEditions == null or #lists.isEmpty(archivedEditions)}"
+        <a class="nav-history" th:if="${(archivedEditions == null or #lists.isEmpty(archivedEditions)) and siteSettings.showHallOfFame}"
            th:href="@{/hall-of-fame}">Hall of Fame</a>
 
         <div class="nav-history-dropdown" th:if="${archivedEditions != null and not #lists.isEmpty(archivedEditions)}">
             <button type="button" class="nav-history dropdown-toggle">Archiv <span class="caret">▾</span></button>
             <div class="dropdown-menu">
-                <a class="dropdown-hof-link" th:href="@{/hall-of-fame}">Hall of Fame</a>
+                <a class="dropdown-hof-link" th:if="${siteSettings.showHallOfFame}" th:href="@{/hall-of-fame}">Hall of Fame</a>
                 <a th:each="e : ${archivedEditions}" th:href="@{'/goa/' + ${e.year}}" th:text="'GOA ' + ${e.year}"
                    th:style="|font-family: ${e.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-bebas)' : 'var(--font-stack-brugty)'}; font-weight: ${e.headingFont == 'BEBAS_NEUE' ? 'bold' : 'normal'};|">GOA 2025</a>
             </div>

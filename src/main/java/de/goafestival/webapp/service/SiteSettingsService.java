@@ -30,6 +30,8 @@ public class SiteSettingsService {
         settings.setFacebookUrl(form.getFacebookUrl());
         settings.setContactEmail(form.getContactEmail());
         settings.setImpressumText(form.getImpressumText());
+        settings.setTestAccessEnabled(form.isTestAccessEnabled());
+        settings.setShowHallOfFame(form.isShowHallOfFame());
         if (form.getLogoImage() != null && !form.getLogoImage().isEmpty()) {
             fileStorageService.delete(settings.getLogoImagePath());
             settings.setLogoImagePath(fileStorageService.store(form.getLogoImage(), "site",

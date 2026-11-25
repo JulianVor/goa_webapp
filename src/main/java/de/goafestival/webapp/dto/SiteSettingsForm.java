@@ -12,6 +12,8 @@ public class SiteSettingsForm {
     private String facebookUrl;
     private String contactEmail;
     private String impressumText;
+    private boolean testAccessEnabled;
+    private boolean showHallOfFame = true;
 
     public MultipartFile getLogoImage() {
         return logoImage;
@@ -59,5 +61,21 @@ public class SiteSettingsForm {
 
     public void setImpressumText(String impressumText) {
         this.impressumText = impressumText;
+    }
+
+    public boolean isTestAccessEnabled() {
+        return testAccessEnabled;
+    }
+
+    public void setTestAccessEnabled(boolean testAccessEnabled) {
+        this.testAccessEnabled = testAccessEnabled;
+    }
+
+    public boolean isShowHallOfFame() {
+        return showHallOfFame;
+    }
+
+    public void setShowHallOfFame(boolean showHallOfFame) {
+        this.showHallOfFame = showHallOfFame;
     }
 }

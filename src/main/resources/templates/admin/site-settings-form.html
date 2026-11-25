@@ -48,6 +48,21 @@
             <label>Impressumstext (HTML)<textarea th:field="*{impressumText}" rows="10" class="code-textarea"></textarea></label>
         </fieldset>
 
+        <fieldset>
+            <legend>Sichtbarkeit</legend>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{showHallOfFame}"/> Hall-of-Fame-Button/Link anzeigen</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Testzugang</legend>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{testAccessEnabled}"/> Gesamte Webseite hinter einem Login sperren</label>
+            <p class="field-hint">
+                Sperrt die komplette öffentliche Webseite (nicht nur /admin) hinter einer Anmeldeabfrage des Browsers.
+                Die Zugangsdaten sind dieselben wie für dieses Admin-Portal. Vorsicht beim Aktivieren auf der echten,
+                veröffentlichten Seite - Besucher kommen dann ohne Admin-Login nirgends mehr hin.
+            </p>
+        </fieldset>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Speichern</button>
             <a class="btn" th:href="@{/admin}">Zurück</a>

@@ -1,5 +1,6 @@
 package de.goafestival.webapp.config;
 
+import de.goafestival.webapp.service.SiteSettingsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,24 +12,32 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * Optional whole-site HTTP Basic gate for a non-production ("test.*") deployment,
- * enabled via TEST_MODE_ENABLED. Runs before Spring Security's own filters, so it
- * applies to literally every request - including /admin and /login - completely
- * independent of the admin login underneath it. Off (no-op) unless enabled.
+ * Optional whole-site HTTP Basic gate, turned on/off from the admin panel
+ * (SiteSettings.testAccessEnabled) rather than at deploy time. Runs before Spring
+ * Security's own filters, so it applies to literally every request - including
+ * /admin and /login - completely independent of the admin login underneath it,
+ * even though it reuses that same login's credentials. No-op while disabled.
  */
 public class SiteLockFilter extends OncePerRequestFilter {
 
     private final String username;
     private final String password;
+    private final SiteSettingsService siteSettingsService;
 
-    public SiteLockFilter(String username, String password) {
+    public SiteLockFilter(String username, String password, SiteSettingsService siteSettingsService) {
         this.username = username;
         this.password = password;
+        this.siteSettingsService = siteSettingsService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        if (!siteSettingsService.get().isTestAccessEnabled()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Basic ")) {
             String decoded = new String(Base64.getDecoder().decode(header.substring(6)), StandardCharsets.UTF_8);

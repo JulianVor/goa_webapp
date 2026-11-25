@@ -36,6 +36,12 @@ public class SiteSettings {
     @Column(columnDefinition = "TEXT")
     private String newsletterConfirmationBody;
 
+    /** Whole-site HTTP Basic gate (see SiteLockFilter), using the admin login's own credentials. Off unless set. */
+    private Boolean testAccessEnabled;
+
+    /** Whether the Hall of Fame link/button appears anywhere on the public site. Shown unless set to false. */
+    private Boolean showHallOfFame;
+
     public Long getId() {
         return id;
     }
@@ -106,5 +112,21 @@ public class SiteSettings {
 
     public void setNewsletterConfirmationBody(String newsletterConfirmationBody) {
         this.newsletterConfirmationBody = newsletterConfirmationBody;
+    }
+
+    public boolean isTestAccessEnabled() {
+        return testAccessEnabled != null && testAccessEnabled;
+    }
+
+    public void setTestAccessEnabled(Boolean testAccessEnabled) {
+        this.testAccessEnabled = testAccessEnabled;
+    }
+
+    public boolean isShowHallOfFame() {
+        return showHallOfFame == null || showHallOfFame;
+    }
+
+    public void setShowHallOfFame(Boolean showHallOfFame) {
+        this.showHallOfFame = showHallOfFame;
     }
 }
