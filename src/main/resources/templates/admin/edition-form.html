@@ -56,10 +56,11 @@
 
         <fieldset>
             <legend>Hall of Fame</legend>
-            <label class="checkbox-row"><input type="checkbox" th:field="*{showHallOfFame}"/> Hall-of-Fame-Button/Link für diese Ausgabe anzeigen</label>
+            <label class="checkbox-row"><input type="checkbox" th:field="*{showHallOfFame}"/> Hall-of-Fame-Button im Hero anzeigen</label>
             <p class="field-hint">
-                Gilt nur für diese Ausgabe/dieses Jahr - Nav-Link bzw. Archiv-Dropdown-Eintrag und, falls alle
-                anderen Bereiche oben ausgeblendet sind, der Hero-Button.
+                Gilt nur für den Hero-Button dieser Ausgabe, der erscheint, wenn alle anderen Bereiche oben
+                ausgeblendet sind. Der Hall-of-Fame-Link im Menü ("Archiv" bzw. ohne Archiv direkt) wird davon
+                nicht beeinflusst - der wird immer angezeigt.
             </p>
         </fieldset>
 
