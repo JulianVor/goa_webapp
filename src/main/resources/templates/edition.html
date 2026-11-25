@@ -15,11 +15,6 @@
             <div class="hero-year" th:if="${not #strings.isEmpty(edition.displayLabel)}" th:text="${edition.displayLabel}">2026</div>
         </th:block>
 
-        <!-- Independent per-edition choice (see Edition.showHallOfFame): not tied to
-             whether other sections are hidden, so an admin can show it alongside a
-             full page too, on any edition's own page (current, archived or Kneipenkonzert). -->
-        <a class="hero-hall-of-fame-link" th:if="${edition.isShowHallOfFame()}" th:href="@{/hall-of-fame}">Hall of Fame</a>
-
         <a class="kneipenkonzert-teaser" th:if="${nextKneipenkonzert != null}"
            th:href="@{'/kneipenkonzerte/' + ${nextKneipenkonzert.id}}">
             <span class="kneipenkonzert-teaser-label">Nächstes Kneipenkonzert</span>
@@ -34,6 +29,11 @@
                 <div class="headliner-date" th:text="${edition.headlinerDateLabel}">10./11.07.2026</div>
             </div>
         </th:block>
+
+        <!-- Independent per-edition choice (see Edition.showHallOfFame): not tied to
+             whether other sections are hidden, so an admin can show it alongside a
+             full page too, on any edition's own page (current, archived or Kneipenkonzert). -->
+        <a class="hero-hall-of-fame-link" th:if="${edition.isShowHallOfFame()}" th:href="@{/hall-of-fame}">Hall of Fame</a>
     </div>
 </header>
 
