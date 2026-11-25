@@ -462,8 +462,14 @@ img { max-width: 100%; display: block; }
 }
 
 .hero-hall-of-fame-link {
-    display: inline-block;
-    margin-top: 2rem;
+    /* display:block (not inline-block) so it always starts on its own line below
+       whatever precedes it - an inline-block only wraps once the line actually
+       runs out of room, which left it sitting beside the headliner box on wide
+       viewports instead of underneath it. width:fit-content keeps it sized to
+       its own content instead of stretching full-width, margin:auto re-centers it. */
+    display: block;
+    width: fit-content;
+    margin: 2rem auto 0;
     padding: 0.9rem 2.2rem;
     background: var(--color-accent-box);
     color: var(--color-button);
