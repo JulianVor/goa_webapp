@@ -68,7 +68,7 @@ public class EditionForm {
     private boolean showLineup = true;
     private boolean showFaq = true;
     private boolean showHeadliner = true;
-    private boolean showHallOfFame = true;
+    private boolean showHallOfFame = false;
 
     private MultipartFile logoImage;
     private MultipartFile backgroundImage;

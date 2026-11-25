@@ -144,6 +144,8 @@ public class Edition {
     private Boolean showLineup;
     private Boolean showFaq;
     private Boolean showHeadliner;
+
+    /** Unlike the flags above, opt-in: hidden by default, only shown once explicitly enabled. */
     private Boolean showHallOfFame;
 
     /** Only one edition may be "current" (shown at "/"); others are reachable as history. */
@@ -435,8 +437,9 @@ public class Edition {
         this.showHeadliner = showHeadliner;
     }
 
+    /** Opt-in (unlike the other show* flags): hidden unless explicitly enabled for this edition. */
     public boolean isShowHallOfFame() {
-        return showHallOfFame == null || showHallOfFame;
+        return showHallOfFame != null && showHallOfFame;
     }
 
     public void setShowHallOfFame(Boolean showHallOfFame) {
