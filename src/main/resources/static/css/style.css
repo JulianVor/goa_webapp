@@ -42,6 +42,10 @@
     --font-stack-brugty: 'Brugty', 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
     --font-stack-poppins: 'Poppins', 'Segoe UI', Arial, sans-serif;
     --font-stack-bebas: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+    /* Body-text companion for the Bebas Neue heading font: same condensed-sans family,
+       but with real lowercase letterforms and a normal weight, so Fließtext in an
+       edition using Bebas Neue stays legible instead of rendering in all-caps display type. */
+    --font-stack-oswald: 'Oswald', 'Segoe UI', Arial, sans-serif;
     --font-display: var(--font-stack-brugty);
     --font-body: var(--font-stack-poppins);
     /* Brugty/Poppins each only really exist as one weight here, so these default to

@@ -13,12 +13,13 @@
          without its own background falls back to the current Festival edition's. -->
     <link rel="preload" as="image" th:if="${effectiveBackground != null}"
           th:href="${effectiveBackground}"/>
-    <!-- Also loaded when only an archived year uses Bebas Neue: the nav's Archiv dropdown
-         renders each year's own font, so this page needs the face even if its own
-         edition doesn't use it. -->
+    <!-- Loaded unconditionally (cheap, one request) rather than only for editions that
+         use them: the nav's Archiv dropdown can render an archived year's Bebas Neue
+         even when the current page's own edition uses Brugty, and body text needs
+         Oswald/Poppins to actually exist as soon as any of the editions on this page
+         reference them, not just the one head.html itself was rendered for. -->
     <link rel="stylesheet"
-          th:if="${(edition != null and edition.headingFont == 'BEBAS_NEUE') or (archivedEditions != null and not #lists.isEmpty(archivedEditions.?[headingFont == 'BEBAS_NEUE']))}"
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"/>
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Poppins:wght@400;600&display=swap"/>
     <style th:if="${edition != null}" th:utext="|
         :root {
             --color-primary: ${edition.colorSecondary};
@@ -34,7 +35,7 @@
             --pill-radius: ${edition.pillRadius}px;
             --bg-image: url('${effectiveBackground ?: ''}');
             --font-display: ${edition.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-bebas)' : 'var(--font-stack-brugty)'};
-            --font-body: ${edition.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-bebas)' : 'var(--font-stack-poppins)'};
+            --font-body: ${edition.headingFont == 'BEBAS_NEUE' ? 'var(--font-stack-oswald)' : 'var(--font-stack-poppins)'};
             --font-weight-display: ${edition.headingFont == 'BEBAS_NEUE' ? 'bold' : 'normal'};
             --font-weight-body: normal;
         }
