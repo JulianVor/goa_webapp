@@ -33,11 +33,15 @@ public class SiteLockFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // goa_webapp_shop fetches /api/branding at startup/periodically regardless of
-        // whether this site is in test-access mode - it carries no private content (just
-        // colors/fonts/metadata), and the shop would otherwise be stuck rendering with
-        // stale/fallback branding for as long as the lock is on.
-        if (!siteSettingsService.get().isTestAccessEnabled() || request.getRequestURI().startsWith("/api/")) {
+        // goa_webapp_shop fetches /api/branding at startup/periodically, and every visitor's
+        // own browser loads the logo/background image URLs it contains directly from
+        // /uploads/** on every page view - both regardless of whether this site is in
+        // test-access mode. Neither carries content this lock is meant to hide (metadata
+        // and public branding images, not festival page content), and the shop would
+        // otherwise render with broken images for as long as the lock is on, for anyone
+        // who hasn't separately authenticated against this site themselves.
+        String uri = request.getRequestURI();
+        if (!siteSettingsService.get().isTestAccessEnabled() || uri.startsWith("/api/") || uri.startsWith("/uploads/")) {
             filterChain.doFilter(request, response);
             return;
         }
