@@ -33,7 +33,11 @@ public class SiteLockFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (!siteSettingsService.get().isTestAccessEnabled()) {
+        // goa_webapp_shop fetches /api/branding at startup/periodically regardless of
+        // whether this site is in test-access mode - it carries no private content (just
+        // colors/fonts/metadata), and the shop would otherwise be stuck rendering with
+        // stale/fallback branding for as long as the lock is on.
+        if (!siteSettingsService.get().isTestAccessEnabled() || request.getRequestURI().startsWith("/api/")) {
             filterChain.doFilter(request, response);
             return;
         }
